@@ -1,0 +1,48 @@
+{
+  "appenders": [
+    {
+      "type": "console",
+      "category": "console"
+    },
+    {
+      "type": "file",
+      "filename": "logs/log.log",
+      "category": "logServer"
+    },
+    {
+      "type": "file",
+      "filename": "logs/chat.log",
+      "category": "chatServer"
+    },
+    {
+      "type": "file",
+      "filename": "logs/login.log",
+      "category": "loginServer"
+    },
+    {
+      "type": "file",
+      "filename": "logs/game.log",
+      "category": "gameServer"
+    },
+    {
+      "type": "file",
+      "filename": "logs/gate.log",
+      "category": "gateServer"
+    },
+    {
+      "type": "file",
+      "filename": "logs/test.log",
+      "category": "testServer"
+    }
+  ],
+  "replaceConsole": true,
+  "levels": {
+    "console": "DEBUG",
+    "logServer": "INFO",
+    "chatServer": "INFO",
+    "loginServer": "INFO",
+    "gameServer": "INFO",
+    "gateServer": "INFO",
+    "testServer": "INFO"
+  }
+}

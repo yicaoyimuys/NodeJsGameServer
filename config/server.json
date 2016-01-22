@@ -1,0 +1,11 @@
+{
+  "gateServer": {"host": "127.0.0.1", "port": 3100, "clientPort": 8880},
+  "chatServer": {"host":"127.0.0.1", "port":3101},
+  "logServer": {"host":"127.0.0.1", "port":3102},
+  "loginServer": {},
+  "gameServer": {
+    "1": {},
+    "2": {},
+    "3": {}
+  }
+}
