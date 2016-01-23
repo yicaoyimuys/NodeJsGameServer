@@ -7,6 +7,7 @@ var Log = require('../../libs/log/log.js');
 var Server = require('../../libs/server/server.js');
 var Global = require('../../libs/global/global.js');
 var Session = require('../../libs/session/session.js');
+var Proto = require('../proto/proto.js');
 
 function BackMessage (){
     this.handles = {};
@@ -19,16 +20,16 @@ BackMessage.prototype.addHandle = function(msgId, handleFunc) {
 BackMessage.prototype.receive = function(session, msg) {
     //Log.debug('BackMessage收到消息：' + msg.toString());
 
-    var data = JSON.parse(msg.toString());
+    var data = Proto.decode(msg);
     var handle = this.handles[data.msgId];
     if(handle){
-        Utils.invokeCallback(handle, session, data.msgBody);
+        Utils.invokeCallback(handle, session, data);
     } else {
         Log.error('BackMessage收到未处理的消息ID: ' + data.msgId);
     }
 }
 
-BackMessage.send = function(server, msgId, msgBody) {
+BackMessage.send = function(server, msg) {
     var session = null;
     if(server instanceof Session){
         session = server;
@@ -41,11 +42,7 @@ BackMessage.send = function(server, msgId, msgBody) {
         return;
     }
 
-    var msg = {
-        'msgId' : msgId,
-        'msgBody' : msgBody
-    }
-    session.send(JSON.stringify(msg));
+    session.send(msg.encode());
 }
 
 module.exports = BackMessage;

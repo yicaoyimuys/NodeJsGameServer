@@ -8,8 +8,8 @@ var Link = require('../libs/net/link.js');
 var Timer = require('../libs/timer/timer.js');
 var Session = require('../libs/session/session.js');
 var SessionService = require('../libs/session/sessionService.js');
-var MsgID = require('./message/msgId.js');
 var BackMessage = require('./message/backMessage.js');
+var Proto = require('./proto/proto.js');
 
 Startup.init = function(serverName) {
     Global.serverName = serverName;
@@ -77,7 +77,9 @@ Startup.connectBack = function(serverConfig, messageHandle) {
         });
 
         //发送HelloServer
-        BackMessage.send(session, MsgID.System_HelloServer_C2S, {"serverName":Global.serverName});
+        var sendMsg = new Proto.system_helloServer();
+        sendMsg.serverName = Global.serverName;
+        BackMessage.send(session, sendMsg);
 
         //监听收到的消息
         session.on(Session.DATA, function(data){

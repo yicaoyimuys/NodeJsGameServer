@@ -47,7 +47,7 @@ Session.prototype.send = function(data){
     if(this.isClose){
         return;
     }
-    var len = Buffer.byteLength(data);
+    var len = data.length;
 
     //写入2个字节表示本次包长
     var headBuf = new Buffer(2);
@@ -55,9 +55,7 @@ Session.prototype.send = function(data){
     this.sock.write(headBuf);
 
     //写入包体
-    var bodyBuf = new Buffer(len);
-    bodyBuf.write(data);
-    this.sock.write(bodyBuf);
+    this.sock.write(data);
 }
 
 Session.prototype.close = function(){

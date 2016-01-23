@@ -5,7 +5,7 @@
 var Startup = require('../../startup.js');
 var Server = require('../../../libs/server/server.js');
 var Log = require('../../../libs/log/log.js');
-var MsgID = require('../../message/msgId.js');
+var Proto = require('../../proto/proto.js');
 var BackMessage = require('../../message/backMessage.js');
 var Global = require('../../../libs/global/global.js');
 
@@ -13,7 +13,7 @@ var chatServerConfig = Server.getByServer('chat');
 var gateServerConfig = Server.getByServer('gate');
 
 var chatReceiveMessage = new BackMessage();
-chatReceiveMessage.addHandle(MsgID.System_HelloServer_C2S, function(session, data){
+chatReceiveMessage.addHandle(Proto.ID_system_helloServer, function(session, data){
     Global.addServerClient(session, data);
 });
 
