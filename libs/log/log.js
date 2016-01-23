@@ -7,11 +7,9 @@ var Log4js = require('log4js');
 var LogConfig = require('../../config/log4js.json');
 
 var $serverName = '';
-var $severId = 0;
 
-Log.init = function(serverName, severId) {
+Log.init = function(serverName) {
     $serverName = serverName;
-    $severId = severId;
     Log4js.configure(LogConfig);
 }
 
@@ -54,6 +52,6 @@ Log.fatal = function(message) {
 Log.log = function(categoryName, logType, message) {
     var logger = Log4js.getLogger(categoryName);
     if (logger) {
-        logger[logType]('['+$serverName+':'+$severId+'] ' + message);
+        logger[logType]('['+$serverName+'] ' + message);
     }
 };

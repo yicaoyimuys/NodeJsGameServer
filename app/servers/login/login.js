@@ -7,15 +7,15 @@ var Server = require('../../../libs/server/server.js');
 var Log = require('../../../libs/log/log.js');
 var BackMessage = require('../../message/backMessage.js');
 
-var serverName = 'loginServer';
-var gateServerConfig = Server.getByServer('gateServer');
-var logServerConfig = Server.getByServer('logServer');
+var loginServerConfig = Server.getByServer('login');
+var gateServerConfig = Server.getByServer('gate');
+var logServerConfig = Server.getByServer('log');
 
 
 var gateReceiveMessage = new BackMessage();
 var logReceiveMessage = new BackMessage();
 
-Startup.init(serverName, 0);
-Startup.connectBack('gateServer', gateServerConfig.host, gateServerConfig.port, gateReceiveMessage);
-Startup.connectBack('logServer', logServerConfig.host, logServerConfig.port, logReceiveMessage);
+Startup.init(loginServerConfig.id, 0);
+Startup.connectBack(gateServerConfig, gateReceiveMessage);
+Startup.connectBack(logServerConfig, logReceiveMessage);
 

@@ -1,11 +1,11 @@
 {
-  "gateServer": {"host": "127.0.0.1", "port": 3100, "clientPort": 8880},
-  "chatServer": {"host":"127.0.0.1", "port":3101},
-  "logServer": {"host":"127.0.0.1", "port":3102},
-  "loginServer": {},
-  "gameServer": {
-    "1": {},
-    "2": {},
-    "3": {}
+  "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880},
+  "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
+  "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
+  "login": {"id":"loginServer-1"},
+  "game": {
+    "1": {"id": "gameServer-1"},
+    "2": {"id": "gameServer-2"},
+    "3": {"id": "gameServer-3"}
   }
 }

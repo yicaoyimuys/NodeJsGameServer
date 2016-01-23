@@ -11,11 +11,10 @@ var SessionService = require('../libs/session/sessionService.js');
 var MsgID = require('./message/msgId.js');
 var BackMessage = require('./message/backMessage.js');
 
-Startup.init = function(serverName, serverId) {
+Startup.init = function(serverName) {
     Global.serverName = serverName;
-    Global.serverID = serverId;
 
-    Log.init(serverName, serverId);
+    Log.init(serverName);
 
     process.on('uncaughtException', function(err) {
         Log.error('Caught exception: ' + err.stack);
@@ -56,12 +55,16 @@ Startup.listenerBack = function(port, messageHandle) {
     Log.info('server listening back on 127.0.0.1:' + port);
 }
 
-Startup.connectBack = function(serverName, host, port, messageHandle) {
+Startup.connectBack = function(serverConfig, messageHandle) {
+    var serverName = serverConfig.id;
+    var host = serverConfig.host;
+    var port = serverConfig.port;
+
     var againConnect = function(){
         Log.error('after 30 second，back client again connect ' + serverName + ', '+ host + ':' + port);
         //30秒一次
         Timer.setTimeout(30*1000, function(){
-            Startup.connectBack(serverName, host, port, messageHandle);
+            Startup.connectBack(serverConfig, messageHandle);
         });
     }
 
@@ -75,7 +78,7 @@ Startup.connectBack = function(serverName, host, port, messageHandle) {
         });
 
         //发送HelloServer
-        BackMessage.send(session, MsgID.System_HelloServer_C2S, {"serverName":Global.serverName, "serverId":Global.serverID});
+        BackMessage.send(session, MsgID.System_HelloServer_C2S, {"serverName":Global.serverName});
 
         //监听收到的消息
         session.on(Session.DATA, function(data){

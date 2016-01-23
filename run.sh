@@ -10,8 +10,8 @@ node app/servers/chat/chat.js &
 sleep 1
 node app/servers/login/login.js &
 sleep 1
-node app/servers/game/game.js -s 1 &
+node app/servers/game/game.js -g 1 &
 sleep 1
-node app/servers/game/game.js -s 2 &
+node app/servers/game/game.js -g 2 &
 sleep 1
-node app/servers/game/game.js -s 3
+node app/servers/game/game.js -g 3
