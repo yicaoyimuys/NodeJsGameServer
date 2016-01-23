@@ -4,6 +4,6 @@
 var Server = module.exports;
 var ServerConfig = require('../../config/server.json');
 
-Server.getByServer = function(serverName) {
-    return ServerConfig[serverName];
+Server.getByServer = function(server) {
+    return ServerConfig[server];
 }

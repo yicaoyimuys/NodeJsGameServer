@@ -4,6 +4,9 @@
 
 var Utils = require('../../libs/util/utils.js');
 var Log = require('../../libs/log/log.js');
+var Server = require('../../libs/server/server.js');
+var Global = require('../../libs/global/global.js');
+var Session = require('../../libs/session/session.js');
 
 function BackMessage (){
     this.handles = {};
@@ -25,9 +28,16 @@ BackMessage.prototype.receive = function(session, msg) {
     }
 }
 
-BackMessage.send = function(session, msgId, msgBody) {
+BackMessage.send = function(server, msgId, msgBody) {
+    var session = null;
+    if(server instanceof Session){
+        session = server;
+    } else {
+        session = Global[Server.getByServer(server).id];
+    }
+
     if(!session){
-        Log.error('BackMessage session is not exists')
+        Log.error('BackMessage session is not exists');
         return;
     }
 

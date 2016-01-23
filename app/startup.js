@@ -70,10 +70,9 @@ Startup.connectBack = function(serverConfig, messageHandle) {
 
     Link.connect(host, port, function(session){
         //Log.info('back client connect on ' + host + ':' + port);
+        Global.bindServer(session, serverName);
 
-        Global[serverName] = session;
         session.addCloseCallBack(function(){
-            Global[serverName] = null;
             againConnect();
         });
 
