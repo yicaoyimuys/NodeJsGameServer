@@ -3,21 +3,22 @@
         "msgId":"10001", //消息ID
         "serverName":"string" //服务器名称
     },
+    "system_gateDispatch":{
+        "msgId":"10002",
+        "userSessionID":"int64",
+        "msgBody":"buffer"
+    },
+    "system_sendToGate":{
+        "msgId":"10003",
+        "userSessionID":"int64",
+        "msgBody":"buffer"
+    },
     "user_login_c2s":{
-        "msgId":"1000",//消息ID
-        "account":"string", //账号
-        "a1":"int32",
-        "b1":"byte",
-        "b2":"short",
-        "b3":"ushort",
-        "b4":"int64",
-        "b5":"uint32",
-        "b6":"float",
-        "b7":"double",
-        "c":"userInfo"
+        "msgId":"1001",//消息ID
+        "account":"string" //账号
     },
     "user_login_s2c":{
-        "msgId":"1001",//消息ID
+        "msgId":"1002",//消息ID
         "user":"userInfo"//用户信息
     },
     "userInfo":{

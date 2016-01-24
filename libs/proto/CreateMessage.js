@@ -78,7 +78,8 @@ function getDecodeStr(key, value){
         || value =="int64"
         || value =="float"
         || value =="double"
-        || value =="string"){
+        || value =="string"
+        || value =="buffer"){
         return "this."+key+" = Msg.decode(buff, '"+value+"');";
     } else if(value.indexOf("array") != -1){
         var arr = value.split("/");
@@ -107,6 +108,8 @@ function getPropertyStr(fileName, key, value){
         return "this."+key+" = '';";
     } else if(value.indexOf("array") != -1){
         return "this."+key+" = [];";
+    } else if(value =="buffer"){
+        return "this."+key+" = null;";
     } else {
         requireStr += "var "+value+" = require('./"+value+".js');\n";
         return "this."+key+" = new "+value+"();";
@@ -124,7 +127,8 @@ function getEncodeStr(key, value){
         || value =="int64"
         || value =="float"
         || value =="double"
-        || value =="string"){
+        || value =="string"
+        || value =="buffer"){
         return "Msg.encode(buff, '"+value+"', this."+key+");";
     } else if(value.indexOf("array") != -1){
         var arr = value.split("/");

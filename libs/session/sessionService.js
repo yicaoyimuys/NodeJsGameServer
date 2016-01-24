@@ -29,6 +29,11 @@ SessionService.removeSession = function (session) {
     }
 }
 
+//获取Session
+SessionService.getSession = function(sessionID) {
+    return sessions[sessionID];
+}
+
 //获取Session总数量
 SessionService.getSessionCount = function() {
     return session_count;

@@ -24,9 +24,10 @@ Msg.encode = function (buff, fieldType, fieldValue, arrayType) {
         buff.double(fieldValue);
     } else if (fieldType == 'array') {
         Msg.encodeArray(buff, fieldValue, arrayType);
+    } else if (fieldType == 'buffer') {
+        buff.buff(fieldValue);
     } else {
-        var fieldBa = fieldValue.encode();
-        buff.buff(fieldBa, fieldBa.length);
+        buff.buff(fieldValue.encode());
     }
 }
 
@@ -52,9 +53,10 @@ Msg.decode = function (buff, fieldType, arrayType) {
         list = buff.double().unpack();
     } else if (fieldType == 'array') {
         return Msg.decodeArray(buff, arrayType);
+    } else if (fieldType == 'buffer') {
+        list = buff.buff().unpack();
     } else {
-        list = buff.int32().unpack();
-        list = buff.buff(null, list[list.length-1]).unpack();
+        list = buff.buff().unpack();
     }
 
     if(list){

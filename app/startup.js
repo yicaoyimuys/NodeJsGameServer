@@ -9,6 +9,7 @@ var Timer = require('../libs/timer/timer.js');
 var Session = require('../libs/session/session.js');
 var SessionService = require('../libs/session/sessionService.js');
 var BackMessage = require('./message/backMessage.js');
+var FrontMessage = require('./message/frontMessage.js');
 var Proto = require('./proto/proto.js');
 
 Startup.init = function(serverName) {
@@ -33,9 +34,8 @@ Startup.listenerFront = function(port) {
             Log.debug('front client disconnect on 127.0.0.1:' + port);
         });
 
-        session.on(Session.DATA, function(buffer){
-            Log.debug('收到消息：' + buffer.toString());
-            session.send(buffer.toString());
+        session.on(Session.DATA, function(data){
+            FrontMessage.receive(session, data);
         });
     };
 
@@ -83,7 +83,7 @@ Startup.connectBack = function(serverConfig) {
 
         //监听收到的消息
         session.on(Session.DATA, function(data){
-            BackMessage.receive(data);
+            BackMessage.receive(session, data);
         });
     }, function(){
         againConnect();

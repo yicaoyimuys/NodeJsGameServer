@@ -5,13 +5,14 @@ var Link = require('../libs/net/link.js');
 var Global = require('../libs/global/global.js');
 var Session = require('../libs/session/session.js');
 var Log = require('../libs/log/log.js');
+var Proto = require('../app/proto/proto.js');
 var EventEmitter = require('events').EventEmitter;
 
 Global.serverName = 'testServer';
 Log.init('testServer', 0);
 
 var Event = new EventEmitter();
-var SUM_CLIENT = 1000;
+var SUM_CLIENT = 500;
 
 //连接
 var successNum = 0;
@@ -25,9 +26,15 @@ for(var i=0; i<SUM_CLIENT; i++){
         });
         clients.push(client);
 
-        client.send('yangsong');
+        var sendMsg = new Proto.user_login_c2s();
+        sendMsg.account = 'yangsong';
+        client.send(sendMsg.encode());
+        console.log(sendMsg.encode());
+
         client.on(Session.DATA, function(data){
-            Log.debug('收到消息:' + data.toString());
+            console.log(data);
+            var msg = Proto.decode(data);
+            Log.debug('收到消息:' + msg.msgId);
             successNum++
             if(successNum + failNum == SUM_CLIENT){
                 Event.emit('success');

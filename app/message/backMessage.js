@@ -13,10 +13,9 @@ var Handle = require('./backMessageHandle.js');
 var BackMessage = module.exports;
 
 BackMessage.receive = function(session, msg) {
-    //Log.debug('BackMessage收到消息：' + msg.toString());
-
     var data = Proto.decode(msg);
     var handle = Handle.handles[data.msgId];
+    Log.debug('BackMessage收到消息ID：' + data.msgId);
     if(handle){
         Utils.invokeCallback(handle, session, data);
     } else {
@@ -36,6 +35,5 @@ BackMessage.send = function(server, msg) {
         Log.error('BackMessage session is not exists');
         return;
     }
-
     session.send(msg.encode());
 }

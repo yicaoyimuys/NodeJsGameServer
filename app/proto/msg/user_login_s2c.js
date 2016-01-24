@@ -9,7 +9,7 @@ var userInfo = require('./userInfo.js');
 
 
 function user_login_s2c(){
-	this.msgId = 1001;
+	this.msgId = 1002;
 	this.user = new userInfo();
 
 }

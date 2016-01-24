@@ -15,7 +15,7 @@ var Type_Int64 = 8;
 var Type_Float = 9;
 var Type_Double = 10;
 var Type_ByteArray = 11;
-var Type_Buff = 11;
+var Type_Buff = 12;
 
 /*
  * 构造方法
@@ -202,17 +202,16 @@ var ByteBuffer = function (org_buf,offset) {
         return this;
     };
 
-    this.buff = function(val,len,index){
-        if(!len){
-            throw new Error('byteArray must got len argument');
-            return this;
-        }
+    this.buff = function(val,index){
         if(val == undefined || val == null){
+            var len = _org_buf['readInt16'+_endian+'E'](_offset);
+            _offset += 2;
             var buff = new Buffer(len);
             _org_buf.copy(buff, 0, _offset, _offset+len);
             _list.push(buff);
             _offset += len;
         }else{
+            var len = val.length;
             _list.splice(index != undefined ? index : _list.length,0,{t:Type_Buff,d:val,l:len});
             _offset += len;
         }
@@ -307,6 +306,9 @@ var ByteBuffer = function (org_buf,offset) {
                     offset+=_list[i].l;
                     break;
                 case Type_Buff:
+                    //前2个字节表示Buffer长度
+                    _org_buf['writeInt16'+_endian+'E'](_list[i].l,offset);
+                    offset+=2;
                     _list[i].d.copy(_org_buf, offset);
                     offset+=_list[i].l;
                     break;

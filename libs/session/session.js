@@ -15,6 +15,7 @@ function Session(sock){
     this.closeHandles = [];
     this.isClose = false;
     this.exBuffer = null;
+    this.gameServer = null;
 
     this.$initSock();
 }
@@ -89,6 +90,10 @@ Session.prototype.$destroy = function() {
     }
     this.closeHandles.length = 0;
     this.closeHandles = null;
+}
+
+Session.prototype.bindGameServer = function(gameServerName) {
+    this.gameServer = gameServerName;
 }
 
 module.exports = Session;
