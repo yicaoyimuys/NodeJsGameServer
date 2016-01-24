@@ -10,6 +10,7 @@ var Session = require('../libs/session/session.js');
 var SessionService = require('../libs/session/sessionService.js');
 var BackMessage = require('./message/backMessage.js');
 var Proto = require('./proto/proto.js');
+var BackMessageReceiveHandle = new BackMessage();
 
 Startup.init = function(serverName) {
     Global.serverName = serverName;
@@ -43,11 +44,11 @@ Startup.listenerFront = function(port) {
     Log.info('server listening front on 127.0.0.1:' + port);
 }
 
-Startup.listenerBack = function(port, messageHandle) {
+Startup.listenerBack = function(port) {
     var acceptFunc = function(session) {
         //Log.debug('back client connected：' + session.sock.remoteAddress + ':' + session.sock.remotePort);
         session.on(Session.DATA, function(data){
-            messageHandle.receive(session, data);
+            BackMessageReceiveHandle.receive(session, data);
         });
     };
 
@@ -55,7 +56,7 @@ Startup.listenerBack = function(port, messageHandle) {
     Log.info('server listening back on 127.0.0.1:' + port);
 }
 
-Startup.connectBack = function(serverConfig, messageHandle) {
+Startup.connectBack = function(serverConfig) {
     var serverName = serverConfig.id;
     var host = serverConfig.host;
     var port = serverConfig.port;
@@ -64,7 +65,7 @@ Startup.connectBack = function(serverConfig, messageHandle) {
         Log.error('after 30 second，back client again connect ' + serverName + ', '+ host + ':' + port);
         //30秒一次
         Timer.setTimeout(30*1000, function(){
-            Startup.connectBack(serverConfig, messageHandle);
+            Startup.connectBack(serverConfig);
         });
     }
 
@@ -83,7 +84,7 @@ Startup.connectBack = function(serverConfig, messageHandle) {
 
         //监听收到的消息
         session.on(Session.DATA, function(data){
-            messageHandle.receive(data);
+            BackMessageReceiveHandle.receive(data);
         });
     }, function(){
         againConnect();

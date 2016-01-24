@@ -35,7 +35,7 @@ Global.removeServerClient = function(session){
     for(var serverName in clients) {
         if(clients[serverName] == session) {
             clients[serverName] = null;
-            Log.error(serverName + ' disconnect ' + Global.serverName);
+            Log.error(serverName + ' disconnect on ' + Global.serverName);
             break;
         }
     }
