@@ -10,10 +10,9 @@ var Session = require('../../libs/session/session.js');
 var Proto = require('../proto/proto.js');
 var Handle = require('./backMessageHandle.js');
 
-function BackMessage (){
-}
+var BackMessage = module.exports;
 
-BackMessage.prototype.receive = function(session, msg) {
+BackMessage.receive = function(session, msg) {
     //Log.debug('BackMessage收到消息：' + msg.toString());
 
     var data = Proto.decode(msg);
@@ -40,5 +39,3 @@ BackMessage.send = function(server, msg) {
 
     session.send(msg.encode());
 }
-
-module.exports = BackMessage;

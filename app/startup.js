@@ -10,7 +10,6 @@ var Session = require('../libs/session/session.js');
 var SessionService = require('../libs/session/sessionService.js');
 var BackMessage = require('./message/backMessage.js');
 var Proto = require('./proto/proto.js');
-var BackMessageReceiveHandle = new BackMessage();
 
 Startup.init = function(serverName) {
     Global.serverName = serverName;
@@ -48,7 +47,7 @@ Startup.listenerBack = function(port) {
     var acceptFunc = function(session) {
         //Log.debug('back client connected：' + session.sock.remoteAddress + ':' + session.sock.remotePort);
         session.on(Session.DATA, function(data){
-            BackMessageReceiveHandle.receive(session, data);
+            BackMessage.receive(session, data);
         });
     };
 
@@ -84,7 +83,7 @@ Startup.connectBack = function(serverConfig) {
 
         //监听收到的消息
         session.on(Session.DATA, function(data){
-            BackMessageReceiveHandle.receive(data);
+            BackMessage.receive(data);
         });
     }, function(){
         againConnect();
