@@ -7,6 +7,7 @@ var Global = module.exports;
 
 Global.serverName = '';
 Global.serverClients = {};
+Global.userDb = null;
 
 //绑定当前所连接的服务器
 Global.bindServer = function(session, serverName) {

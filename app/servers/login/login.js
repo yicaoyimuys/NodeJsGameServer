@@ -3,7 +3,7 @@
  */
 
 var Startup = require('../../startup.js');
-var Server = require('../../../libs/server/server.js');
+var Server = require('../../../libs/config/server.js');
 var Log = require('../../../libs/log/log.js');
 
 var loginServerConfig = Server.getByServer('login');
@@ -11,6 +11,7 @@ var gateServerConfig = Server.getByServer('gate');
 var logServerConfig = Server.getByServer('log');
 
 Startup.init(loginServerConfig.id, 0);
+Startup.initUseDb();
 Startup.connectBack(gateServerConfig);
 Startup.connectBack(logServerConfig);
 

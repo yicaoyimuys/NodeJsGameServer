@@ -7,3 +7,7 @@ var ServerConfig = require('../../config/server.json');
 Server.getByServer = function(server) {
     return ServerConfig[server];
 }
+
+Server.getServerID = function(){
+    return ServerConfig.serverID;
+}

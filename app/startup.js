@@ -2,6 +2,7 @@
  * Created by egret on 16/1/21.
  */
 var Startup = module.exports;
+
 var Global = require('../libs/global/global.js');
 var Log = require('../libs/log/log.js');
 var Link = require('../libs/net/link.js');
@@ -11,6 +12,8 @@ var SessionService = require('../libs/session/sessionService.js');
 var BackMessage = require('./message/backMessage.js');
 var FrontMessage = require('./message/frontMessage.js');
 var Proto = require('./proto/proto.js');
+var Db = require('../libs/config/db.js');
+var SqlClient = require('./dao/mysql/mysql.js');
 
 Startup.init = function(serverName) {
     Global.serverName = serverName;
@@ -23,6 +26,10 @@ Startup.init = function(serverName) {
 
     Log.info('server starting ...');
 };
+
+Startup.initUseDb = function() {
+    Global.userDb = new SqlClient(Db.get('user'));
+}
 
 Startup.listenerFront = function(port) {
     var acceptFunc = function(session) {

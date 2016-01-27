@@ -4,7 +4,7 @@
 
 var Utils = require('../../libs/util/utils.js');
 var Log = require('../../libs/log/log.js');
-var Server = require('../../libs/server/server.js');
+var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
 var Session = require('../../libs/session/session.js');
 var Proto = require('../proto/proto.js');
@@ -15,7 +15,7 @@ var BackMessage = module.exports;
 BackMessage.receive = function(session, msg) {
     var data = Proto.decode(msg);
     var handle = Handle.handles[data.msgId];
-    Log.debug('BackMessage收到消息ID：' + data.msgId);
+    //Log.debug('BackMessage收到消息ID：' + data.msgId);
     if(handle){
         Utils.invokeCallback(handle, session, data);
     } else {

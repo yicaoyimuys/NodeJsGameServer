@@ -25,6 +25,7 @@
         "userId":"int64",
         "userName":"string",
         "money":"int32",
+        "createTime":"int32",
         "task":"array/int32"
     }
 }

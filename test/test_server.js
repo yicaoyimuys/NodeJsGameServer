@@ -15,10 +15,16 @@ var Event = new EventEmitter();
 var SUM_CLIENT = 500;
 
 //连接
+var clients = [];
 var successNum = 0;
 var failNum = 0;
+var now = Date.now();
+
 for(var i=0; i<SUM_CLIENT; i++){
-    var clients = [];
+    connect(i);
+}
+
+function connect(index){
     Link.connect('127.0.0.1', 8880, function(client){
         Log.debug('连接成功');
         client.addCloseCallBack(function(){
@@ -27,14 +33,14 @@ for(var i=0; i<SUM_CLIENT; i++){
         clients.push(client);
 
         var sendMsg = new Proto.user_login_c2s();
-        sendMsg.account = 'yangsong';
+        sendMsg.account = 'yangsong' + index;
         client.send(sendMsg.encode());
-        console.log(sendMsg.encode());
+        //console.log(sendMsg.encode());
 
         client.on(Session.DATA, function(data){
-            console.log(data);
+            //console.log(data);
             var msg = Proto.decode(data);
-            Log.debug('收到消息:' + msg.msgId);
+            console.log('收到消息:', msg);
             successNum++
             if(successNum + failNum == SUM_CLIENT){
                 Event.emit('success');
@@ -53,6 +59,7 @@ for(var i=0; i<SUM_CLIENT; i++){
 Event.on('success', function(){
     Log.debug('成功数：' + successNum)
     Log.debug('失败数：' + failNum)
+    Log.debug('耗时：'+ (Date.now()-now));
     setTimeout(function(){
         for(var i=0;i<clients.length; i++){
             clients[i].close()

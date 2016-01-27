@@ -65,22 +65,20 @@ Msg.decode = function (buff, fieldType, arrayType) {
 }
 
 Msg.decodeArray = function (buff, fieldtype) {
-    var list = buff.int32().unpack();
+    var list = buff.short().unpack();
     var len = list[list.length - 1];
-    var index = 0;
     var arr = [];
-    while (index < len) {
+    for (var index = 0; index < len; index++) {
         arr.push(Msg.decode(buff, fieldtype));
-        ++index;
     }
     return arr;
 }
 
 Msg.encodeArray = function (buff, fieldValue, arrayType) {
     var len = fieldValue.length;
-    buff.int32(len);
+    buff.short(len);
     for (var index = 0; index < len; index++) {
-        Msg.encode(buff, arrayType, fieldValue[i]);
+        Msg.encode(buff, arrayType, fieldValue[index]);
     }
 }
 

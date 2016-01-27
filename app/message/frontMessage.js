@@ -3,22 +3,22 @@
  */
 
 var Log = require('../../libs/log/log.js');
-var Server = require('../../libs/server/server.js');
+var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
 var Proto = require('../proto/proto.js');
 var BackMessage = require('./backMessage.js');
 
 var FrontMessage = module.exports;
 
-FrontMessage.receive = function(session, msg) {
+FrontMessage.receive = function(session, receiveBuff) {
     //根据msgId发送消息到不同的服务器
-    var msgId = msg.readUInt16BE(0);
+    var msgId = receiveBuff.readUInt16BE(0);
     Log.debug('FrontMessage收到消息ID：' + msgId);
 
     //封装发送到后台服务器的消息
     var sendMsg = new Proto.system_gateDispatch();
     sendMsg.userSessionID = session.id;
-    sendMsg.msgBody = msg;
+    sendMsg.msgBody = receiveBuff;
 
     //消息分发
     if(msgId >= 1000 && msgId <= 1499){
@@ -38,11 +38,11 @@ FrontMessage.receive = function(session, msg) {
     }
 }
 
-FrontMessage.send = function(session, msg) {
+FrontMessage.send = function(session, sendBuff) {
     if(!session){
         Log.error('FrontMessage session is not exists');
         return;
     }
 
-    session.send(msg);
+    session.send(sendBuff);
 }
