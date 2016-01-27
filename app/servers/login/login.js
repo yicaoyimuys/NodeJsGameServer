@@ -12,6 +12,7 @@ var logServerConfig = Server.getByServer('log');
 
 Startup.init(loginServerConfig.id, 0);
 Startup.initUseDb();
+Startup.initRedis();
 Startup.connectBack(gateServerConfig);
 Startup.connectBack(logServerConfig);
 

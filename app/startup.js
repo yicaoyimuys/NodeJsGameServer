@@ -13,7 +13,9 @@ var BackMessage = require('./message/backMessage.js');
 var FrontMessage = require('./message/frontMessage.js');
 var Proto = require('./proto/proto.js');
 var Db = require('../libs/config/db.js');
+var Redis = require('../libs/config/redis.js');
 var SqlClient = require('./dao/mysql/mysql.js');
+var RedisClient = require('./cache/redis/redis.js');
 
 Startup.init = function(serverName) {
     Global.serverName = serverName;
@@ -29,6 +31,10 @@ Startup.init = function(serverName) {
 
 Startup.initUseDb = function() {
     Global.userDb = new SqlClient(Db.get('user'));
+}
+
+Startup.initRedis = function() {
+    Global.redis = new RedisClient(Redis.get());
 }
 
 Startup.listenerFront = function(port) {

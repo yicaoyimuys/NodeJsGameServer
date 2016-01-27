@@ -10,19 +10,27 @@ var DbUser = require('../model/dbUser.js');
 var UserDao = require('../dao/userDao.js');
 var Proto = require('../proto/proto.js');
 var Log = require('../../libs/log/log.js');
+var UserCache = require('../cache/userCache.js');
 
 User.login = function(account, cb) {
-    UserDao.getUserByName(account, function(err, dbUser){
-        if (err){
-            Log.error(err);
+    UserCache.getUserByName(account, function(cacheDbUser){
+        if(cacheDbUser){
+            User.loginSuccess(cacheDbUser, cb);
+            Log.debug('存在缓存')
         } else {
-            if (dbUser) {
-                User.loginSuccess(dbUser, cb);
-            } else{
-                User.create(account, cb);
-            }
+            UserDao.getUserByName(account, function(err, dbUser){
+                if (err){
+                    Log.error(err);
+                } else {
+                    if (dbUser) {
+                        User.loginSuccess(dbUser, cb);
+                    } else{
+                        User.create(account, cb);
+                    }
+                }
+            })
         }
-    })
+    });
 }
 
 User.create = function(account, cb) {
@@ -39,6 +47,8 @@ User.create = function(account, cb) {
 }
 
 User.loginSuccess = function(dbUser, cb){
+    UserCache.setUser(dbUser);
+
     var sendMsg = new Proto.user_login_s2c();
     sendMsg.user.userId = dbUser.id;
     sendMsg.user.userName = dbUser.name;

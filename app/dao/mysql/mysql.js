@@ -13,12 +13,24 @@ function SqlClient(dbConfig){
 
 	this.config = dbConfig;
 	this.pool = Mysql.createPool(dbConfig);
+	this.ping();
+}
+
+SqlClient.prototype.ping = function(){
+	this.pool.getConnection(function(err, connection) {
+		if (err) {
+			Log.error('sql connect fail：' + err);
+			return;
+		}
+		Log.info('sql connect success...')
+		connection.release();
+	})
 }
 
 SqlClient.prototype.query = function(sql, values, cb){
 	this.pool.getConnection(function(err, connection) {
 		if(err){
-			Log.error('获取数据库连接错误：' + err);
+			Log.error('sql connect fail：' + err);
 			return;
 		}
 

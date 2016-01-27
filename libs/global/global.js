@@ -5,9 +5,14 @@ var Log = require('../log/log.js');
 
 var Global = module.exports;
 
+//当前服务器名称
 Global.serverName = '';
+//当前服务器所连接的后台客户端
 Global.serverClients = {};
+//当前服务器所连接的userDb
 Global.userDb = null;
+//当前服务器所连接的redis
+Global.redis = null;
 
 //绑定当前所连接的服务器
 Global.bindServer = function(session, serverName) {
