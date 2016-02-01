@@ -3,12 +3,13 @@
  */
 var msg = require("./CreateMessage.js");
 var fs = require("fs");
+var msgFilePath = "./app/proto/msg/";
 
 function clearFolder() {
-    if (fs.existsSync(msg.MsgFilePath)) {
-        files = fs.readdirSync(msg.MsgFilePath);
+    if (fs.existsSync(msgFilePath)) {
+        files = fs.readdirSync(msgFilePath);
         files.forEach(function (file, index){
-            var path = msg.MsgFilePath + file;
+            var path = msgFilePath + file;
             fs.unlinkSync(path);
         });
     }
