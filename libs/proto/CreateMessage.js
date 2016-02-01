@@ -146,5 +146,3 @@ function saveFile(fileName, content){
 function saveMsgDicFile(content){
     fs.writeFileSync(protoFileJs, content);
 }
-
-exports.MsgFilePath = msgFilePath;

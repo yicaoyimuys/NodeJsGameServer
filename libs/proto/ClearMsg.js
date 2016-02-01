@@ -1,7 +1,6 @@
 /**
  * Created by egret on 16/2/1.
  */
-var msg = require("./CreateMessage.js");
 var fs = require("fs");
 var msgFilePath = "./app/proto/msg/";
 
