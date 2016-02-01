@@ -11,8 +11,9 @@ var gateServerConfig = Server.getByServer('gate');
 var logServerConfig = Server.getByServer('log');
 
 Startup.init(loginServerConfig.id, 0);
-Startup.initUseDb();
 Startup.initRedis();
+Startup.initUseDb();
+Startup.initAsyncUserDb();
 Startup.connectBack(gateServerConfig);
 Startup.connectBack(logServerConfig);
 

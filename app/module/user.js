@@ -10,6 +10,7 @@ var DbUser = require('../model/dbUser.js');
 var UserDao = require('../dao/userDao.js');
 var Proto = require('../proto/gameProto.js');
 var Log = require('../../libs/log/log.js');
+var MyDate = require('../../libs/date/date.js');
 var UserCache = require('../cache/userCache.js');
 
 User.login = function(account, cb) {
@@ -47,7 +48,9 @@ User.create = function(account, cb) {
 }
 
 User.loginSuccess = function(dbUser, cb){
+    dbUser.last_login_time = MyDate.unix();
     UserCache.setUser(dbUser);
+    UserDao.updateUserLoginTime(dbUser);
 
     var sendMsg = new Proto.user_login_s2c();
     sendMsg.user.userId = dbUser.id;

@@ -52,3 +52,9 @@ UserDao.createUser = function (dbUser, cb) {
         }
     });
 }
+
+UserDao.updateUserLoginTime = function(dbUser){
+    var sql = 'UPDATE `user` SET last_login_time = ? WHERE id = ?';
+    var args = [dbUser.last_login_time, dbUser.id];
+    Global.asyncUserDb.query(sql, args);
+}

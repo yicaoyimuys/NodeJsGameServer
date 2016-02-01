@@ -16,6 +16,7 @@ if [ $# -eq 0 ]
 		func node app/servers/game/game.js
 		func node app/servers/chat/chat.js
 		func node app/servers/log/log.js
+		func node app/servers/db/db.js
 	else
 		func $1
 fi
