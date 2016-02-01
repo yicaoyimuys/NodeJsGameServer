@@ -8,7 +8,7 @@ var Global = require('../../libs/global/global.js');
 var Utils = require('../../libs/util/utils.js');
 var DbUser = require('../model/dbUser.js');
 var UserDao = require('../dao/userDao.js');
-var Proto = require('../proto/proto.js');
+var Proto = require('../proto/gameProto.js');
 var Log = require('../../libs/log/log.js');
 var UserCache = require('../cache/userCache.js');
 

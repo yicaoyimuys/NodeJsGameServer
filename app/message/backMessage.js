@@ -7,7 +7,7 @@ var Log = require('../../libs/log/log.js');
 var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
 var Session = require('../../libs/session/session.js');
-var Proto = require('../proto/proto.js');
+var Proto = require('../proto/systemProto.js');
 var Handle = require('./backMessageHandle.js');
 
 var BackMessage = module.exports;

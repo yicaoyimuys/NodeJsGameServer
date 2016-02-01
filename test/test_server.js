@@ -5,7 +5,7 @@ var Link = require('../libs/net/link.js');
 var Global = require('../libs/global/global.js');
 var Session = require('../libs/session/session.js');
 var Log = require('../libs/log/log.js');
-var Proto = require('../app/proto/proto.js');
+var Proto = require('../app/proto/gameProto.js');
 var EventEmitter = require('events').EventEmitter;
 
 Global.serverName = 'testServer';

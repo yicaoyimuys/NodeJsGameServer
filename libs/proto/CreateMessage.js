@@ -2,8 +2,10 @@
  * Created by yangsong on 16/1/24.
  */
 var fs = require("fs");
-var protoFile = "./app/proto/proto.json";
-var protoFileJs = "./app/proto/proto.js";
+var program = require('../program/program.js');
+
+var protoFile = "./app/proto/"+program.protoFile+".json";
+var protoFileJs = "./app/proto/"+program.protoFile+".js";
 var msgFilePath = "./app/proto/msg/";
 
 var msgTemplate = fs.readFileSync("./libs/proto/template/msgTemplate.txt","utf-8");
@@ -14,7 +16,6 @@ var msgProtoDic = "";
 var msgProtoRequire = "";
 var requireStr = "";
 
-clearFolder();
 buildFile();
 generateMsgDicFile();
 
@@ -138,16 +139,6 @@ function getEncodeStr(key, value){
     }
 }
 
-function clearFolder() {
-    if (fs.existsSync(msgFilePath)) {
-        files = fs.readdirSync(msgFilePath);
-        files.forEach(function (file, index){
-            var path = msgFilePath + file;
-            fs.unlinkSync(path);
-        });
-    }
-}
-
 function saveFile(fileName, content){
     fs.writeFileSync(msgFilePath + fileName + ".js", content);
 }
@@ -155,3 +146,5 @@ function saveFile(fileName, content){
 function saveMsgDicFile(content){
     fs.writeFileSync(protoFileJs, content);
 }
+
+exports.MsgFilePath = msgFilePath;

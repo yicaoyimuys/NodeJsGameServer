@@ -5,7 +5,7 @@
 var Utils = require('../../libs/util/utils.js');
 var Log = require('../../libs/log/log.js');
 var Server = require('../../libs/config/server.js');
-var Proto = require('../proto/proto.js');
+var Proto = require('../proto/gameProto.js');
 var Handle = require('./gameMessageHandle.js');
 
 var GameMessage = module.exports;

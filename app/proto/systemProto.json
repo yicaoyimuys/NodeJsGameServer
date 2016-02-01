@@ -1,0 +1,16 @@
+{
+    "system_helloServer":{
+        "msgId":"10001", //消息ID
+        "serverName":"string" //服务器名称
+    },
+    "system_gateDispatch":{
+        "msgId":"10002",
+        "userSessionID":"int64",
+        "msgBody":"buffer"
+    },
+    "system_sendToGate":{
+        "msgId":"10003",
+        "userSessionID":"int64",
+        "msgBody":"buffer"
+    }
+}

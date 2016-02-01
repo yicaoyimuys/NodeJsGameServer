@@ -3,7 +3,7 @@
  */
 var GameMessageHandle = module.exports;
 
-var Proto = require('../proto/proto.js');
+var Proto = require('../proto/gameProto.js');
 var Utils = require('../../libs/util/utils.js');
 
 var User = require('../module/user.js');
