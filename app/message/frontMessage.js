@@ -5,7 +5,8 @@
 var Log = require('../../libs/log/log.js');
 var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
-var Proto = require('../proto/systemProto.js');
+var SystemProto = require('../proto/systemProto.js');
+var GameProto = require('../proto/gameProto.js');
 var BackMessage = require('./backMessage.js');
 
 var FrontMessage = module.exports;
@@ -16,7 +17,7 @@ FrontMessage.receive = function(session, receiveBuff) {
     Log.debug('FrontMessage收到消息ID：' + msgId);
 
     //封装发送到后台服务器的消息
-    var sendMsg = new Proto.system_gateDispatch();
+    var sendMsg = new SystemProto.system_gateDispatch();
     sendMsg.userSessionID = session.id;
     sendMsg.msgBody = receiveBuff;
 
@@ -30,6 +31,14 @@ FrontMessage.receive = function(session, receiveBuff) {
         BackMessage.send('chat', sendMsg);
     }
     else if(msgId >= 2000 && msgId <= 5999){
+        //分配游戏服务器
+        if(msgId == GameProto.ID_user_joinGame_c2s){
+            Global.allotGameServer(session);
+            if(!session.gameServer){
+                Log.error('没有可分配的gameServer');
+                return;
+            }
+        }
         //游戏服务器消息
         BackMessage.send(Global[session.gameServer], sendMsg);
     }

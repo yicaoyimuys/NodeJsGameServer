@@ -13,5 +13,13 @@
         "money":"int32",
         "createTime":"int32",
         "task":"array/int32"
+    },
+    "user_joinGame_c2s":{
+        "msgId":"2001",
+        "userId":"int64"
+    },
+    "user_joinGame_s2c":{
+        "msgId":"2002",
+        "user":"userInfo"//用户信息
     }
 }

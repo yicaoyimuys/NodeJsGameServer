@@ -40,10 +40,17 @@ function connect(index){
         client.on(Session.DATA, function(data){
             //console.log(data);
             var msg = Proto.decode(data);
-            console.log('收到消息:', msg);
-            successNum++
-            if(successNum + failNum == SUM_CLIENT){
-                Event.emit('success');
+            if(msg.msgId == Proto.ID_user_login_s2c){
+                sendMsg = new Proto.user_joinGame_c2s();
+                sendMsg.userId = msg.user.userId;
+                client.send(sendMsg.encode());
+            }
+            else if(msg.msgId == Proto.ID_user_joinGame_s2c){
+                console.log('收到用户消息:', msg);
+                successNum++
+                if(successNum + failNum == SUM_CLIENT){
+                    Event.emit('success');
+                }
             }
         })
 

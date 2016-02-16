@@ -35,3 +35,15 @@ UserCache.getUserByName = function(userName, callback){
         }
     });
 }
+
+UserCache.getUserById = function(userId, callback){
+    Global.redis.get(USER_KEY + userId, function (err, reply) {
+        if(err){
+            Log.error('UserCache.getUserById：' + err);
+            Utils.invokeCallback(callback, null);
+        }
+        else{
+            Utils.invokeCallback(callback, JSON.parse(reply));
+        }
+    });
+}

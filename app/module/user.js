@@ -60,3 +60,19 @@ User.loginSuccess = function(dbUser, cb){
     sendMsg.user.task = [1, 2, 3, 8, 9];
     Utils.invokeCallback(cb, sendMsg);
 }
+
+User.joinGame = function(userId, cb){
+    UserCache.getUserById(userId, function(cacheDbUser){
+        if(cacheDbUser){
+            var sendMsg = new Proto.user_joinGame_s2c();
+            sendMsg.user.userId = cacheDbUser.id;
+            sendMsg.user.userName = cacheDbUser.name;
+            sendMsg.user.money = cacheDbUser.money;
+            sendMsg.user.create_time = cacheDbUser.create_time;
+            sendMsg.user.task = [9, 8, 3, 2];
+            Utils.invokeCallback(cb, sendMsg);
+        } else {
+            Log.error('不存在用户缓存数据')
+        }
+    });
+}
