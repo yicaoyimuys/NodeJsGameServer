@@ -6,7 +6,10 @@ var User = module.exports;
 
 var Global = require('../../libs/global/global.js');
 var Utils = require('../../libs/util/utils.js');
-var DbUser = require('../model/dbUser.js');
+var UserSession = require('../../libs/session/userSession.js');
+var DbUserModel = require('../model/dbUser.js');
+var UserModel = require('../model/user.js');
+var DataService = require('../data/dataService.js');
 var UserDao = require('../dao/userDao.js');
 var Proto = require('../proto/gameProto.js');
 var Log = require('../../libs/log/log.js');
@@ -35,7 +38,7 @@ User.login = function(account, cb) {
 }
 
 User.create = function(account, cb) {
-    var dbUser = new DbUser();
+    var dbUser = new DbUserModel();
     dbUser.name = account;
     dbUser.money = Math.ceil(Math.random() * 10000);
     UserDao.createUser(dbUser, function(err, dbUser){
@@ -48,10 +51,12 @@ User.create = function(account, cb) {
 }
 
 User.loginSuccess = function(dbUser, cb){
+    //在Redis中缓存用户数据
     dbUser.last_login_time = MyDate.unix();
     UserCache.setUser(dbUser);
     UserDao.updateUserLoginTime(dbUser);
 
+    //返回客户端消息
     var sendMsg = new Proto.user_login_s2c();
     sendMsg.user.userId = dbUser.id;
     sendMsg.user.userName = dbUser.name;
@@ -61,9 +66,16 @@ User.loginSuccess = function(dbUser, cb){
     Utils.invokeCallback(cb, sendMsg);
 }
 
-User.joinGame = function(userId, cb){
+User.joinGame = function(userId, cb, userSessionID){
     UserCache.getUserById(userId, function(cacheDbUser){
         if(cacheDbUser){
+            //在内存中缓存用户数据
+            var user = new UserModel();
+            user.dbUser = cacheDbUser;
+            user.session = new UserSession(userSessionID);
+            DataService.addUser(user);
+
+            //返回客户端消息
             var sendMsg = new Proto.user_joinGame_s2c();
             sendMsg.user.userId = cacheDbUser.id;
             sendMsg.user.userName = cacheDbUser.name;

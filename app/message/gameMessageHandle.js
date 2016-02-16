@@ -12,6 +12,6 @@ GameMessageHandle.handles = {};
 GameMessageHandle.handles[Proto.ID_user_login_c2s] = function(data, cb){
     User.login(data.account, cb);
 }
-GameMessageHandle.handles[Proto.ID_user_joinGame_c2s] = function(data, cb){
-    User.joinGame(data.userId, cb);
+GameMessageHandle.handles[Proto.ID_user_joinGame_c2s] = function(data, cb, userSessionID){
+    User.joinGame(data.userId, cb, userSessionID);
 }

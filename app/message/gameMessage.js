@@ -10,14 +10,16 @@ var Handle = require('./gameMessageHandle.js');
 
 var GameMessage = module.exports;
 
-GameMessage.receive = function(receiveBuff, cb) {
+GameMessage.receive = function(data, cb) {
+    var receiveBuff = data.msgBody;
+    var userSessionID = data.userSessionID;
     var receiveMsg = Proto.decode(receiveBuff);
     var handle = Handle.handles[receiveMsg.msgId];
     Log.debug('GameMessage收到消息ID：' + receiveMsg.msgId);
     if(handle){
         handle(receiveMsg, function(sendMsg){
             Utils.invokeCallback(cb, sendMsg.encode());
-        });
+        }, userSessionID);
     } else {
         Log.error('GameMessage收到未处理的消息ID: ' + receiveMsg.msgId);
     }

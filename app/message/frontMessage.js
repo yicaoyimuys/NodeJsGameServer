@@ -7,6 +7,7 @@ var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
 var SystemProto = require('../proto/systemProto.js');
 var GameProto = require('../proto/gameProto.js');
+var Message = require('./message.js');
 var BackMessage = require('./backMessage.js');
 
 var FrontMessage = module.exports;
@@ -22,15 +23,15 @@ FrontMessage.receive = function(session, receiveBuff) {
     sendMsg.msgBody = receiveBuff;
 
     //消息分发
-    if(msgId >= 1000 && msgId <= 1499){
+    if(Message.isLoginMsg(msgId)){
         //登陆服务器消息
         BackMessage.send('login', sendMsg);
     }
-    else if(msgId >= 1500 && msgId <= 1999){
+    else if(Message.isChatMsg(msgId)){
         //聊天服务器消息
         BackMessage.send('chat', sendMsg);
     }
-    else if(msgId >= 2000 && msgId <= 5999){
+    else if(Message.isGameMsg(msgId)){
         //分配游戏服务器
         if(msgId == GameProto.ID_user_joinGame_c2s){
             Global.allotGameServer(session);

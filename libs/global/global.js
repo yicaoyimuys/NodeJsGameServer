@@ -76,7 +76,7 @@ Global.allotGameServer = function(session){
     var serverInfo = Global.gameServerClients[Global.allotGameServerIndex];
     serverInfo.users.push(session);
     session.addCloseCallBack(function(){
-        for(var i=0; i<serverInfo.users.length; i++){
+        for(var i=0, len=serverInfo.users.length; i<len; i++){
             if(serverInfo.users[i] == session){
                 serverInfo.users.splice(i, 1);
                 break;

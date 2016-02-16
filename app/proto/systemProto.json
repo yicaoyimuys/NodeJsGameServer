@@ -12,5 +12,9 @@
         "msgId":"10003",
         "userSessionID":"int64",
         "msgBody":"buffer"
+    },
+    "system_clientOffline":{
+        "msgId":"10004",
+        "userSessionID":"int64"
     }
 }
