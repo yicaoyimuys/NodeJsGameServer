@@ -7,10 +7,12 @@ var UserCache = module.exports;
 var Global = require('../../libs/global/global.js');
 var Log = require('../../libs/log/log.js');
 var Utils = require('../../libs/util/utils.js');
+var MyDate = require('../../libs/date/date.js');
 var Async = require('async');
 
 var USER_KEY = 'User_';
 var USER_NAME_KEY = 'User_Name_';
+var USER_OFFLINE_KEY = 'User_Offline_';
 
 UserCache.setUser = function(dbUser){
     Global.redis.mset(USER_KEY + dbUser.id, JSON.stringify(dbUser), USER_NAME_KEY + dbUser.name, dbUser.id);
@@ -47,3 +49,36 @@ UserCache.getUserById = function(userId, callback){
         }
     });
 }
+
+UserCache.setOnline = function(userId){
+    Global.redis.hdel(USER_OFFLINE_KEY, userId);
+}
+
+UserCache.setOffline = function(userId){
+    var nowTime = MyDate.unix();
+    Global.redis.hset(USER_OFFLINE_KEY, userId, nowTime);
+}
+
+UserCache.getAllOfflineUser = function(callback){
+    Global.redis.hgetall(USER_OFFLINE_KEY, function (err, obj) {
+        if(err){
+            Log.error('UserCache.getAllOfflineUser：' + err);
+        }
+        else{
+            Utils.invokeCallback(callback, obj);
+        }
+    });
+}
+
+UserCache.removeOfflineUser = function(removeUsers){
+    if(removeUsers.length == 0){
+        return;
+    }
+
+    Global.redis.hdel(USER_OFFLINE_KEY, removeUsers);
+    for(var i=0, len=removeUsers.length; i<len; i++){
+        removeUsers[i] = USER_KEY + removeUsers[i];
+    }
+    Global.redis.del(removeUsers);
+}
+

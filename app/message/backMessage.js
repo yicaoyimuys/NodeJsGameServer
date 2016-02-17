@@ -24,6 +24,10 @@ BackMessage.receive = function(session, msg) {
 }
 
 BackMessage.send = function(server, msg) {
+    if(!server){
+        return;
+    }
+
     var session = null;
     if(server instanceof Session){
         session = server;

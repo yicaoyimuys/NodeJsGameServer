@@ -48,10 +48,13 @@ Startup.listenerFront = function(port) {
 
         SessionService.addSession(session);
         session.addCloseCallBack(function(){
+            var sendMsg = new Proto.system_clientOffline();
+            sendMsg.userSessionID = session.id;
             //通知后端服务器用户下线
-            if(session.gameServer){
-                var sendMsg = new Proto.system_clientOffline();
-                sendMsg.userSessionID = session.id;
+            {
+                //登录服务器
+                BackMessage.send('login', sendMsg);
+                //游戏服务器
                 BackMessage.send(Global[session.gameServer], sendMsg);
             }
             Log.debug('front client disconnect on 127.0.0.1:' + port);

@@ -16,10 +16,10 @@ var Log = require('../../libs/log/log.js');
 var MyDate = require('../../libs/date/date.js');
 var UserCache = require('../cache/userCache.js');
 
-User.login = function(account, cb) {
+User.login = function(account, cb, userSessionID) {
     UserCache.getUserByName(account, function(cacheDbUser){
         if(cacheDbUser){
-            User.loginSuccess(cacheDbUser, cb);
+            User.loginSuccess(cacheDbUser, cb, userSessionID);
             Log.debug('存在缓存')
         } else {
             UserDao.getUserByName(account, function(err, dbUser){
@@ -27,9 +27,9 @@ User.login = function(account, cb) {
                     Log.error(err);
                 } else {
                     if (dbUser) {
-                        User.loginSuccess(dbUser, cb);
+                        User.loginSuccess(dbUser, cb, userSessionID);
                     } else{
-                        User.create(account, cb);
+                        User.create(account, cb, userSessionID);
                     }
                 }
             })
@@ -37,7 +37,7 @@ User.login = function(account, cb) {
     });
 }
 
-User.create = function(account, cb) {
+User.create = function(account, cb, userSessionID) {
     var dbUser = new DbUserModel();
     dbUser.name = account;
     dbUser.money = Math.ceil(Math.random() * 10000);
@@ -45,16 +45,31 @@ User.create = function(account, cb) {
         if (err){
             Log.error(err);
         } else {
-            User.loginSuccess(dbUser, cb);
+            User.loginSuccess(dbUser, cb, userSessionID);
         }
     })
 }
 
-User.loginSuccess = function(dbUser, cb){
+User.loginSuccess = function(dbUser, cb, userSessionID){
     //在Redis中缓存用户数据
     dbUser.last_login_time = MyDate.unix();
     UserCache.setUser(dbUser);
+
+    //在内存中缓存用户数据
+    var user = new UserModel();
+    user.dbUser = dbUser;
+    user.session = new UserSession(userSessionID);
+    user.session.addCloseCallBack(function(){
+        //设置用户下线
+        UserCache.setOffline(dbUser.id);
+    });
+    DataService.addUser(user);
+
+    //更新用户最后登录时间
     UserDao.updateUserLoginTime(dbUser);
+
+    //设置用户在线
+    UserCache.setOnline(dbUser.id);
 
     //返回客户端消息
     var sendMsg = new Proto.user_login_s2c();
