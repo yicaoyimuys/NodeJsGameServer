@@ -20,6 +20,16 @@ var successNum = 0;
 var failNum = 0;
 var now = Date.now();
 
+var arr = [];
+for(var i=0; i<SUM_CLIENT; i++){
+    while(true){
+        var flag = Math.ceil(Math.random() * 10000);
+        if(arr.indexOf(flag) == -1){
+            arr.push(flag);
+            break;
+        }
+    }
+}
 for(var i=0; i<SUM_CLIENT; i++){
     connect(i);
 }
@@ -33,7 +43,7 @@ function connect(index){
         clients.push(client);
 
         var sendMsg = new Proto.user_login_c2s();
-        sendMsg.account = 'yangsong' + index;
+        sendMsg.account = 'yangsong' + arr[index];
         client.send(sendMsg.encode());
         //console.log(sendMsg.encode());
 
@@ -46,7 +56,7 @@ function connect(index){
                 client.send(sendMsg.encode());
             }
             else if(msg.msgId == Proto.ID_user_joinGame_s2c){
-                console.log('收到用户消息:', msg);
+                //console.log('收到用户消息:', msg);
                 successNum++
                 if(successNum + failNum == SUM_CLIENT){
                     Event.emit('success');
@@ -64,9 +74,9 @@ function connect(index){
 
 //关闭
 Event.on('success', function(){
-    Log.debug('成功数：' + successNum)
-    Log.debug('失败数：' + failNum)
-    Log.debug('耗时：'+ (Date.now()-now));
+    console.log('成功数：' + successNum)
+    console.log('失败数：' + failNum)
+    console.log('耗时：'+ (Date.now()-now));
     setTimeout(function(){
         for(var i=0;i<clients.length; i++){
             clients[i].close()

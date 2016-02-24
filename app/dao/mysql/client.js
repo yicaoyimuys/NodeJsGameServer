@@ -37,7 +37,7 @@ SqlClient.prototype.query = function(sql, values, cb){
 		connection.query(sql, values, function(err, res) {
 			connection.release();
 			if(err){
-				Log.error('执行sql语句['+sql+']错误：' + err);
+				Log.error('执行sql语句['+sql+'; '+values+']错误：' + err);
 			}
 			//console.log(err, res);
 			Utils.invokeCallback(cb, err, res);
