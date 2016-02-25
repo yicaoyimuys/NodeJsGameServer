@@ -26,7 +26,7 @@ Guid.prototype.newId = function() {
     if (timestamp == this.lastTimestamp) {
         // 当前毫秒内，则+1
         this.sequence += 1;
-        if (this.sequence > 4095) {
+        if (this.sequence >= 524287) {
             // 当前毫秒内计数满了，则等待下一秒
             this.sequence = 0;
             while(true) {
@@ -41,7 +41,44 @@ Guid.prototype.newId = function() {
     }
     this.lastTimestamp = timestamp;
 
-    return ((timestamp << 24) | (this.serverId << 12) | this.sequence) >>> 0;
+    //sequence(20) + timestamp(32) + serverId(12);
+    var a = this.left(this.sequence, 44);
+    var b = this.left(timestamp, 12);
+    var c = this.left(this.serverId, 0);
+    var d = this.residue(this.residue(a, b), c);
+    //console.log(a, a.length);
+    //console.log(b, b.length);
+    //console.log(c, c.length);
+    //console.log(d, d.length);
+    return parseInt(d, 2);
+}
+
+Guid.prototype.residue = function(a, b){
+    var result = "";
+    for(var i=0; i<64; i++){
+        var ai = a.substr(i, 1);
+        var bi = b.substr(i, 1);
+        if(ai == "1" || bi == "1"){
+            result += "1";
+        }
+        else{
+            result += "0";
+        }
+    }
+    return result;
+}
+
+Guid.prototype.left = function(value, leftLen){
+    var valueStr = value.toString(2);
+    while(valueStr.length < 64){
+        valueStr = "0" + valueStr;
+    }
+    while(leftLen > 0){
+        valueStr = valueStr.substring(1, valueStr.length);
+        valueStr += "0";
+        leftLen--;
+    }
+    return valueStr;
 }
 
 module.exports = Guid;
