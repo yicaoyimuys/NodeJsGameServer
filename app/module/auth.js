@@ -65,9 +65,6 @@ Auth.loginSuccess = function(dbUser, cb, userSessionID){
     });
     DataService.addUser(user);
 
-    //更新用户最后登录时间
-    UserDao.updateUserLoginTime(dbUser);
-
     //设置用户在线
     UserCache.setOnline(dbUser.id);
 

@@ -10,6 +10,8 @@ var Server = require('../../libs/config/server.js');
 var Guid = require('../../libs/guid/guid.js');
 var MyDate = require('../../libs/date/date.js');
 var DbUser = require('../model/dbUser.js');
+var UserCache = require('../cache/userCache.js');
+var Log = require('../../libs/log/log.js');
 
 var userGuid = new Guid(Server.getServerID());
 
@@ -53,8 +55,19 @@ UserDao.createUser = function (dbUser, cb) {
     });
 }
 
-UserDao.updateUserLoginTime = function(dbUser){
-    var sql = 'UPDATE `user` SET last_login_time = ? WHERE id = ?';
-    var args = [dbUser.last_login_time, dbUser.id];
-    Global.asyncUserDb.query(sql, args);
+UserDao.update = function(userId, callback){
+    UserCache.getUserById(userId, function(dbUser){
+        if(dbUser == null){
+            Log.error('UserDao.update：用户不存在');
+            return;
+        }
+        var sql = 'UPDATE `user` SET name=?, money=?, last_login_time = ? WHERE id = ?';
+        var args = [dbUser.name, dbUser.money, dbUser.last_login_time, dbUser.id];
+        Global.userDb.query(sql, args, function(err, res){
+            if (err) {
+                Log.error('UserDao.update：' + err);
+            }
+            Utils.invokeCallback(callback);
+        });
+    });
 }

@@ -9,6 +9,7 @@ var Log = require('../../libs/log/log.js');
 var Utils = require('../../libs/util/utils.js');
 var MyDate = require('../../libs/date/date.js');
 var Async = require('async');
+var DbUpdateCache = require('./dbUpdateCache.js');
 
 var USER_KEY = 'User_';
 var USER_NAME_KEY = 'User_Name_';
@@ -16,6 +17,7 @@ var USER_OFFLINE_KEY = 'User_Offline_';
 
 UserCache.setUser = function(dbUser){
     Global.redis.mset(USER_KEY + dbUser.id, JSON.stringify(dbUser), USER_NAME_KEY + dbUser.name, dbUser.id);
+    DbUpdateCache.update(dbUser.id, DbUpdateCache.UPDATE_USER_TYPE);
 }
 
 UserCache.getUserByName = function(userName, callback){

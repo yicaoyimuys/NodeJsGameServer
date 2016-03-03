@@ -15,7 +15,6 @@ var Proto = require('./proto/systemProto.js');
 var Db = require('../libs/config/db.js');
 var Redis = require('../libs/config/redis.js');
 var SqlClient = require('./dao/mysql/client.js');
-var SqlAsync = require('./dao/mysql/async.js');
 var RedisClient = require('./cache/redis/redis.js');
 
 Startup.init = function(serverName) {
@@ -32,10 +31,6 @@ Startup.init = function(serverName) {
 
 Startup.initUseDb = function() {
     Global.userDb = new SqlClient(Db.get('user'));
-}
-
-Startup.initAsyncUserDb = function() {
-    Global.asyncUserDb = new SqlAsync('User_DB_Write_Msgs');
 }
 
 Startup.initRedis = function() {

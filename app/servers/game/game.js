@@ -14,7 +14,6 @@ var logServerConfig = Server.getByServer('log');
 
 Startup.init(gameServerConfig.id);
 Startup.initRedis();
-Startup.initAsyncUserDb();
 Startup.connectBack(gateServerConfig);
 Startup.connectBack(chatServerConfig);
 Startup.connectBack(logServerConfig);

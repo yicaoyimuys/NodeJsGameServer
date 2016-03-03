@@ -11,8 +11,6 @@ Global.serverName = '';
 Global.serverClients = {};
 //当前服务器所连接的userDb
 Global.userDb = null;
-//异步db操作
-Global.asyncUserDb = null;
 //当前服务器所连接的redis
 Global.redis = null;
 //当前服务器所连接的game后台服务器
