@@ -35,7 +35,8 @@ for(var i=0; i<SUM_CLIENT; i++){
 }
 
 function connect(index){
-    Link.connect('127.0.0.1', 8880, function(client){
+    Link.connectByWebSocket('127.0.0.1', 8880, function(client){
+    //Link.connect('127.0.0.1', 8880, function(client){
         Log.debug('连接成功');
         client.addCloseCallBack(function(){
             Log.debug('连接关闭');

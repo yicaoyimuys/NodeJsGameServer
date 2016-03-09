@@ -37,30 +37,36 @@ Startup.initRedis = function() {
     Global.redis = new RedisClient(Redis.get());
 }
 
+
+var frontSocketAcceptFunc = function(session) {
+    Log.debug('front client connected');
+
+    SessionService.addSession(session);
+    session.addCloseCallBack(function(){
+        var sendMsg = new Proto.system_clientOffline();
+        sendMsg.userSessionID = session.id;
+        //通知后端服务器用户下线
+        {
+            //登录服务器
+            BackMessage.send('login', sendMsg);
+            //游戏服务器
+            BackMessage.send(Global[session.gameServer], sendMsg);
+        }
+        Log.debug('front client disconnect');
+    });
+
+    session.on(Session.DATA, function(data){
+        FrontMessage.receive(session, data);
+    });
+};
+
+Startup.listenerFrontWs = function(port) {
+    Link.serveByWebSocket(port, frontSocketAcceptFunc);
+    Log.info('server listening front on 127.0.0.1:' + port);
+}
+
 Startup.listenerFront = function(port) {
-    var acceptFunc = function(session) {
-        Log.debug('front client connected：' + session.sock.remoteAddress + ':' + session.sock.remotePort);
-
-        SessionService.addSession(session);
-        session.addCloseCallBack(function(){
-            var sendMsg = new Proto.system_clientOffline();
-            sendMsg.userSessionID = session.id;
-            //通知后端服务器用户下线
-            {
-                //登录服务器
-                BackMessage.send('login', sendMsg);
-                //游戏服务器
-                BackMessage.send(Global[session.gameServer], sendMsg);
-            }
-            Log.debug('front client disconnect on 127.0.0.1:' + port);
-        });
-
-        session.on(Session.DATA, function(data){
-            FrontMessage.receive(session, data);
-        });
-    };
-
-    Link.serve(port, acceptFunc);
+    Link.serve(port, frontSocketAcceptFunc);
     Log.info('server listening front on 127.0.0.1:' + port);
 }
 

@@ -30,7 +30,13 @@ Session.prototype.$initSock = function() {
     this.exBuffer = new ExBuffer().ushortHead().bigEndian();
     this.exBuffer.on('data', onReceivePackData);
 
+    //Socket使用
     this.sock.on('data', function(data) {
+        self.exBuffer.put(data);
+    });
+
+    //WebSocket使用
+    this.sock.on('message', function(data) {
         self.exBuffer.put(data);
     });
 
@@ -52,11 +58,22 @@ Session.prototype.send = function(data){
 
     //写入2个字节表示本次包长
     var headBuf = new Buffer(2);
-    headBuf.writeUInt16BE(len, 0)
-    this.sock.write(headBuf);
+    headBuf.writeUInt16BE(len, 0);
+    this.writeBufferToSocket(headBuf);
 
     //写入包体
-    this.sock.write(data);
+    this.writeBufferToSocket(data);
+}
+
+Session.prototype.writeBufferToSocket = function(buf){
+    if(this.sock['write']){
+        //Socket使用
+        this.sock.write(buf);
+    }
+    else{
+        //WebSocket使用
+        this.sock.send(buf);
+    }
 }
 
 Session.prototype.close = function(){
