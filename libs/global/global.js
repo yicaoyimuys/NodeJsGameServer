@@ -2,9 +2,12 @@
  * Created by egret on 16/1/21.
  */
 var Log = require('../log/log.js');
+var Program = require('../program/program.js');
 
 var Global = module.exports;
 
+//当前环境(开发，生产)
+Global.environment = Program.environment || 'development';
 //当前服务器名称
 Global.serverName = '';
 //当前服务器所连接的后台客户端

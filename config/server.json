@@ -1,13 +1,28 @@
 {
-  "serverID" : 1,
-  "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
-  "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
-  "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
-  "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
-  "login": {"id":"loginServer-1"},
-  "game": {
-    "1": {"id": "gameServer-1"},
-    "2": {"id": "gameServer-2"},
-    "3": {"id": "gameServer-3"}
+  "development": {
+    "serverID" : 1,
+    "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
+    "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
+    "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
+    "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
+    "login": {"id":"loginServer-1"},
+    "game": {
+      "1": {"id": "gameServer-1"},
+      "2": {"id": "gameServer-2"},
+      "3": {"id": "gameServer-3"}
+    }
+  },
+  "production": {
+    "serverID" : 1,
+    "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
+    "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
+    "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
+    "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
+    "login": {"id":"loginServer-1"},
+    "game": {
+      "1": {"id": "gameServer-1"},
+      "2": {"id": "gameServer-2"},
+      "3": {"id": "gameServer-3"}
+    }
   }
 }

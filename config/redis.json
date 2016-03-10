@@ -1,6 +1,14 @@
 {
-  "host": "127.0.0.1",
-  "port": 6379,
-  "auth_pass": "yangsong",
-  "db": 1
+  "development": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "auth_pass": "yangsong",
+    "db": 1
+  },
+  "production": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "auth_pass": "qwertyuiop",
+    "db": 1
+  }
 }

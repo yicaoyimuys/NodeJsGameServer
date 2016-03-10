@@ -2,18 +2,18 @@
 
 sh stop.sh
 
-node app/servers/gate/gate.js &
+node app/servers/gate/gate.js -e development &
 sleep 1
-node app/servers/log/log.js &
+node app/servers/log/log.js -e development &
 sleep 1
-node app/servers/db/db.js &
+node app/servers/db/db.js -e development &
 sleep 1
-node app/servers/chat/chat.js &
+node app/servers/chat/chat.js -e development &
 sleep 1
-node app/servers/login/login.js &
+node app/servers/login/login.js -e development &
 sleep 1
-node app/servers/game/game.js -g 1 &
+node app/servers/game/game.js -e development -g 1 &
 sleep 1
-node app/servers/game/game.js -g 2 &
+node app/servers/game/game.js -e development -g 2 &
 sleep 1
-node app/servers/game/game.js -g 3
+node app/servers/game/game.js -e development -g 3

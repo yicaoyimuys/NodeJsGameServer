@@ -5,12 +5,13 @@ var Log = module.exports;
 
 var Log4js = require('log4js');
 var LogConfig = require('../../config/log4js.json');
+var Global = require('../global/global.js');
 
 var $serverName = '';
 
 Log.init = function(serverName) {
     $serverName = serverName;
-    Log4js.configure(LogConfig);
+    Log4js.configure(LogConfig[Global.environment]);
 }
 
 Log.trace = function(message) {
@@ -52,6 +53,9 @@ Log.fatal = function(message) {
 Log.log = function(categoryName, logType, message) {
     var logger = Log4js.getLogger(categoryName);
     if (logger) {
-        logger[logType]('['+$serverName+'] ' + message);
+        if(categoryName == 'console'){
+            message = '['+$serverName+'] ' + message;
+        }
+        logger[logType](message);
     }
 };

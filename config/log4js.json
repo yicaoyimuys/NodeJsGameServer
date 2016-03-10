@@ -1,48 +1,134 @@
 {
-  "appenders": [
-    {
-      "type": "console",
-      "category": "console"
-    },
-    {
-      "type": "file",
-      "filename": "logs/log.log",
-      "category": "logServer"
-    },
-    {
-      "type": "file",
-      "filename": "logs/chat.log",
-      "category": "chatServer"
-    },
-    {
-      "type": "file",
-      "filename": "logs/login.log",
-      "category": "loginServer"
-    },
-    {
-      "type": "file",
-      "filename": "logs/game.log",
-      "category": "gameServer"
-    },
-    {
-      "type": "file",
-      "filename": "logs/gate.log",
-      "category": "gateServer"
-    },
-    {
-      "type": "file",
-      "filename": "logs/test.log",
-      "category": "testServer"
+  "development": {
+    "appenders": [
+      {
+        "type": "console",
+        "category": "console"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gateServer-1.log",
+        "category": "gateServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/chatServer-1.log",
+        "category": "chatServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/logServer-1.log",
+        "category": "logServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/dbServer-1.log",
+        "category": "dbServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/loginServer-1.log",
+        "category": "loginServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gameServer-1.log",
+        "category": "gameServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gameServer-2.log",
+        "category": "gameServer-2"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gameServer-3.log",
+        "category": "gameServer-3"
+      },
+      {
+        "type": "file",
+        "filename": "logs/test.log",
+        "category": "testServer"
+      }
+    ],
+    "replaceConsole": true,
+    "levels": {
+      "console": "DEBUG",
+      "gateServer-1": "INFO",
+      "chatServer-1": "INFO",
+      "logServer-1": "INFO",
+      "dbServer-1": "INFO",
+      "loginServer-1": "INFO",
+      "gameServer-1": "INFO",
+      "gameServer-2": "INFO",
+      "gameServer-3": "INFO",
+      "testServer": "INFO"
     }
-  ],
-  "replaceConsole": true,
-  "levels": {
-    "console": "DEBUG",
-    "logServer": "INFO",
-    "chatServer": "INFO",
-    "loginServer": "INFO",
-    "gameServer": "INFO",
-    "gateServer": "INFO",
-    "testServer": "INFO"
+  },
+  "production": {
+    "appenders": [
+      {
+        "type": "console",
+        "category": "console"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gateServer-1.log",
+        "category": "gateServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/chatServer-1.log",
+        "category": "chatServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/logServer-1.log",
+        "category": "logServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/dbServer-1.log",
+        "category": "dbServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/loginServer-1.log",
+        "category": "loginServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gameServer-1.log",
+        "category": "gameServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gameServer-2.log",
+        "category": "gameServer-2"
+      },
+      {
+        "type": "file",
+        "filename": "logs/gameServer-3.log",
+        "category": "gameServer-3"
+      },
+      {
+        "type": "file",
+        "filename": "logs/test.log",
+        "category": "testServer"
+      }
+    ],
+    "replaceConsole": true,
+    "levels": {
+      "console": "INFO",
+      "gateServer-1": "INFO",
+      "chatServer-1": "INFO",
+      "logServer-1": "INFO",
+      "dbServer-1": "INFO",
+      "loginServer-1": "INFO",
+      "gameServer-1": "INFO",
+      "gameServer-2": "INFO",
+      "gameServer-3": "INFO",
+      "testServer": "INFO"
+    }
   }
 }
