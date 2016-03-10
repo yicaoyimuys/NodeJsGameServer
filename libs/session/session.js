@@ -80,7 +80,15 @@ Session.prototype.close = function(){
     if(this.isClose){
         return;
     }
-    this.sock.destroy();
+
+    if(this.sock['destroy']){
+        //Socket使用
+        this.sock.destroy();
+    }
+    else{
+        //WebSocket使用
+        this.sock.close();
+    }
 }
 
 Session.prototype.addCloseCallBack = function(cb){
@@ -94,6 +102,7 @@ Session.prototype.$destroy = function() {
     this.isClose = true;
 
     this.sock.removeAllListeners('data');
+    this.sock.removeAllListeners('message');
     this.sock.removeAllListeners('close');
     this.sock.removeAllListeners('error');
     this.sock = null;
