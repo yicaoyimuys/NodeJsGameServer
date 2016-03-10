@@ -16,5 +16,11 @@
     "system_clientOffline":{
         "msgId":"10004",
         "userSessionID":"int64"
+    },
+    "system_chatAddUser":{
+        "msgId":"10005",
+        "userSessionID":"int64",
+        "userId":"int64",
+        "userName":"string"
     }
 }

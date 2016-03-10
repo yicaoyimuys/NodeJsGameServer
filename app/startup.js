@@ -51,6 +51,8 @@ var frontSocketAcceptFunc = function(session) {
             BackMessage.send('login', sendMsg);
             //游戏服务器
             BackMessage.send(Global[session.gameServer], sendMsg);
+            //Chat服务器
+            BackMessage.send('chat', sendMsg);
         }
         Log.debug('front client disconnect');
     });

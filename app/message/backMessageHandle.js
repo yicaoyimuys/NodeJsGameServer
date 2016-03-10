@@ -4,6 +4,7 @@
 var Global = require('../../libs/global/global.js');
 var SessionService = require('../../libs/session/sessionService.js');
 var DataService = require('../data/dataService.js');
+var ChatService = require('../data/chatService.js');
 var Log = require('../../libs/log/log.js');
 var Proto = require('../proto/systemProto.js');
 var BackMessage = require('./backMessage.js');
@@ -31,4 +32,9 @@ BackMessageHandle.handles[Proto.ID_system_clientOffline] = function(session, dat
     if(user){
         user.session.close();
     }
+
+    ChatService.removeUser(data.userSessionID);
+}
+BackMessageHandle.handles[Proto.ID_system_chatAddUser] = function(session, data) {
+    ChatService.addUser(data.userSessionID, data.userId, data.userName);
 }
