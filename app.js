@@ -1,0 +1,20 @@
+Timer = require('./libs/timer/timer.js');
+
+process.argv[0] = '0';
+process.argv[1] = '1';
+process.argv[2] = '-e';
+process.argv[3] = 'development';
+process.argv[4] = '-g';
+process.argv[5] = 1;
+//require('./app/servers/gate/gate.js');
+//Timer.sleep(1000);
+//require('./app/servers/log/log.js');
+//Timer.sleep(1000);
+//require('./app/servers/db/db.js');
+//Timer.sleep(1000);
+//require('./app/servers/chat/chat.js');
+//Timer.sleep(1000);
+//require('./app/servers/login/login.js');
+//Timer.sleep(1000);
+require('./app/servers/game/game.js');
+Timer.sleep(1000);

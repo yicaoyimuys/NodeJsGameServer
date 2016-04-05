@@ -18,3 +18,10 @@ Timer.setInterval = function (delay, callback, args) {
 Timer.clearInterval = function (calllback) {
     clearInterval(calllback);
 }
+
+Timer.sleep = function(sleepTime) {
+    var start = Date.now();
+    while(Date.now() - start <= sleepTime) {
+
+    }
+}
