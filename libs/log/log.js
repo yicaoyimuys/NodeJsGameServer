@@ -7,41 +7,41 @@ var Log4js = require('log4js');
 var LogConfig = require('../../config/log4js.json');
 var Global = require('../global/global.js');
 
-var $serverName = '';
+var initLogName = '';
 
 Log.init = function(serverName) {
-    $serverName = serverName;
+    initLogName = serverName;
     Log4js.configure(LogConfig[Global.environment]);
 }
 
-Log.trace = function(message) {
+Log.trace = function(message, logName) {
     Log.log('console', 'trace', message);
-    Log.log($serverName, 'trace', message);
+    Log.log(logName || initLogName, 'trace', message);
 }
 
-Log.debug = function(message) {
+Log.debug = function(message, logName) {
     Log.log('console', 'debug', message);
-    Log.log($serverName, 'debug', message);
+    Log.log(logName || initLogName, 'debug', message);
 }
 
-Log.info = function(message) {
+Log.info = function(message, logName) {
     Log.log('console', 'info', message);
-    Log.log($serverName, 'info', message);
+    Log.log(logName || initLogName, 'info', message);
 }
 
-Log.warn = function(message) {
+Log.warn = function(message, logName) {
     Log.log('console', 'warn', message);
-    Log.log($serverName, 'warn', message);
+    Log.log(logName || initLogName, 'warn', message);
 }
 
-Log.error = function(message) {
+Log.error = function(message, logName) {
     Log.log('console', 'error', message);
-    Log.log($serverName, 'error', message);
+    Log.log(logName || initLogName, 'error', message);
 }
 
-Log.fatal = function(message) {
+Log.fatal = function(message, logName) {
     Log.log('console', 'fatal', message);
-    Log.log($serverName, 'fatal', message);
+    Log.log(logName || initLogName, 'fatal', message);
 }
 
 /**
@@ -54,7 +54,7 @@ Log.log = function(categoryName, logType, message) {
     var logger = Log4js.getLogger(categoryName);
     if (logger) {
         if(categoryName == 'console'){
-            message = '['+$serverName+'] ' + message;
+            message = '['+initLogName+'] ' + message;
         }
         logger[logType](message);
     }
