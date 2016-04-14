@@ -11,12 +11,12 @@ function func(){
 
 if [ $# -eq 0 ]
 	then
-		func app/servers/gate/gate.js
-		func app/servers/login/login.js
-		func app/servers/game/game.js
-		func app/servers/chat/chat.js
-		func app/servers/log/log.js
-		func app/servers/db/db.js
+		func node app/servers/gate/gate.js
+		func node app/servers/login/login.js
+		func node app/servers/game/game.js
+		func node app/servers/chat/chat.js
+		func node app/servers/log/log.js
+		func node app/servers/db/db.js
 	else
 		func $1
 fi
