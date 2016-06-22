@@ -55,8 +55,13 @@ Msg.decode = function (buff, fieldType, arrayType) {
         return Msg.decodeArray(buff, arrayType);
     } else if (fieldType == 'buffer') {
         list = buff.buff().unpack();
-    } else {
+    } else if (typeof(fieldType) == 'string') {
         list = buff.buff().unpack();
+    } else {
+        var buffers = buff.buff().unpack();
+        var model = new fieldType();
+        model.decode(buffers[buffers.length-1]);
+        list = [model];
     }
 
     if(list){

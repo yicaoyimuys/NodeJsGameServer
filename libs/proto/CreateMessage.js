@@ -84,7 +84,7 @@ function getDecodeStr(key, value){
         return "this."+key+" = Msg.decode(buff, '"+value+"');";
     } else if(value.indexOf("array") != -1){
         var arr = value.split("/");
-        return "this."+key+" = Msg.decode(buff, '"+arr[0]+"', '"+arr[1]+"');";
+        return "this."+key+" = Msg.decode(buff, '"+arr[0]+"', "+arr[1]+");";
     } else {
         return "this."+key+".decode(Msg.decode(buff, '"+value+"'));";
     }
@@ -108,6 +108,8 @@ function getPropertyStr(fileName, key, value){
     } else if(value =="string"){
         return "this."+key+" = '';";
     } else if(value.indexOf("array") != -1){
+        var arr = value.split("/");
+        requireStr += "var "+arr[1]+" = require('./"+arr[1]+".js');\n";
         return "this."+key+" = [];";
     } else if(value =="buffer"){
         return "this."+key+" = null;";

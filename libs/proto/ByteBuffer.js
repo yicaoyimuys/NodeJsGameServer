@@ -104,18 +104,28 @@ var ByteBuffer = function (org_buf, offset) {
     };
 
     /**
-     * 变长字符串 前2个字节表示字符串长度
+     * 变长字符串 前1个字节表示字符串长度类型，接着2个字节表示字符串长度
      **/
     this.string = function (val, index) {
         if (val == undefined || val == null) {
-            var len = _org_buf['readInt16' + _endian + 'E'](_offset);
+            var lent = _org_buf.readUInt8(_offset);
+            _offset += 1;
+            var readLenStr = '';
+            if(lent == 1){
+                readLenStr = 'readUInt16' + _endian + 'E';
+            } else if(lent == 2){
+                readLenStr = 'readUInt32' + _endian + 'E';
+            } else {
+                readLenStr = 'readDouble' + _endian + 'E';
+            }
+            var len = _org_buf[readLenStr](_offset);
             _offset += 2;
             _list.push(_org_buf.toString(_encoding, _offset, _offset + len));
             _offset += len;
         } else {
             var len = Buffer.byteLength(val, _encoding);
             _list.splice(index != undefined ? index : _list.length, 0, {t: Type_String, d: val, l: len});
-            _offset += len + 2;
+            _offset += len + 1 + 2;
         }
         return this;
     };
@@ -203,7 +213,7 @@ var ByteBuffer = function (org_buf, offset) {
 
     this.buff = function (val, index) {
         if (val == undefined || val == null) {
-            var len = _org_buf['readInt16' + _endian + 'E'](_offset);
+            var len = _org_buf['readUInt16' + _endian + 'E'](_offset);
             _offset += 2;
             var buff = new Buffer(len);
             _org_buf.copy(buff, 0, _offset, _offset + len);
@@ -265,15 +275,31 @@ var ByteBuffer = function (org_buf, offset) {
                     offset += _list[i].l;
                     break;
                 case Type_String:
+                    //第一个字节表示字符串长度类型，1:Uint16 2:Uint32 3:Uint64
+                    var lent = 0;
+                    var writeLenStr = '';
+                    if(_list[i].l < Math.pow(2, 16)){
+                        lent = 1;
+                        writeLenStr = 'writeUInt16' + _endian + 'E';
+                    } else if(_list[i].l < Math.pow(2, 32)){
+                        lent = 2;
+                        writeLenStr = 'writeUInt32' + _endian + 'E';
+                    } else {
+                        lent = 3;
+                        writeLenStr = 'writeDouble' + _endian + 'E';
+                    }
+                    _org_buf.writeUInt8(lent, offset);
+                    offset += 1;
                     //前2个字节表示字符串长度
-                    _org_buf['writeInt16' + _endian + 'E'](_list[i].l, offset);
+                    _org_buf[writeLenStr](_list[i].l, offset);
                     offset += 2;
-                    _org_buf.write(_list[i].d, _encoding, offset);
+                    //字符串内容
+                    _org_buf.write(_list[i].d, offset, _list[i].l, _encoding);
                     offset += _list[i].l;
                     break;
                 case Type_VString:
                     var vlen = Buffer.byteLength(_list[i].d, _encoding);//字符串实际长度
-                    _org_buf.write(_list[i].d, _encoding, offset);
+                    _org_buf.write(_list[i].d, offset, _list[i].l, _encoding);
                     //补齐\0
                     for (var j = offset + vlen; j < offset + _list[i].l; j++) {
                         _org_buf.writeUInt8(0, j);
@@ -306,7 +332,7 @@ var ByteBuffer = function (org_buf, offset) {
                     break;
                 case Type_Buff:
                     //前2个字节表示Buffer长度
-                    _org_buf['writeInt16' + _endian + 'E'](_list[i].l, offset);
+                    _org_buf['writeUInt16' + _endian + 'E'](_list[i].l, offset);
                     offset += 2;
                     _list[i].d.copy(_org_buf, offset, 0, _list[i].l);
                     offset += _list[i].l;

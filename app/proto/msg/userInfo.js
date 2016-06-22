@@ -5,6 +5,7 @@
 var ByteBuffer = require('../../../libs/proto/ByteBuffer.js');
 var Msg = require('../../../libs/proto/Msg.js');
 
+var int32 = require('./int32.js');
 
 
 function userInfo(){
@@ -33,7 +34,7 @@ userInfo.prototype.decode = function(ba){
 	this.userName = Msg.decode(buff, 'string');
 	this.money = Msg.decode(buff, 'int32');
 	this.createTime = Msg.decode(buff, 'int32');
-	this.task = Msg.decode(buff, 'array', 'int32');
+	this.task = Msg.decode(buff, 'array', int32);
 
 }
 
