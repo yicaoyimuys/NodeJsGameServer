@@ -68,23 +68,33 @@ function generateMsgFile(fileName, msgObj){
     saveFile(fileName, fileContent);
 }
 
+function isBaseType(type){
+    return type =="byte"
+        || type =="short"
+        || type =="ushort"
+        || type =="int32"
+        || type =="uint32"
+        || type =="int64"
+        || type =="float"
+        || type =="double"
+        || type =="string"
+        || type =="buffer";
+}
+
 function getDecodeStr(key, value){
     if(key =="msgId"){
         return "this."+key+" = Msg.decode(buff, 'ushort');";
-    } else if (value =="byte"
-        || value =="short"
-        || value =="ushort"
-        || value =="int32"
-        || value =="uint32"
-        || value =="int64"
-        || value =="float"
-        || value =="double"
-        || value =="string"
-        || value =="buffer"){
+    } else if (isBaseType(value)){
         return "this."+key+" = Msg.decode(buff, '"+value+"');";
     } else if(value.indexOf("array") != -1){
         var arr = value.split("/");
-        return "this."+key+" = Msg.decode(buff, '"+arr[0]+"', "+arr[1]+");";
+        if(isBaseType(arr[1])){
+            //基础类型
+            return "this."+key+" = Msg.decode(buff, '"+arr[0]+"', '"+arr[1]+"');";
+        } else {
+            //自定义类型
+            return "this."+key+" = Msg.decode(buff, '"+arr[0]+"', "+arr[1]+");";
+        }
     } else {
         return "this."+key+".decode(Msg.decode(buff, '"+value+"'));";
     }
@@ -109,7 +119,9 @@ function getPropertyStr(fileName, key, value){
         return "this."+key+" = '';";
     } else if(value.indexOf("array") != -1){
         var arr = value.split("/");
-        requireStr += "var "+arr[1]+" = require('./"+arr[1]+".js');\n";
+        if(!isBaseType(arr[1])) {
+            requireStr += "var " + arr[1] + " = require('./" + arr[1] + ".js');\n";
+        }
         return "this."+key+" = [];";
     } else if(value =="buffer"){
         return "this."+key+" = null;";
@@ -122,16 +134,7 @@ function getPropertyStr(fileName, key, value){
 function getEncodeStr(key, value){
     if(key =="msgId"){
         return "Msg.encode(buff, 'ushort', this."+key+");";
-    } else if (value =="byte"
-        || value =="short"
-        || value =="ushort"
-        || value =="int32"
-        || value =="uint32"
-        || value =="int64"
-        || value =="float"
-        || value =="double"
-        || value =="string"
-        || value =="buffer"){
+    } else if (isBaseType(value)){
         return "Msg.encode(buff, '"+value+"', this."+key+");";
     } else if(value.indexOf("array") != -1){
         var arr = value.split("/");
