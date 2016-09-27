@@ -7,6 +7,7 @@ var Net = require('net');
 var Utils = require('../util/utils.js');
 var Session = require('../session/session.js');
 var Log = require('../log/log.js');
+var Request = require('request');
 
 Link.serveByWebSocket = function(port, acceptFunc) {
     var WebSocketServer = require('ws').Server;
@@ -57,3 +58,35 @@ Link.connect = function(host, port, successFunc, failFunc) {
         Utils.invokeCallback(successFunc, session);
     });
 };
+
+Link.requestPost = function(url, param, successFunc, failFunc){
+    Request.post({url:url, form: param}, function (error, response, body) {
+        if(error){
+            failFunc(error, -1, url);
+        }
+        else{
+            if (response.statusCode == 200) {
+                successFunc(body);
+            }
+            else{
+                failFunc(null, response.statusCode, url);
+            }
+        }
+    })
+}
+
+Link.request = function(url, successFunc, failFunc){
+    Request(url, function (error, response, body) {
+        if(error){
+            failFunc(error, -1, url);
+        }
+        else{
+            if (response.statusCode == 200) {
+                successFunc(body);
+            }
+            else{
+                failFunc(null, response.statusCode, url);
+            }
+        }
+    })
+}

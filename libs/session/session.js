@@ -16,6 +16,9 @@ function Session(sock){
     this.isClose = false;
     this.exBuffer = null;
     this.gameServer = null;
+    this.closeByActive = false;
+    this.remoteAddress = this.sock.remoteAddress + ':' + this.sock.remotePort;
+    //Log.debug('SessionCreate:' + this.remoteAddress);
 
     this.$initSock();
 }
@@ -30,23 +33,31 @@ Session.prototype.$initSock = function() {
     this.exBuffer = new ExBuffer().ushortHead().bigEndian();
     this.exBuffer.on('data', onReceivePackData);
 
-    //Socket使用
+    //Socket接收到数据
     this.sock.on('data', function(data) {
         self.exBuffer.put(data);
     });
 
-    //WebSocket使用
+    //WebSocket接收到数据
     this.sock.on('message', function(data) {
+        if(!data['copy']){
+            Log.warn('Session收到未知数据:' + data);
+            return;
+        }
         self.exBuffer.put(data);
     });
 
+    //Socket/WebSocket关闭
     this.sock.on('close', function() {
         self.$destroy();
     });
 
+    //Socket错误处理
     this.sock.on('error', function(err) {
         Log.debug('socket error：' + err);
+
         self.close();
+        self.$destroy();
     });
 };
 
@@ -65,6 +76,21 @@ Session.prototype.send = function(data){
     this.writeBufferToSocket(data);
 }
 
+Session.prototype.sendByWebSocket = function (data) {
+    if(this.isClose){
+        return;
+    }
+    var len = data.length;
+
+    //写入2个字节表示本次包长
+    var headBuf = new Buffer(2);
+    headBuf.writeUInt16BE(len, 0);
+
+    //写入包体
+    var sendBuf = Buffer.concat([headBuf, data], 2 + len);
+    this.writeBufferToSocket(sendBuf);
+}
+
 Session.prototype.writeBufferToSocket = function(buf){
     if(this.sock['write']){
         //Socket使用
@@ -76,13 +102,21 @@ Session.prototype.writeBufferToSocket = function(buf){
     }
 }
 
-Session.prototype.close = function(){
+Session.prototype.close = function(isActive){
     if(this.isClose){
         return;
     }
 
-    if(this.sock['destroy']){
+    //是否是主动断开，默认为false
+    if(!isActive){
+        isActive = false;
+    }
+
+    this.closeByActive = isActive;
+
+    if(this.sock['end']){
         //Socket使用
+        this.sock.end();
         this.sock.destroy();
     }
     else{
@@ -99,6 +133,7 @@ Session.prototype.addCloseCallBack = function(cb){
 }
 
 Session.prototype.$destroy = function() {
+    //Log.debug('SessionClose:' + this.remoteAddress);
     this.isClose = true;
 
     this.sock.removeAllListeners('data');
@@ -112,7 +147,7 @@ Session.prototype.$destroy = function() {
 
     this.removeAllListeners(Session.DATA);
     for(var i= 0, len=this.closeHandles.length; i<len; i++){
-        Utils.invokeCallback(this.closeHandles[i]);
+        Utils.invokeCallback(this.closeHandles[i], this.closeByActive);
     }
     this.closeHandles.length = 0;
     this.closeHandles = null;

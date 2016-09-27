@@ -101,8 +101,11 @@ Startup.connectBack = function(serverConfig) {
         Log.info('back client connect success ' + serverName + ', '+ host + ':' + port);
         Global.bindServer(session, serverName);
 
-        session.addCloseCallBack(function(){
-            againConnect();
+        session.addCloseCallBack(function(isActive){
+            Log.error('back client session close');
+            if(!isActive){
+                againConnect();
+            }
         });
 
         //发送HelloServer

@@ -42,3 +42,8 @@ SessionService.getSession = function(sessionID) {
 SessionService.getSessionCount = function() {
     return session_count;
 }
+
+//获得所有session
+SessionService.getAllSession = function () {
+    return sessions;
+}

@@ -111,21 +111,34 @@ var ByteBuffer = function (org_buf, offset) {
             var lent = _org_buf.readUInt8(_offset);
             _offset += 1;
             var readLenStr = '';
+            var readLenOffset = 0;
             if(lent == 1){
                 readLenStr = 'readUInt16' + _endian + 'E';
+                readLenOffset = 2;
             } else if(lent == 2){
                 readLenStr = 'readUInt32' + _endian + 'E';
+                readLenOffset = 4;
             } else {
                 readLenStr = 'readDouble' + _endian + 'E';
+                readLenOffset = 8;
             }
             var len = _org_buf[readLenStr](_offset);
-            _offset += 2;
+            _offset += readLenOffset;
             _list.push(_org_buf.toString(_encoding, _offset, _offset + len));
             _offset += len;
         } else {
             var len = Buffer.byteLength(val, _encoding);
             _list.splice(index != undefined ? index : _list.length, 0, {t: Type_String, d: val, l: len});
-            _offset += len + 1 + 2;
+
+            var writeLenOffset = 0;
+            if(len < Math.pow(2, 16)){
+                writeLenOffset = 2;
+            } else if(len < Math.pow(2, 32)){
+                writeLenOffset = 4;
+            } else {
+                writeLenOffset = 8;
+            }
+            _offset += len + 1 + writeLenOffset;
         }
         return this;
     };
@@ -213,8 +226,22 @@ var ByteBuffer = function (org_buf, offset) {
 
     this.buff = function (val, index) {
         if (val == undefined || val == null) {
-            var len = _org_buf['readUInt16' + _endian + 'E'](_offset);
-            _offset += 2;
+            var lent = _org_buf.readUInt8(_offset);
+            _offset += 1;
+            var readLenStr = '';
+            var readLenOffset = 0;
+            if(lent == 1){
+                readLenStr = 'readUInt16' + _endian + 'E';
+                readLenOffset = 2;
+            } else if(lent == 2){
+                readLenStr = 'readUInt32' + _endian + 'E';
+                readLenOffset = 4;
+            } else {
+                readLenStr = 'readDouble' + _endian + 'E';
+                readLenOffset = 8;
+            }
+            var len = _org_buf[readLenStr](_offset);
+            _offset += readLenOffset;
             var buff = new Buffer(len);
             _org_buf.copy(buff, 0, _offset, _offset + len);
             _list.push(buff);
@@ -222,7 +249,16 @@ var ByteBuffer = function (org_buf, offset) {
         } else {
             var len = val.length;
             _list.splice(index != undefined ? index : _list.length, 0, {t: Type_Buff, d: val, l: len});
-            _offset += len + 2;
+
+            var writeLenOffset = 0;
+            if(len < Math.pow(2, 16)){
+                writeLenOffset = 2;
+            } else if(len < Math.pow(2, 32)){
+                writeLenOffset = 4;
+            } else {
+                writeLenOffset = 8;
+            }
+            _offset += len + 1 + writeLenOffset;
         }
         return this;
     }
@@ -278,21 +314,25 @@ var ByteBuffer = function (org_buf, offset) {
                     //第一个字节表示字符串长度类型，1:Uint16 2:Uint32 3:Uint64
                     var lent = 0;
                     var writeLenStr = '';
+                    var writeLenOffset = 0;
                     if(_list[i].l < Math.pow(2, 16)){
                         lent = 1;
                         writeLenStr = 'writeUInt16' + _endian + 'E';
+                        writeLenOffset = 2;
                     } else if(_list[i].l < Math.pow(2, 32)){
                         lent = 2;
                         writeLenStr = 'writeUInt32' + _endian + 'E';
+                        writeLenOffset = 4;
                     } else {
                         lent = 3;
                         writeLenStr = 'writeDouble' + _endian + 'E';
+                        writeLenOffset = 8;
                     }
                     _org_buf.writeUInt8(lent, offset);
                     offset += 1;
                     //前2个字节表示字符串长度
                     _org_buf[writeLenStr](_list[i].l, offset);
-                    offset += 2;
+                    offset += writeLenOffset;
                     //字符串内容
                     _org_buf.write(_list[i].d, offset, _list[i].l, _encoding);
                     offset += _list[i].l;
@@ -331,9 +371,28 @@ var ByteBuffer = function (org_buf, offset) {
                     offset += _list[i].l;
                     break;
                 case Type_Buff:
+                    //第一个字节表示Buff长度类型，1:Uint16 2:Uint32 3:Uint64
+                    var lent = 0;
+                    var writeLenStr = '';
+                    var writeLenOffset = 0;
+                    if(_list[i].l < Math.pow(2, 16)){
+                        lent = 1;
+                        writeLenStr = 'writeUInt16' + _endian + 'E';
+                        writeLenOffset = 2;
+                    } else if(_list[i].l < Math.pow(2, 32)){
+                        lent = 2;
+                        writeLenStr = 'writeUInt32' + _endian + 'E';
+                        writeLenOffset = 4;
+                    } else {
+                        lent = 3;
+                        writeLenStr = 'writeDouble' + _endian + 'E';
+                        writeLenOffset = 8;
+                    }
+                    _org_buf.writeUInt8(lent, offset);
+                    offset += 1;
                     //前2个字节表示Buffer长度
-                    _org_buf['writeUInt16' + _endian + 'E'](_list[i].l, offset);
-                    offset += 2;
+                    _org_buf[writeLenStr](_list[i].l, offset);
+                    offset += writeLenOffset;
                     _list[i].d.copy(_org_buf, offset, 0, _list[i].l);
                     offset += _list[i].l;
                     break;

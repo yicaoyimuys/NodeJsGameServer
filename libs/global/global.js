@@ -22,6 +22,13 @@ Global.allotGameServerIndex = 0;
 
 //绑定当前所连接的服务器
 Global.bindServer = function(session, serverName) {
+    var existsSession = Global[serverName];
+    if(existsSession){
+        existsSession.close(true);
+        existsSession = null;
+        Log.warn('bindServer exists same server：' + serverName);
+    }
+
     Global[serverName] = session;
     session.addCloseCallBack(function(){
         Global[serverName] = null;
@@ -31,9 +38,11 @@ Global.bindServer = function(session, serverName) {
 //添加当前所连接的客户端进程
 Global.addServerClient = function(session, data){
     var serverName = data.serverName;
-    if(Global.serverClients[serverName]){
-        Log.error('exists same server：' + serverName);
-        return;
+    var existsSession = Global.serverClients[serverName];
+    if(existsSession){
+        existsSession.close(true);
+        existsSession = null;
+        Log.warn('addServerClient exists same server：' + serverName);
     }
 
     Global.bindServer(session, serverName);
