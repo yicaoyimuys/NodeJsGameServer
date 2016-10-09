@@ -48,11 +48,11 @@ var frontSocketAcceptFunc = function(session) {
         //通知后端服务器用户下线
         {
             //登录服务器
-            BackMessage.send('login', sendMsg);
+            BackMessage.sendToLogin(sendMsg);
             //游戏服务器
-            BackMessage.send(Global[session.gameServer], sendMsg);
+            BackMessage.sendToGame(session.gameServer, sendMsg);
             //Chat服务器
-            BackMessage.send('chat', sendMsg);
+            BackMessage.sendToChat(sendMsg);
         }
         Log.debug('front client disconnect');
     });

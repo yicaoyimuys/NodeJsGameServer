@@ -25,11 +25,11 @@ FrontMessage.receive = function(session, receiveBuff) {
     //消息分发
     if(Message.isLoginMsg(msgId)){
         //登陆服务器消息
-        BackMessage.send('login', sendMsg);
+        BackMessage.sendToLogin(sendMsg);
     }
     else if(Message.isChatMsg(msgId)){
         //聊天服务器消息
-        BackMessage.send('chat', sendMsg);
+        BackMessage.sendToChat(sendMsg);
     }
     else if(Message.isGameMsg(msgId)){
         //分配游戏服务器
@@ -41,7 +41,7 @@ FrontMessage.receive = function(session, receiveBuff) {
             }
         }
         //游戏服务器消息
-        BackMessage.send(Global[session.gameServer], sendMsg);
+        BackMessage.sendToGame(session.gameServer, sendMsg);
     }
     else {
         Log.error('FrontMessage收到未处理的消息ID: ' + data.msgId);

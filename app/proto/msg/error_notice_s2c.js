@@ -7,26 +7,26 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_clientOffline(){
-	this.msgId = 10006;
-	this.userSessionID = 0;
+function error_notice_s2c(){
+	this.msgId = 2000;
+	this.errorCode = 0;
 
 }
 
-system_clientOffline.prototype.encode = function(){
+error_notice_s2c.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'int64', this.userSessionID);
+	Msg.encode(buff, 'int32', this.errorCode);
 
     return buff.pack();
 }
 
-system_clientOffline.prototype.decode = function(ba){
+error_notice_s2c.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.userSessionID = Msg.decode(buff, 'int64');
+	this.errorCode = Msg.decode(buff, 'int32');
 
 }
 
 
-module.exports = system_clientOffline;
+module.exports = error_notice_s2c;

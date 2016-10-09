@@ -13,12 +13,21 @@
         "userSessionID":"int64",
         "msgBody":"buffer"
     },
-    "system_clientOffline":{
+    "system_sendToGateByList":{
         "msgId":"10004",
+        "userSessionList":"array/int64",
+        "msgBody":"buffer"
+    },
+    "system_sendToGateByAll":{
+        "msgId":"10005",
+        "msgBody":"buffer"
+    },
+    "system_clientOffline":{
+        "msgId":"10006",
         "userSessionID":"int64"
     },
     "system_chatAddUser":{
-        "msgId":"10005",
+        "msgId":"10007",
         "userSessionID":"int64",
         "userId":"int64",
         "userName":"string"

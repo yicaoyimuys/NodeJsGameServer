@@ -2,8 +2,8 @@
  * Created by egret on 16/2/16.
  */
 function User(){
-    this.dbUser = null;
-    this.session = null;
+    this.id = 0;
+    this.name = '';
 }
 
 module.exports = User;

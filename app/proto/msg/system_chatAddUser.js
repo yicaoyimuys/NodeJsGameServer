@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_chatAddUser(){
-	this.msgId = 10005;
+	this.msgId = 10007;
 	this.userSessionID = 0;
 	this.userId = 0;
 	this.userName = '';

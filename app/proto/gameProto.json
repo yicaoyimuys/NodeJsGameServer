@@ -14,6 +14,10 @@
         "createTime":"int32",
         "task":"array/int32"
     },
+    "error_notice_s2c":{
+        "msgId":"2000",
+        "errorCode":"int32"
+    },
     "user_joinGame_c2s":{
         "msgId":"2001",
         "userId":"int64"
@@ -21,5 +25,17 @@
     "user_joinGame_s2c":{
         "msgId":"2002",
         "user":"userInfo"//用户信息
+    },
+    "user_chat_c2s":{
+        "msgId":"1500",
+        "chatMsg":"string",
+        "channel":"int32" //1全服
+    },
+    "user_chat_s2c":{
+        "msgId":"1501",
+        "chatMsg":"string",
+        "fUserId":"int64",
+        "fUserName":"string",
+        "channel":"int32"
     }
 }

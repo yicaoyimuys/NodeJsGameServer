@@ -9,16 +9,16 @@ var DataService = module.exports;
 var Users = {};
 var UserSessions = {};
 
-DataService.addUser = function(user){
-    var userId = user.dbUser.id;
-    var userSessionId = user.session.id;
+DataService.addUser = function(user, userSession){
+    var userId = user.id;
+    var userSessionId = userSession.id;
     Users[userId] = user;
     UserSessions[userSessionId] = userId;
 
-    user.session.addCloseCallBack(function(){
+    userSession.addCloseCallBack(function(){
         Users[userId] = null;
         UserSessions[userSessionId] = null;
-        //Log.info('下线了。。。。。 ' + userId);
+        Log.info('下线了。。。。。 ' + userId);
     });
 }
 

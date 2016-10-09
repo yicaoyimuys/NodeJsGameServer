@@ -12,7 +12,7 @@ Global.serverName = 'testServer';
 Log.init('testServer', 0);
 
 var Event = new EventEmitter();
-var SUM_CLIENT = 500;
+var SUM_CLIENT = 10;
 
 //连接
 var clients = [];
@@ -43,25 +43,41 @@ function connect(index){
         });
         clients.push(client);
 
+        //登录认证
         var sendMsg = new Proto.user_login_c2s();
         sendMsg.account = 'yangsong' + arr[index];
         client.send(sendMsg.encode());
         //console.log(sendMsg.encode());
 
+        var myUserName = '';
         client.on(Session.DATA, function(data){
             //console.log(data);
+
             var msg = Proto.decode(data);
             if(msg.msgId == Proto.ID_user_login_s2c){
+                myUserName = msg.user.userName;
+                //console.log(myUserName, '收到用户消息:', msg);
+
+                //进入游戏
                 sendMsg = new Proto.user_joinGame_c2s();
                 sendMsg.userId = msg.user.userId;
                 client.send(sendMsg.encode());
             }
             else if(msg.msgId == Proto.ID_user_joinGame_s2c){
-                //console.log('收到用户消息:', msg);
-                successNum++
-                if(successNum + failNum == SUM_CLIENT){
-                    Event.emit('success');
-                }
+                //console.log(myUserName, '收到用户消息:', msg);
+                //发送聊天
+                sendMsg = new Proto.user_chat_c2s();
+                sendMsg.chatMsg = 'Hello ' + myUserName;
+                sendMsg.channel = 2;
+                client.send(sendMsg.encode());
+            } else if(msg.msgId == Proto.ID_user_chat_s2c){
+                console.log(myUserName, '收到用户消息:', msg);
+                //successNum++
+                //if(successNum + failNum == SUM_CLIENT){
+                //    Event.emit('success');
+                //}
+            } else {
+                console.log(myUserName, '收到用户消息:', msg);
             }
         })
 

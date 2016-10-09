@@ -7,13 +7,14 @@ var Log = require('../../libs/log/log.js');
 var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
 var Session = require('../../libs/session/session.js');
-var Proto = require('../proto/systemProto.js');
+var SystemProto = require('../proto/systemProto.js');
+var GameProto = require('../proto/gameProto.js');
 var Handle = require('./backMessageHandle.js');
 
 var BackMessage = module.exports;
 
 BackMessage.receive = function(session, msg) {
-    var data = Proto.decode(msg);
+    var data = SystemProto.decode(msg);
     var handle = Handle.handles[data.msgId];
     //Log.debug('BackMessage收到消息ID：' + data.msgId);
     if(handle){
@@ -23,7 +24,7 @@ BackMessage.receive = function(session, msg) {
     }
 }
 
-BackMessage.send = function(server, msg) {
+function send(server, msg) {
     if(!server){
         return;
     }
@@ -40,4 +41,39 @@ BackMessage.send = function(server, msg) {
         return;
     }
     session.send(msg.encode());
+}
+
+BackMessage.sendToGateByAll = function(userSession, sendMsg) {
+    var msg = new SystemProto.system_sendToGateByAll();
+    msg.msgBody = sendMsg.encode();
+    send(userSession.session, msg);
+}
+
+BackMessage.sendToGate = function(userSession, sendMsg) {
+    var msg = new SystemProto.system_sendToGate();
+    msg.userSessionID = userSession.id;
+    msg.msgBody = sendMsg.encode();
+    send(userSession.session, msg);
+}
+
+BackMessage.sendErrorCode = function(userSession, errorCode) {
+    var errorMsg = new GameProto.error_notice_s2c();
+    errorMsg.errorCode = errorCode;
+    BackMessage.sendToGate(userSession, errorMsg);
+}
+
+BackMessage.sendToGame = function(gameServerName, sendMsg) {
+    send(Global[gameServerName], sendMsg);
+}
+
+BackMessage.sendToChat = function(sendMsg) {
+    send('chat', sendMsg);
+}
+
+BackMessage.sendToLogin = function(sendMsg) {
+    send('login', sendMsg);
+}
+
+BackMessage.send = function(session, sendMsg) {
+    send(session, sendMsg);
 }

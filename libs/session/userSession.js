@@ -4,10 +4,15 @@
 var Log = require('../log/log.js');
 var Utils = require('../util/utils.js');
 
-function UserSession($id){
+function UserSession($id, $session){
     this.id = $id;
+    this.session = $session;
     this.closeHandles = [];
     this.isClose = false;
+
+    this.session.addCloseCallBack(function(){
+        this.close();
+    });
 }
 
 UserSession.prototype.close = function(){
@@ -32,6 +37,8 @@ UserSession.prototype.$destroy = function() {
     }
     this.closeHandles.length = 0;
     this.closeHandles = null;
+
+    this.session = null;
 }
 
 module.exports = UserSession;
