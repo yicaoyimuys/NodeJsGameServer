@@ -8,6 +8,7 @@ var WorldUser = require('../model/worldUser.js');
 var UserSession = require('../../libs/session/userSession.js');
 var UserSessionService = require('../../libs/session/userSessionService.js');
 var Log = require('../../libs/log/log.js');
+var Server = require('../../libs/config/server.js');
 var BackMessage = require('../message/backMessage.js');
 var SystemProto = require('../proto/systemProto.js');
 var UserCache = require('../cache/userCache.js');
@@ -15,7 +16,9 @@ var UserCache = require('../cache/userCache.js');
 World.userOnline = function(data, session){
     var userId = data.userId;
     var userSessionId = data.userSessionId;
-    var userGameServer = data.userGameServer;
+
+    //分配游戏服务器
+    var userGameServer = allotGameServer();
 
     //在World服务器中保存用户数据
     var user = new WorldUser();
@@ -35,7 +38,6 @@ World.userOnline = function(data, session){
             var sendMsg = new SystemProto.system_userJoinGame();
             sendMsg.userId = userId;
             sendMsg.userSessionId = userSessionId;
-            sendMsg.userName = cacheDbUser.name;
             BackMessage.sendToGame(userGameServer, sendMsg);
 
             //通知对应的ChatServer
@@ -43,7 +45,7 @@ World.userOnline = function(data, session){
             sendMsg.userId = userId;
             sendMsg.userSessionId = userSessionId;
             sendMsg.userName = cacheDbUser.name;
-            sendMsg.unionId = '测试帮会';
+            sendMsg.unionId = cacheDbUser.unionId || '测试帮会';
             BackMessage.sendToChat(sendMsg);
         } else {
             Log.error('不存在用户缓存数据');
@@ -67,4 +69,22 @@ World.userOffline = function(data){
     var sendMsg = new SystemProto.system_userExitChat();
     sendMsg.userSessionId = userSessionId;
     BackMessage.sendToChat(sendMsg);
+}
+
+
+
+//给用户分配游戏服务器
+var allotGameServerId = 1;
+var allotGameServer = function(){
+    var gameServers = Server.getGameServers();
+
+    var serverInfo = gameServers[allotGameServerId.toString()];
+    var serverName = serverInfo.id;
+
+    allotGameServerId++;
+    if(!gameServers[allotGameServerId.toString()]){
+        allotGameServerId = 1;
+    }
+
+    return serverName;
 }

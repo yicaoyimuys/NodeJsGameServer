@@ -11,7 +11,6 @@ function system_userJoinGame(){
 	this.msgId = 1009;
 	this.userId = 0;
 	this.userSessionId = 0;
-	this.userName = '';
 
 }
 
@@ -20,7 +19,6 @@ system_userJoinGame.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'int64', this.userId);
 	Msg.encode(buff, 'int64', this.userSessionId);
-	Msg.encode(buff, 'string', this.userName);
 
     return buff.pack();
 }
@@ -30,7 +28,6 @@ system_userJoinGame.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.userId = Msg.decode(buff, 'int64');
 	this.userSessionId = Msg.decode(buff, 'int64');
-	this.userName = Msg.decode(buff, 'string');
 
 }
 

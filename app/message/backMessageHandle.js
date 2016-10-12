@@ -45,7 +45,7 @@ BackMessageHandle.handles[Proto.ID_system_userExitChat] = function(session, data
 
 /***Game收到消息处理 Start***/
 BackMessageHandle.handles[Proto.ID_system_userJoinGame] = function(session, data) {
-    User.addUser(data.userSessionId, data.userId, data.userName)
+    User.addUser(data.userSessionId, data.userId)
 }
 BackMessageHandle.handles[Proto.ID_system_userExitGame] = function(session, data) {
     User.removeUser(data.userSessionId);

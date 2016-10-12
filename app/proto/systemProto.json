@@ -30,8 +30,7 @@
     "system_clientOnline":{
         "msgId":"1007",
         "userId":"int64",
-        "userSessionId":"int64",
-        "userGameServer":"string"
+        "userSessionId":"int64"
     },
     "system_sendToWorld":{
         "msgId":"1008",
@@ -40,8 +39,7 @@
     "system_userJoinGame":{
         "msgId":"1009",
         "userId":"int64",
-        "userSessionId":"int64",
-        "userName":"string"
+        "userSessionId":"int64"
     },
     "system_userJoinChat":{
         "msgId":"1010",

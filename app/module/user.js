@@ -18,16 +18,28 @@ var MyDate = require('../../libs/date/date.js');
 var UserCache = require('../cache/userCache.js');
 var BackMessage = require('../message/backMessage.js');
 
-User.addUser = function(userSessionId, userId, userName){
-    var user = new GameUser();
-    user.id = userId;
-    user.name = userName;
-    user.sessionId = userSessionId;
+User.addUser = function(userSessionId, userId){
+    UserCache.getUserById(userId, function(dbUser){
+        if(dbUser){
+            //在本进程内保存用户基础数据
+            var user = new GameUser();
+            user.id = userId;
+            user.name = dbUser.name;
+            user.sessionId = userSessionId;
 
-    var userSession = new UserSession(userSessionId, Global[Server.getByServer('gate').id]);
+            var userSession = new UserSession(userSessionId, Global[Server.getByServer('gate').id]);
 
-    GameDataService.addUser(user, userSession);
-    UserSessionService.addSession(userSession);
+            GameDataService.addUser(user, userSession);
+            UserSessionService.addSession(userSession);
+
+            //返回通知客户端登录成功
+            var sendMsg = new GameProto.user_login_s2c();
+            sendMsg.gameServer = Global.serverName;
+            BackMessage.sendToGate(userSession, sendMsg);
+        } else {
+            Log.error('不存在用户缓存数据')
+        }
+    });
 }
 
 User.removeUser = function(userSessionId){
@@ -35,12 +47,14 @@ User.removeUser = function(userSessionId){
     userSession && userSession.close();
 }
 
-User.joinGame = function(userSession, userId){
-    if(!GameDataService.getUser(userId)){
+User.joinGame = function(userSession){
+    var userData = GameDataService.getUserBySession(userSession.id);
+    if(!userData){
         Log.error('该GameServer中不存在此用户~  ' + userId);
         return;
     }
 
+    var userId = userData.id;
     UserCache.getUserById(userId, function(cacheDbUser){
         if(cacheDbUser){
             //返回客户端消息
@@ -49,7 +63,7 @@ User.joinGame = function(userSession, userId){
             sendMsg.user.userName = cacheDbUser.name;
             sendMsg.user.money = cacheDbUser.money;
             sendMsg.user.create_time = cacheDbUser.create_time;
-            sendMsg.user.task = [9, 8, 3, 2];
+            sendMsg.user.task = cacheDbUser.task || [9, 8, 3, 2];
             BackMessage.sendToGate(userSession, sendMsg);
         } else {
             Log.error('不存在用户缓存数据')
