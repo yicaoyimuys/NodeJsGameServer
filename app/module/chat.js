@@ -15,14 +15,19 @@ var Server = require('../../libs/config/server.js');
 var MyDate = require('../../libs/date/date.js');
 var Log = require('../../libs/log/log.js');
 
-Chat.addUser = function(userSessionId, userId, userName) {
-    ChatService.addUser(userSessionId, userId, userName);
+Chat.addUser = function(userSessionId, userId, userName, unionId) {
+    ChatService.addUser(userSessionId, userId, userName, unionId);
 
     var userSession = new UserSession(userSessionId, Global[Server.getByServer('gate').id]);
     userSession.addCloseCallBack(function(){
         ChatService.removeUser(userSessionId);
     });
     UserSessionService.addSession(userSession);
+}
+
+Chat.removeUser = function(userSessionId){
+    var userSession = UserSessionService.getSession(userSessionId);
+    userSession && userSession.close();
 }
 
 Chat.talk = function (userSession, chatMsg, channel) {

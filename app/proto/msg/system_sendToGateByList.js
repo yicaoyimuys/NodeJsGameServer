@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToGateByList(){
-	this.msgId = 10004;
+	this.msgId = 1004;
 	this.userSessionList = [];
 	this.msgBody = null;
 

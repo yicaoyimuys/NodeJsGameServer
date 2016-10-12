@@ -7,26 +7,26 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_helloServer(){
-	this.msgId = 1001;
-	this.serverName = '';
+function system_sendToWorld(){
+	this.msgId = 1008;
+	this.msgBody = null;
 
 }
 
-system_helloServer.prototype.encode = function(){
+system_sendToWorld.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'string', this.serverName);
+	Msg.encode(buff, 'buffer', this.msgBody);
 
     return buff.pack();
 }
 
-system_helloServer.prototype.decode = function(ba){
+system_sendToWorld.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.serverName = Msg.decode(buff, 'string');
+	this.msgBody = Msg.decode(buff, 'buffer');
 
 }
 
 
-module.exports = system_helloServer;
+module.exports = system_sendToWorld;

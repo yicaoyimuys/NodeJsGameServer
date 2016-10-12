@@ -8,8 +8,12 @@ var Log = require('../../../libs/log/log.js');
 
 var chatServerConfig = Server.getByServer('chat');
 var gateServerConfig = Server.getByServer('gate');
+var worldServerConfig = Server.getByServer('world');
+var logServerConfig = Server.getByServer('log');
 
-Startup.init(chatServerConfig.id, 0);
+Startup.init(chatServerConfig.id);
 Startup.listenerBack(chatServerConfig.port);
 Startup.connectBack(gateServerConfig);
+Startup.connectBack(worldServerConfig);
+Startup.connectBack(logServerConfig);
 

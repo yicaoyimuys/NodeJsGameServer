@@ -4,6 +4,7 @@
     "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
     "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
     "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
+    "world": {"id":"worldServer-1", "host":"127.0.0.1", "port":3103},
     "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
     "login": {"id":"loginServer-1"},
     "game": {
@@ -17,6 +18,7 @@
     "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
     "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
     "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
+    "world": {"id":"worldServer-1", "host":"127.0.0.1", "port":3103},
     "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
     "login": {"id":"loginServer-1"},
     "game": {

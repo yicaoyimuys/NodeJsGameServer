@@ -5,7 +5,8 @@
     },
     "user_login_s2c":{
         "msgId":"1002",//消息ID
-        "user":"userInfo"//用户信息
+        "user":"userInfo",//用户信息
+        "gameServer":"string"
     },
     "userInfo":{
         "userId":"int64",
@@ -20,7 +21,8 @@
     },
     "user_joinGame_c2s":{
         "msgId":"2001",
-        "userId":"int64"
+        "userId":"int64",
+        "gameServer":"string"
     },
     "user_joinGame_s2c":{
         "msgId":"2002",

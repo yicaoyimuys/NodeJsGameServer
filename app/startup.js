@@ -43,17 +43,11 @@ var frontSocketAcceptFunc = function(session) {
 
     SessionService.addSession(session);
     session.addCloseCallBack(function(){
+        //通知后端服务器用户下线
         var sendMsg = new Proto.system_clientOffline();
         sendMsg.userSessionID = session.id;
-        //通知后端服务器用户下线
-        {
-            //登录服务器
-            BackMessage.sendToLogin(sendMsg);
-            //游戏服务器
-            BackMessage.sendToGame(session.gameServer, sendMsg);
-            //Chat服务器
-            BackMessage.sendToChat(sendMsg);
-        }
+        sendMsg.userGameServer = session.gameServer;
+        BackMessage.sendToLogin(sendMsg);
         Log.debug('front client disconnect');
     });
 

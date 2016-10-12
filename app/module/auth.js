@@ -5,12 +5,14 @@ var Auth = module.exports;
 
 var Global = require('../../libs/global/global.js');
 var Utils = require('../../libs/util/utils.js');
+var Server = require('../../libs/config/server.js');
 var UserSessionService = require('../../libs/session/userSessionService.js');
 var DbUserModel = require('../model/dbUser.js');
-var UserModel = require('../model/user.js');
-var DataService = require('../data/dataService.js');
+var GameUser = require('../model/gameUser.js');
+var GameDataService = require('../data/gameDataService.js');
 var UserDao = require('../dao/userDao.js');
-var Proto = require('../proto/gameProto.js');
+var GameProto = require('../proto/gameProto.js');
+var SystemProto = require('../proto/systemProto.js');
 var Log = require('../../libs/log/log.js');
 var MyDate = require('../../libs/date/date.js');
 var UserCache = require('../cache/userCache.js');
@@ -57,10 +59,11 @@ Auth.loginSuccess = function(userSession, dbUser){
     UserCache.setUser(dbUser);
 
     //在内存中缓存用户数据
-    var user = new UserModel();
+    var user = new GameUser();
     user.id = dbUser.id;
     user.name = dbUser.name;
-    DataService.addUser(user, userSession);
+    user.sessionId = userSession.id;
+    GameDataService.addUser(user, userSession);
     UserSessionService.addSession(userSession);
 
     //设置用户在线
@@ -70,12 +73,48 @@ Auth.loginSuccess = function(userSession, dbUser){
         UserCache.setOffline(dbUser.id);
     });
 
+    //通知WorldServer用户登录成功，并分配GameServer
+    var userGameServer = allotGameServer();
+    var onlineMsg = new SystemProto.system_clientOnline();
+    onlineMsg.userId = dbUser.id;
+    onlineMsg.userSessionId = userSession.id;
+    onlineMsg.userGameServer = userGameServer;
+    BackMessage.sendToWorld(onlineMsg);
+
     //返回客户端消息
-    var sendMsg = new Proto.user_login_s2c();
+    var sendMsg = new GameProto.user_login_s2c();
     sendMsg.user.userId = dbUser.id;
     sendMsg.user.userName = dbUser.name;
     sendMsg.user.money = dbUser.money;
     sendMsg.user.create_time = dbUser.create_time;
     sendMsg.user.task = [1, 2, 3, 8, 9];
+    sendMsg.gameServer = userGameServer;
     BackMessage.sendToGate(userSession, sendMsg);
+}
+
+
+
+//给用户分配游戏服务器
+var allotGameServerId = 1;
+var allotGameServer = function(){
+    var gameServers = Server.getGameServers();
+
+    var serverInfo = gameServers[allotGameServerId.toString()];
+    var serverName = serverInfo.id;
+
+    allotGameServerId++;
+    if(!gameServers[allotGameServerId.toString()]){
+        allotGameServerId = 1;
+    }
+
+    return serverName;
+}
+
+
+Auth.offline = function(data){
+    var userSession = UserSessionService.getSession(data.userSessionID);
+    userSession && userSession.close();
+
+    //通知WorldServer用户下线
+    BackMessage.sendToWorld(data);
 }

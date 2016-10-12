@@ -9,6 +9,7 @@ if [ $# -eq 0 ]
 		func app/servers/login/login.js
 		func app/servers/game/game.js
 		func app/servers/chat/chat.js
+		func app/servers/chat/world.js
 		func app/servers/log/log.js
 		func app/servers/db/db.js
 	else

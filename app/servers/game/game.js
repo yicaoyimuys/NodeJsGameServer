@@ -9,12 +9,12 @@ var Program = require('../../../libs/program/program.js');
 
 var gameServerConfig = Server.getByServer('game')[Program.gameId.toString()];
 var gateServerConfig = Server.getByServer('gate');
-var chatServerConfig = Server.getByServer('chat');
+var worldServerConfig = Server.getByServer('world');
 var logServerConfig = Server.getByServer('log');
 
 Startup.init(gameServerConfig.id);
 Startup.initRedis();
 Startup.connectBack(gateServerConfig);
-Startup.connectBack(chatServerConfig);
+Startup.connectBack(worldServerConfig);
 Startup.connectBack(logServerConfig);
 

@@ -12,7 +12,7 @@ Global.serverName = 'testServer';
 Log.init('testServer', 0);
 
 var Event = new EventEmitter();
-var SUM_CLIENT = 10;
+var SUM_CLIENT = 1;
 
 //连接
 var clients = [];
@@ -61,6 +61,7 @@ function connect(index){
                 //进入游戏
                 sendMsg = new Proto.user_joinGame_c2s();
                 sendMsg.userId = msg.user.userId;
+                sendMsg.gameServer = msg.gameServer;
                 client.send(sendMsg.encode());
             }
             else if(msg.msgId == Proto.ID_user_joinGame_s2c){
@@ -68,7 +69,7 @@ function connect(index){
                 //发送聊天
                 sendMsg = new Proto.user_chat_c2s();
                 sendMsg.chatMsg = 'Hello ' + myUserName;
-                sendMsg.channel = 2;
+                sendMsg.channel = 1;
                 client.send(sendMsg.encode());
             } else if(msg.msgId == Proto.ID_user_chat_s2c){
                 console.log(myUserName, '收到用户消息:', msg);

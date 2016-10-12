@@ -8,6 +8,8 @@ node app/servers/log/log.js -e development &
 sleep 1
 node app/servers/db/db.js -e development &
 sleep 1
+node app/servers/world/world.js -e development &
+sleep 1
 node app/servers/chat/chat.js -e development &
 sleep 1
 node app/servers/login/login.js -e development &

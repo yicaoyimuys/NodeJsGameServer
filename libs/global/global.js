@@ -3,6 +3,7 @@
  */
 var Log = require('../log/log.js');
 var Program = require('../program/program.js');
+var Server = require('../config/server.js');
 
 var Global = module.exports;
 
@@ -17,8 +18,7 @@ Global.userDb = null;
 //当前服务器所连接的redis
 Global.redis = null;
 //当前服务器所连接的game后台服务器
-Global.gameServerClients = [];
-Global.allotGameServerIndex = 0;
+Global.gameServerClients = null;
 
 //绑定当前所连接的服务器
 Global.bindServer = function(session, serverName) {
@@ -53,20 +53,6 @@ Global.addServerClient = function(session, data){
         Log.error(serverName + ' disconnect on ' + Global.serverName);
     });
 
-    //GameServer特殊处理
-    if(serverName.indexOf('gameServer') != -1){
-        Global.gameServerClients.push(new GameServerInfo(serverName));
-        session.addCloseCallBack(function(){
-            var clients = Global.gameServerClients;
-            for(var i=0; i<clients.length; i++){
-                if(clients[i].id == serverName){
-                    clients.splice(i, 1);
-                    break;
-                }
-            }
-        });
-    }
-
     Log.info(serverName + ' connect ' + Global.serverName + ' success');
 }
 
@@ -75,29 +61,28 @@ function GameServerInfo($id){
     this.users = [];
 }
 
-//给用户分配游戏服务器
-Global.allotGameServer = function(session){
-    session.bindGameServer(null);
+//在网关中记录游戏服务器中用户列表
+Global.gameServerAddUser = function(serverName, session){
+    if(!Global.gameServerClients){
+        Global.gameServerClients = {};
+        var gameServers = Server.getGameServers();
+        for(var key in gameServers){
+            var name = gameServers[key].id;
+            Global.gameServerClients[name] = new GameServerInfo(name);
+        }
+    }
 
-    if(Global.gameServerClients.length == 0){
+    var server = Global.gameServerClients[serverName];
+    if(!server){
         return;
     }
 
-    var serverInfo = Global.gameServerClients[Global.allotGameServerIndex];
-    serverInfo.users.push(session);
+    server.users.push(session.id);
     session.addCloseCallBack(function(){
-        for(var i=0, len=serverInfo.users.length; i<len; i++){
-            if(serverInfo.users[i] == session){
-                serverInfo.users.splice(i, 1);
-                break;
-            }
-        }
+        server.users.splice(server.users.indexOf(session.id), 1);
     });
+}
 
-    session.bindGameServer(serverInfo.id);
-
-    Global.allotGameServerIndex++;
-    if(Global.allotGameServerIndex == Global.gameServerClients.length){
-        Global.allotGameServerIndex = 0;
-    }
+Global.isLoginServer = function(){
+    return Global.serverName.indexOf('loginServer') != -1;
 }

@@ -1,35 +1,61 @@
 {
     "system_helloServer":{
-        "msgId":"10001", //消息ID
+        "msgId":"1001", //消息ID
         "serverName":"string" //服务器名称
     },
     "system_gateDispatch":{
-        "msgId":"10002",
+        "msgId":"1002",
         "userSessionID":"int64",
         "msgBody":"buffer"
     },
     "system_sendToGate":{
-        "msgId":"10003",
+        "msgId":"1003",
         "userSessionID":"int64",
         "msgBody":"buffer"
     },
     "system_sendToGateByList":{
-        "msgId":"10004",
+        "msgId":"1004",
         "userSessionList":"array/int64",
         "msgBody":"buffer"
     },
     "system_sendToGateByAll":{
-        "msgId":"10005",
+        "msgId":"1005",
         "msgBody":"buffer"
     },
     "system_clientOffline":{
-        "msgId":"10006",
-        "userSessionID":"int64"
-    },
-    "system_chatAddUser":{
-        "msgId":"10007",
+        "msgId":"1006",
         "userSessionID":"int64",
+        "userGameServer":"string"
+    },
+    "system_clientOnline":{
+        "msgId":"1007",
         "userId":"int64",
+        "userSessionId":"int64",
+        "userGameServer":"string"
+    },
+    "system_sendToWorld":{
+        "msgId":"1008",
+        "msgBody":"buffer"
+    },
+    "system_userJoinGame":{
+        "msgId":"1009",
+        "userId":"int64",
+        "userSessionId":"int64",
         "userName":"string"
+    },
+    "system_userJoinChat":{
+        "msgId":"1010",
+        "userId":"int64",
+        "userSessionId":"int64",
+        "userName":"string",
+        "unionId":"int32"
+    },
+    "system_userExitGame":{
+        "msgId":"1011",
+        "userSessionId":"int64"
+    },
+    "system_userExitChat":{
+        "msgId":"1012",
+        "userSessionId":"int64"
     }
 }

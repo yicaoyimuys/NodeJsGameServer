@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToGate(){
-	this.msgId = 10003;
+	this.msgId = 1003;
 	this.userSessionID = 0;
 	this.msgBody = null;
 

@@ -32,13 +32,16 @@ FrontMessage.receive = function(session, receiveBuff) {
         BackMessage.sendToChat(sendMsg);
     }
     else if(Message.isGameMsg(msgId)){
-        //分配游戏服务器
+        //游戏服务器消息
         if(msgId == GameProto.ID_user_joinGame_c2s){
-            Global.allotGameServer(session);
-            if(!session.gameServer){
-                Log.error('没有可分配的gameServer');
+            //绑定游戏服务器
+            var msg = GameProto.decode(receiveBuff);
+            if(session.gameServer){
+                Log.error('重复登录？？？？');
                 return;
             }
+            session.bindGameServer(msg.gameServer);
+            Global.gameServerAddUser(msg.gameServer, session);
         }
         //游戏服务器消息
         BackMessage.sendToGame(session.gameServer, sendMsg);

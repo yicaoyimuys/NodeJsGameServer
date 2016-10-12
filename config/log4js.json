@@ -22,6 +22,11 @@
       },
       {
         "type": "file",
+        "filename": "logs/worldServer-1.log",
+        "category": "worldServer-1"
+      },
+      {
+        "type": "file",
         "filename": "logs/dbServer-1.log",
         "category": "dbServer-1"
       },
@@ -57,6 +62,7 @@
       "gateServer-1": "INFO",
       "chatServer-1": "INFO",
       "logServer-1": "INFO",
+      "worldServer-1": "INFO",
       "dbServer-1": "INFO",
       "loginServer-1": "INFO",
       "gameServer-1": "INFO",
@@ -85,6 +91,11 @@
         "type": "file",
         "filename": "logs/logServer-1.log",
         "category": "logServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/worldServer-1.log",
+        "category": "worldServer-1"
       },
       {
         "type": "file",
@@ -123,6 +134,7 @@
       "gateServer-1": "INFO",
       "chatServer-1": "INFO",
       "logServer-1": "INFO",
+      "worldServer-1": "INFO",
       "dbServer-1": "INFO",
       "loginServer-1": "INFO",
       "gameServer-1": "INFO",

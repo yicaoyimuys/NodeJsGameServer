@@ -12,11 +12,12 @@ var UserSessions = {};
 
 var Chan_World = [];
 
-ChatService.addUser = function(userSessionId, userId, userName){
+ChatService.addUser = function(userSessionId, userId, userName, unionId){
     var user = new ChatUser();
     user.id = userId;
     user.name = userName;
     user.sessionId = userSessionId;
+    user.unionId = unionId;
 
     Users[userId] = user;
     UserNames[userName] = userId;
@@ -39,6 +40,7 @@ ChatService.removeUser = function(userSessionId){
 
     Chan_World.splice(Chan_World.indexOf(userId), 1);
     Log.debug('Chat RemoveUser：' + Chan_World.length);
+    Log.debug('下线了。。。。。 ' + userId);
 }
 
 ChatService.getUserById = function(userId) {

@@ -5,6 +5,7 @@ function ChatUser(){
     this.id = 0;
     this.name = '';
     this.sessionId = 0;
+    this.unionId = 0;
     this.lastTalkTime = 0;
 }
 

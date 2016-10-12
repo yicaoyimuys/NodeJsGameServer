@@ -13,3 +13,7 @@ Server.getByServer = function(server) {
 Server.getServerID = function(){
     return ServerConfig[Global.environment].serverID;
 }
+
+Server.getGameServers = function(){
+    return ServerConfig[Global.environment]['game'];
+}

@@ -5,11 +5,14 @@ var Global = require('../../libs/global/global.js');
 var SessionService = require('../../libs/session/sessionService.js');
 var UserSessionService = require('../../libs/session/userSessionService.js');
 var Chat = require('../module/chat.js');
+var User = require('../module/user.js');
+var Auth = require('../module/auth.js');
 var Log = require('../../libs/log/log.js');
 var Proto = require('../proto/systemProto.js');
 var BackMessage = require('./backMessage.js');
 var FrontMessage = require('./frontMessage.js');
 var GameMessage = require('./gameMessage.js');
+var WorldMessage = require('./worldMessage.js');
 
 var BackMessageHandle = module.exports;
 
@@ -20,15 +23,41 @@ BackMessageHandle.handles[Proto.ID_system_helloServer] = Global.addServerClient;
 BackMessageHandle.handles[Proto.ID_system_gateDispatch] = function(session, data) {
     GameMessage.receive(session, data);
 }
-BackMessageHandle.handles[Proto.ID_system_clientOffline] = function(session, data) {
-    var userSession = UserSessionService.getSession(data.userSessionID);
-    userSession && userSession.close();
-}
-BackMessageHandle.handles[Proto.ID_system_chatAddUser] = function(session, data) {
-    Chat.addUser(data.userSessionID, data.userId, data.userName);
-}
 /***Game Chat Login收到的消息处理 End**/
 
+
+/***Login收到消息处理 Start***/
+BackMessageHandle.handles[Proto.ID_system_clientOffline] = function(session, data) {
+    Auth.offline(data);
+}
+/***Login收到消息处理 End***/
+
+
+/***Chat收到消息处理 Start***/
+BackMessageHandle.handles[Proto.ID_system_userJoinChat] = function(session, data) {
+    Chat.addUser(data.userSessionId, data.userId, data.userName, data.unionId);
+}
+BackMessageHandle.handles[Proto.ID_system_userExitChat] = function(session, data) {
+    Chat.removeUser(data.userSessionId);
+}
+/***Chat收到消息处理 End***/
+
+
+/***Game收到消息处理 Start***/
+BackMessageHandle.handles[Proto.ID_system_userJoinGame] = function(session, data) {
+    User.addUser(data.userSessionId, data.userId, data.userName)
+}
+BackMessageHandle.handles[Proto.ID_system_userExitGame] = function(session, data) {
+    User.removeUser(data.userSessionId);
+}
+/***Game收到消息处理 End***/
+
+
+/***World收到消息处理 Start***/
+BackMessageHandle.handles[Proto.ID_system_sendToWorld] = function(session, data) {
+    WorldMessage.receive(session, data);
+}
+/***World收到消息处理 End***/
 
 
 /***Gate收到的消息处理 Start**/

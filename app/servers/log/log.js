@@ -8,6 +8,6 @@ var Log = require('../../../libs/log/log.js');
 
 var serverConfig = Server.getByServer('log');
 
-Startup.init(serverConfig.id, 0);
+Startup.init(serverConfig.id);
 Startup.listenerBack(serverConfig.port);
 

@@ -1,9 +1,10 @@
 /**
  * Created by egret on 16/2/16.
  */
-function User(){
+function GameUser(){
     this.id = 0;
     this.name = '';
+    this.sessionId = 0;
 }
 
-module.exports = User;
+module.exports = GameUser;

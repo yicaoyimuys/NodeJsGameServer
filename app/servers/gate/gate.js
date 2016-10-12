@@ -8,7 +8,7 @@ var Log = require('../../../libs/log/log.js');
 
 var serverConfig = Server.getByServer('gate');
 
-Startup.init(serverConfig.id, 0);
+Startup.init(serverConfig.id);
 //是否使用WebSocket
 if(serverConfig.clientIsWs){
     Startup.listenerFrontWs(serverConfig.clientPort);

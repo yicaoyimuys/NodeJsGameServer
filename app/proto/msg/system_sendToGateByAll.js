@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToGateByAll(){
-	this.msgId = 10005;
+	this.msgId = 1005;
 	this.msgBody = null;
 
 }

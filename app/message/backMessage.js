@@ -66,6 +66,12 @@ BackMessage.sendToGame = function(gameServerName, sendMsg) {
     send(Global[gameServerName], sendMsg);
 }
 
+BackMessage.sendToWorld = function(sendMsg) {
+    var msg = new SystemProto.system_sendToWorld();
+    msg.msgBody = sendMsg.encode();
+    send('world', msg);
+}
+
 BackMessage.sendToChat = function(sendMsg) {
     send('chat', sendMsg);
 }
