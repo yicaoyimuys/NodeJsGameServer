@@ -46,7 +46,6 @@ var frontSocketAcceptFunc = function(session) {
         //通知后端服务器用户下线
         var sendMsg = new Proto.system_clientOffline();
         sendMsg.userSessionID = session.id;
-        sendMsg.userGameServer = session.gameServer;
         BackMessage.sendToLogin(sendMsg);
         Log.debug('front client disconnect');
     });

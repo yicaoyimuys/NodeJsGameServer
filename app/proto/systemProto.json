@@ -24,8 +24,7 @@
     },
     "system_clientOffline":{
         "msgId":"1006",
-        "userSessionID":"int64",
-        "userGameServer":"string"
+        "userSessionID":"int64"
     },
     "system_clientOnline":{
         "msgId":"1007",

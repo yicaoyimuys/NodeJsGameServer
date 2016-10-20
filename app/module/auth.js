@@ -43,6 +43,7 @@ Auth.create = function(userSession, account) {
     var dbUser = new DbUserModel();
     dbUser.name = account;
     dbUser.money = Math.ceil(Math.random() * 10000);
+    dbUser.last_scene_id = 1;
     UserDao.createUser(dbUser, function(err, dbUser){
         if (err){
             Log.error(err);

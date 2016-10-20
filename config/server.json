@@ -8,9 +8,9 @@
     "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
     "login": {"id":"loginServer-1"},
     "game": {
-      "1": {"id": "gameServer-1"},
-      "2": {"id": "gameServer-2"},
-      "3": {"id": "gameServer-3"}
+      "1": {"id": "gameServer-1", "scenes":[1]},
+      "2": {"id": "gameServer-2", "scenes":[2,3]},
+      "3": {"id": "gameServer-3", "scenes":[4,5,6]}
     }
   },
   "production": {
@@ -22,9 +22,9 @@
     "db": {"id":"dbServer-1", "syncdb_interval":300, "dealOfflineUser_interval":480},
     "login": {"id":"loginServer-1"},
     "game": {
-      "1": {"id": "gameServer-1"},
-      "2": {"id": "gameServer-2"},
-      "3": {"id": "gameServer-3"}
+      "1": {"id": "gameServer-1", "scenes":[1]},
+      "2": {"id": "gameServer-2", "scenes":[2,3]},
+      "3": {"id": "gameServer-3", "scenes":[4,5,6]}
     }
   }
 }

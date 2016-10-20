@@ -5,26 +5,32 @@
     },
     "user_login_s2c":{
         "msgId":"1002",//消息ID
-        "gameServer":"string"
+        "user":"userInfo" //用户信息
     },
     "userInfo":{
         "userId":"int64",
         "userName":"string",
         "money":"int32",
         "createTime":"int32",
-        "task":"array/int32"
+        "task":"array/int32",
+        "sceneId":"int32"
     },
     "error_notice_s2c":{
         "msgId":"2000",
         "errorCode":"int32"
     },
-    "user_joinGame_c2s":{
+    "user_joinScene_c2s":{
         "msgId":"2001",
-        "gameServer":"string"
+        "sceneId":"int32"
     },
-    "user_joinGame_s2c":{
+    "user_joinScene_s2c":{
         "msgId":"2002",
-        "user":"userInfo"//用户信息
+        "name":"string",
+        "id":"int64",
+        "x":"int32",
+        "y":"int32",
+        "attack":"int32",
+        "defence":"int32"
     },
     "user_chat_c2s":{
         "msgId":"1500",

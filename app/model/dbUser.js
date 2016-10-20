@@ -8,6 +8,7 @@ function DbUser(){
     this.money = 0;
     this.create_time = 0;
     this.last_login_time = 0;
+    this.last_scene_id = 0;
 }
 
 module.exports = DbUser;

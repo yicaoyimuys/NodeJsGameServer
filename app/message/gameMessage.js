@@ -20,8 +20,7 @@ GameMessage.receive = function(session, data) {
     Log.debug('GameMessage收到消息ID：' + receiveMsg.msgId);
 
     var userSession = null;
-    if(receiveMsg.msgId == Proto.ID_user_login_c2s
-        || receiveMsg.msgId == Proto.ID_user_joinGame_c2s){
+    if(receiveMsg.msgId == Proto.ID_user_login_c2s){
         userSession = new UserSession(userSessionID, session);
     } else {
         userSession = UserSessionService.getSession(userSessionID);

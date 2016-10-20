@@ -33,15 +33,16 @@ FrontMessage.receive = function(session, receiveBuff) {
     }
     else if(Message.isGameMsg(msgId)){
         //游戏服务器消息
-        if(msgId == GameProto.ID_user_joinGame_c2s){
+        if(msgId == GameProto.ID_user_joinScene_c2s){
             //绑定游戏服务器
             var msg = GameProto.decode(receiveBuff);
-            if(session.gameServer){
+            var gameServer = Server.allotGameServer(msg.sceneId);
+            if(session.gameServer == gameServer){
                 Log.error('重复登录？？？？');
                 return;
             }
-            session.bindGameServer(msg.gameServer);
-            Global.gameServerAddUser(msg.gameServer, session);
+            session.bindGameServer(gameServer);
+            Global.gameServerAddUser(gameServer, session);
         }
         //游戏服务器消息
         BackMessage.sendToGame(session.gameServer, sendMsg);

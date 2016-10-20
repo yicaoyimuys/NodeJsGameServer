@@ -17,3 +17,25 @@ Server.getServerID = function(){
 Server.getGameServers = function(){
     return ServerConfig[Global.environment]['game'];
 }
+
+Server.allotGameServer = function(sceneId){
+    var gameServers = Server.getGameServers();
+    for(var key in gameServers){
+        var serverInfo = gameServers[key];
+        if(serverInfo.scenes.indexOf(sceneId) != -1){
+            return serverInfo.id;
+        }
+    }
+    return null;
+}
+
+Server.getScenes = function(serverName){
+    var gameServers = Server.getGameServers();
+    for(var key in gameServers){
+        var serverInfo = gameServers[key];
+        if(serverInfo.id == serverName){
+            return serverInfo.scenes;
+        }
+    }
+    return null;
+}

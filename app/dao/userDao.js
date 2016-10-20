@@ -31,6 +31,7 @@ UserDao.getUserByName = function (account, cb) {
                 dbUser.money = rs.money;
                 dbUser.create_time = rs.create_time;
                 dbUser.last_login_time = rs.last_login_time;
+                dbUser.last_scene_id = rs.last_scene_id;
                 Utils.invokeCallback(cb, null, dbUser);
             } else {
                 Utils.invokeCallback(cb, null, null);
@@ -43,8 +44,8 @@ UserDao.createUser = function (dbUser, cb) {
     dbUser.id = userGuid.newId();
     dbUser.create_time = dbUser.last_login_time = MyDate.unix();
 
-    var sql = 'INSERT INTO `user` (id, name, money, create_time, last_login_time) values (?, ?, ?, ?, ?)';
-    var args = [dbUser.id, dbUser.name, dbUser.money, dbUser.create_time, dbUser.last_login_time];
+    var sql = 'INSERT INTO `user` (id, name, money, create_time, last_login_time, last_scene_id) values (?, ?, ?, ?, ?, ?)';
+    var args = [dbUser.id, dbUser.name, dbUser.money, dbUser.create_time, dbUser.last_login_time, dbUser.last_scene_id];
 
     Global.userDb.query(sql, args, function(err, res){
         if (err) {
@@ -61,8 +62,8 @@ UserDao.update = function(userId, callback){
             Log.error('UserDao.update：用户不存在');
             return;
         }
-        var sql = 'UPDATE `user` SET name=?, money=?, last_login_time = ? WHERE id = ?';
-        var args = [dbUser.name, dbUser.money, dbUser.last_login_time, dbUser.id];
+        var sql = 'UPDATE `user` SET name=?, money=?, last_login_time = ?, last_scene_id = ? WHERE id = ?';
+        var args = [dbUser.name, dbUser.money, dbUser.last_login_time, dbUser.last_scene_id, dbUser.id];
         Global.userDb.query(sql, args, function(err, res){
             if (err) {
                 Log.error('UserDao.update：' + err);

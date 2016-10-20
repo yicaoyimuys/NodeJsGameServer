@@ -13,6 +13,7 @@ function userInfo(){
 	this.money = 0;
 	this.createTime = 0;
 	this.task = [];
+	this.sceneId = 0;
 
 }
 
@@ -23,6 +24,7 @@ userInfo.prototype.encode = function(){
 	Msg.encode(buff, 'int32', this.money);
 	Msg.encode(buff, 'int32', this.createTime);
 	Msg.encode(buff, 'array', this.task, 'int32');
+	Msg.encode(buff, 'int32', this.sceneId);
 
     return buff.pack();
 }
@@ -34,6 +36,7 @@ userInfo.prototype.decode = function(ba){
 	this.money = Msg.decode(buff, 'int32');
 	this.createTime = Msg.decode(buff, 'int32');
 	this.task = Msg.decode(buff, 'array', 'int32');
+	this.sceneId = Msg.decode(buff, 'int32');
 
 }
 

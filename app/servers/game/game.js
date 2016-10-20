@@ -6,6 +6,7 @@ var Startup = require('../../startup.js');
 var Server = require('../../../libs/config/server.js');
 var Log = require('../../../libs/log/log.js');
 var Program = require('../../../libs/program/program.js');
+var Scene = require('../../module/scene.js')
 
 var gameServerConfig = Server.getByServer('game')[Program.gameId.toString()];
 var gateServerConfig = Server.getByServer('gate');
@@ -17,4 +18,7 @@ Startup.initRedis();
 Startup.connectBack(gateServerConfig);
 Startup.connectBack(worldServerConfig);
 Startup.connectBack(logServerConfig);
+
+//场景初始化
+Scene.init();
 
