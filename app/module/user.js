@@ -73,8 +73,8 @@ User.joinScene = function(userSession, sceneId){
     var player = new Player();
     player.id = userData.id;
     player.name = userData.name;
-    player.x = Math.floor(Math.random()*sceneInfo.cols);
-    player.y = Math.floor(Math.random()*sceneInfo.rows);
+    player.x = Math.floor(Math.random()*sceneInfo.width);
+    player.y = Math.floor(Math.random()*sceneInfo.height);
     player.attack = 1000;
     player.defence = 500;
     Scene.addObj(sceneInfo, player);
@@ -83,14 +83,17 @@ User.joinScene = function(userSession, sceneId){
         Scene.removeObj(player);
     });
 
+    //在用户数据中保存player引用
+    userData.player = player;
+
     //返回客户端消息
     var sendMsg = new GameProto.user_joinScene_s2c();
-    sendMsg.id = player.id;
-    sendMsg.name = player.name;
-    sendMsg.x = player.x;
-    sendMsg.y = player.y;
-    sendMsg.attack = player.attack;
-    sendMsg.defence = player.defence;
+    sendMsg.player.id = player.id;
+    sendMsg.player.name = player.name;
+    sendMsg.player.x = player.x;
+    sendMsg.player.y = player.y;
+    sendMsg.att.attack = player.attack;
+    sendMsg.att.defence = player.defence;
     BackMessage.sendToGate(userSession, sendMsg);
 
     //UserCache.getUserById(userId, function(cacheDbUser){

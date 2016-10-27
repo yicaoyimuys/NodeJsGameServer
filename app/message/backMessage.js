@@ -43,17 +43,24 @@ function send(server, msg) {
     session.send(msg.encode());
 }
 
-BackMessage.sendToGateByAll = function(userSession, sendMsg) {
-    var msg = new SystemProto.system_sendToGateByAll();
-    msg.msgBody = sendMsg.encode();
-    send(userSession.session, msg);
-}
-
 BackMessage.sendToGate = function(userSession, sendMsg) {
     var msg = new SystemProto.system_sendToGate();
     msg.userSessionID = userSession.id;
     msg.msgBody = sendMsg.encode();
     send(userSession.session, msg);
+}
+
+BackMessage.sendToGateByAll = function(sendMsg) {
+    var msg = new SystemProto.system_sendToGateByAll();
+    msg.msgBody = sendMsg.encode();
+    send('gate', msg);
+}
+
+BackMessage.sendToGateByList = function(sessionList, sendMsg) {
+    var msg = new SystemProto.system_sendToGateByList();
+    msg.userSessionList = sessionList;
+    msg.msgBody = sendMsg.encode();
+    send('gate', msg);
 }
 
 BackMessage.sendErrorCode = function(userSession, errorCode) {

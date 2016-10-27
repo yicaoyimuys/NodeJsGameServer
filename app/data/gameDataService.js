@@ -6,6 +6,8 @@ var Log = require('../../libs/log/log.js');
 
 var GameDataService = module.exports;
 
+var UserSessionService = require('../../libs/session/userSessionService.js');
+
 var Users = {};
 var UserSessions = {};
 
@@ -24,6 +26,22 @@ GameDataService.addUser = function(user, userSession){
 
 GameDataService.getUser = function(userId){
     return Users[userId];
+}
+
+GameDataService.getUserSessionId = function(userId){
+    var user = GameDataService.getUser(userId);
+    if(user){
+        return user.sessionId;
+    }
+    return null;
+}
+
+GameDataService.getUserSession = function(userId){
+    var sessionId = GameDataService.getUserSessionId(userId);
+    if(sessionId){
+        return UserSessionService.getSession(sessionId);
+    }
+    return null;
 }
 
 GameDataService.getUserBySession = function(sessionId){

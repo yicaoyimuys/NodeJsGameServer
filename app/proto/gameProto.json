@@ -25,12 +25,52 @@
     },
     "user_joinScene_s2c":{
         "msgId":"2002",
-        "name":"string",
-        "id":"int64",
-        "x":"int32",
-        "y":"int32",
+        "player":"obj_info",
+        "att":"att_info"
+    },
+    "obj_join_s2c":{
+        "msgId":"2003",
+        "obj":"obj_info"
+    },
+    "obj_leave_s2c":{
+        "msgId":"2004",
+        "type":"ushort",
+        "id":"int64"
+    },
+    "att_info":{
         "attack":"int32",
         "defence":"int32"
+    },
+    "obj_info":{
+        "type":"ushort",
+        "id":"int64",
+        "name":"string",
+        "x":"ushort",
+        "y":"ushort"
+    },
+    "obj_walk_info":{
+        "time":"int64",
+        "x":"ushort",
+        "y":"ushort",
+        "speed":"ushort",
+        "radian":"float"
+    },
+    "player_walk_c2s":{
+        "msgId":"2005",
+        "data":"obj_walk_info"
+    },
+    "obj_walk_s2c":{
+        "msgId":"2006",
+        "type":"ushort",
+        "id":"int64",
+        "data":"obj_walk_info"
+    },
+    "obj_walk_stop_s2c":{
+        "msgId":"2007",
+        "type":"ushort",
+        "id":"int64",
+        "x":"ushort",
+        "y":"ushort"
     },
     "user_chat_c2s":{
         "msgId":"1500",

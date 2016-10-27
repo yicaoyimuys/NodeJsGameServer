@@ -1,7 +1,7 @@
 /**
  * Created by egret on 16/10/20.
  */
-var util = require(process.binding('natives').util ? 'util': 'sys');
+var util = require('util');
 
 var BaseObj = require('./baseObj.js');
 var ObjType = require('../../comm/objType.js');

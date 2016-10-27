@@ -9,6 +9,7 @@ function SceneInfo(){
     this.cols = 0;
     this.rows = 0;
     this.aoi = null;
+    this.action = null;
 }
 
 module.exports = SceneInfo;

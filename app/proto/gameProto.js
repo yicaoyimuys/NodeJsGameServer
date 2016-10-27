@@ -11,6 +11,14 @@ Proto.userInfo = require('./msg/userInfo.js');
 Proto.error_notice_s2c = require('./msg/error_notice_s2c.js');
 Proto.user_joinScene_c2s = require('./msg/user_joinScene_c2s.js');
 Proto.user_joinScene_s2c = require('./msg/user_joinScene_s2c.js');
+Proto.obj_join_s2c = require('./msg/obj_join_s2c.js');
+Proto.obj_leave_s2c = require('./msg/obj_leave_s2c.js');
+Proto.att_info = require('./msg/att_info.js');
+Proto.obj_info = require('./msg/obj_info.js');
+Proto.obj_walk_info = require('./msg/obj_walk_info.js');
+Proto.player_walk_c2s = require('./msg/player_walk_c2s.js');
+Proto.obj_walk_s2c = require('./msg/obj_walk_s2c.js');
+Proto.obj_walk_stop_s2c = require('./msg/obj_walk_stop_s2c.js');
 Proto.user_chat_c2s = require('./msg/user_chat_c2s.js');
 Proto.user_chat_s2c = require('./msg/user_chat_s2c.js');
 
@@ -20,6 +28,11 @@ Proto.ID_user_login_s2c = 1002;
 Proto.ID_error_notice_s2c = 2000;
 Proto.ID_user_joinScene_c2s = 2001;
 Proto.ID_user_joinScene_s2c = 2002;
+Proto.ID_obj_join_s2c = 2003;
+Proto.ID_obj_leave_s2c = 2004;
+Proto.ID_player_walk_c2s = 2005;
+Proto.ID_obj_walk_s2c = 2006;
+Proto.ID_obj_walk_stop_s2c = 2007;
 Proto.ID_user_chat_c2s = 1500;
 Proto.ID_user_chat_s2c = 1501;
 
@@ -30,6 +43,11 @@ var dic = {
 	"2000":"error_notice_s2c",
 	"2001":"user_joinScene_c2s",
 	"2002":"user_joinScene_s2c",
+	"2003":"obj_join_s2c",
+	"2004":"obj_leave_s2c",
+	"2005":"player_walk_c2s",
+	"2006":"obj_walk_s2c",
+	"2007":"obj_walk_stop_s2c",
 	"1500":"user_chat_c2s",
 	"1501":"user_chat_s2c"
 }

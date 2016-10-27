@@ -7,6 +7,8 @@ function BaseObj(){
     this.name = '';
     this.x = 0;
     this.y = 0;
+    this.titleX = 0;
+    this.titleY = 0;
     this.aoiCellX = -1;
     this.aoiCellY = -1;
     this.sceneId = -1;

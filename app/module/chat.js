@@ -66,5 +66,5 @@ Chat.talk = function (userSession, chatMsg, channel) {
     sendMsg.fUserId = user.id;
     sendMsg.fUserName = user.name;
     sendMsg.channel = channel;
-    BackMessage.sendToGateByAll(userSession, sendMsg);
+    BackMessage.sendToGateByAll(sendMsg);
 }

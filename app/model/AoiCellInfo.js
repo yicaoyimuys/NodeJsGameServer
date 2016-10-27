@@ -4,7 +4,7 @@
 function AoiCellInfo(x, y){
     this.x = x;
     this.y = y;
-    this.objs = [];
+    this.objs = {};
 }
 
 module.exports = AoiCellInfo;

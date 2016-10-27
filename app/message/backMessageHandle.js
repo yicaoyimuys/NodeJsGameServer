@@ -63,13 +63,13 @@ BackMessageHandle.handles[Proto.ID_system_sendToWorld] = function(session, data)
 /***Gate收到的消息处理 Start**/
 BackMessageHandle.handles[Proto.ID_system_sendToGate] = function(session, data) {
     var userSession = SessionService.getSession(data.userSessionID);
-    FrontMessage.send(userSession, data.msgBody);
+    userSession && FrontMessage.send(userSession, data.msgBody);
 }
 BackMessageHandle.handles[Proto.ID_system_sendToGateByList] = function(session, data) {
     var list = data.userSessionList;
     for (var i=0, len=list.length; i<len; i++) {
         var userSession = SessionService.getSession(list[i]);
-        FrontMessage.send(userSession, data.msgBody);
+        userSession && FrontMessage.send(userSession, data.msgBody);
     }
 }
 BackMessageHandle.handles[Proto.ID_system_sendToGateByAll] = function(session, data) {
