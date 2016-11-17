@@ -37,7 +37,7 @@ function send(server, msg) {
     }
 
     if(!session){
-        Log.error('BackMessage session is not exists');
+        Log.error('BackMessage session is not exists: ' + server);
         return;
     }
     session.send(msg.encode());
