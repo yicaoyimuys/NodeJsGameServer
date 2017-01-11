@@ -6,5 +6,6 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "ws": "^1.1.1"
   }
 }
