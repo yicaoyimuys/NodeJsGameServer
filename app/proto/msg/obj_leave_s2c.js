@@ -20,7 +20,9 @@ obj_leave_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.type);
 	Msg.encode(buff, 'int64', this.id);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 obj_leave_s2c.prototype.decode = function(ba){
@@ -29,6 +31,7 @@ obj_leave_s2c.prototype.decode = function(ba){
 	this.type = Msg.decode(buff, 'ushort');
 	this.id = Msg.decode(buff, 'int64');
 
+    buff = null;
 }
 
 

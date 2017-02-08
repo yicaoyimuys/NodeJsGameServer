@@ -21,7 +21,7 @@ var UserCache = require('../cache/userCache.js');
 var BackMessage = require('../message/backMessage.js');
 var Scene = require('./scene.js');
 
-User.addUser = function(userSessionId, userId){
+User.addUser = function(userSessionId, userId, userConnectorServer){
     UserCache.getUserById(userId, function(dbUser){
         if(!dbUser) {
             Log.error('不存在用户缓存数据');
@@ -34,7 +34,7 @@ User.addUser = function(userSessionId, userId){
         user.name = dbUser.name;
         user.sessionId = userSessionId;
 
-        var userSession = new UserSession(userSessionId, Global[Server.getByServer('gate').id]);
+        var userSession = new UserSession(userSessionId, Global[userConnectorServer]);
 
         GameDataService.addUser(user, userSession);
         UserSessionService.addSession(userSession);
@@ -47,7 +47,7 @@ User.addUser = function(userSessionId, userId){
         sendMsg.user.create_time = dbUser.create_time;
         sendMsg.user.task = dbUser.task || [9, 8, 3, 2];
         sendMsg.user.sceneId = dbUser.last_scene_id;
-        BackMessage.sendToGate(userSession, sendMsg);
+        BackMessage.sendToConnector(userSession, sendMsg);
     });
 }
 
@@ -94,7 +94,7 @@ User.joinScene = function(userSession, sceneId){
     sendMsg.player.y = player.y;
     sendMsg.att.attack = player.attack;
     sendMsg.att.defence = player.defence;
-    BackMessage.sendToGate(userSession, sendMsg);
+    BackMessage.sendToConnector(userSession, sendMsg);
 
     //UserCache.getUserById(userId, function(cacheDbUser){
     //    if(cacheDbUser){

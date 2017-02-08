@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToGateByAll(){
-	this.msgId = 1005;
+	this.msgId = 105;
 	this.msgBody = null;
 
 }
@@ -18,7 +18,9 @@ system_sendToGateByAll.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'buffer', this.msgBody);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_sendToGateByAll.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ system_sendToGateByAll.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.msgBody = Msg.decode(buff, 'buffer');
 
+    buff = null;
 }
 
 

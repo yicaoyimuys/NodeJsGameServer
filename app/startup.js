@@ -11,6 +11,7 @@ var Session = require('../libs/session/session.js');
 var SessionService = require('../libs/session/sessionService.js');
 var BackMessage = require('./message/backMessage.js');
 var FrontMessage = require('./message/frontMessage.js');
+var GateMessage = require('./message/gateMessage.js');
 var Proto = require('./proto/systemProto.js');
 var Db = require('../libs/config/db.js');
 var Redis = require('../libs/config/redis.js');
@@ -43,15 +44,21 @@ var frontSocketAcceptFunc = function(session) {
 
     SessionService.addSession(session);
     session.addCloseCallBack(function(){
-        //通知后端服务器用户下线
-        var sendMsg = new Proto.system_clientOffline();
-        sendMsg.userSessionID = session.id;
-        BackMessage.sendToLogin(sendMsg);
+        if(Global.isConnectorServer()){
+            //通知后端服务器用户下线
+            var sendMsg = new Proto.system_clientOffline();
+            sendMsg.userSessionID = session.id;
+            BackMessage.sendToLogin(sendMsg);
+        }
         Log.debug('front client disconnect');
     });
 
     session.on(Session.DATA, function(data){
-        FrontMessage.receive(session, data);
+        if(Global.isConnectorServer()){
+            FrontMessage.receive(session, data);
+        } else {
+            GateMessage.receive(session, data);
+        }
     });
 };
 

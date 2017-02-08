@@ -20,7 +20,9 @@ user_chat_c2s.prototype.encode = function(){
 	Msg.encode(buff, 'string', this.chatMsg);
 	Msg.encode(buff, 'int32', this.channel);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 user_chat_c2s.prototype.decode = function(ba){
@@ -29,6 +31,7 @@ user_chat_c2s.prototype.decode = function(ba){
 	this.chatMsg = Msg.decode(buff, 'string');
 	this.channel = Msg.decode(buff, 'int32');
 
+    buff = null;
 }
 
 

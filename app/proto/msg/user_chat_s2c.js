@@ -24,7 +24,9 @@ user_chat_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'string', this.fUserName);
 	Msg.encode(buff, 'int32', this.channel);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 user_chat_s2c.prototype.decode = function(ba){
@@ -35,6 +37,7 @@ user_chat_s2c.prototype.decode = function(ba){
 	this.fUserName = Msg.decode(buff, 'string');
 	this.channel = Msg.decode(buff, 'int32');
 
+    buff = null;
 }
 
 

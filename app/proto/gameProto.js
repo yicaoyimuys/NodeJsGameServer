@@ -5,6 +5,8 @@ var Log = require('../../libs/log/log.js');
 
 var Proto = module.exports;
 
+Proto.get_connector_c2s = require('./msg/get_connector_c2s.js');
+Proto.get_connector_s2c = require('./msg/get_connector_s2c.js');
 Proto.user_login_c2s = require('./msg/user_login_c2s.js');
 Proto.user_login_s2c = require('./msg/user_login_s2c.js');
 Proto.userInfo = require('./msg/userInfo.js');
@@ -23,6 +25,8 @@ Proto.user_chat_c2s = require('./msg/user_chat_c2s.js');
 Proto.user_chat_s2c = require('./msg/user_chat_s2c.js');
 
 
+Proto.ID_get_connector_c2s = 501;
+Proto.ID_get_connector_s2c = 502;
 Proto.ID_user_login_c2s = 1001;
 Proto.ID_user_login_s2c = 1002;
 Proto.ID_error_notice_s2c = 2000;
@@ -38,6 +42,8 @@ Proto.ID_user_chat_s2c = 1501;
 
 
 var dic = {
+	"501":"get_connector_c2s",
+	"502":"get_connector_s2c",
 	"1001":"user_login_c2s",
 	"1002":"user_login_s2c",
 	"2000":"error_notice_s2c",

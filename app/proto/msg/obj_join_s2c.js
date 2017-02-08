@@ -19,7 +19,9 @@ obj_join_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'obj_info', this.obj);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 obj_join_s2c.prototype.decode = function(ba){
@@ -27,6 +29,7 @@ obj_join_s2c.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.obj.decode(Msg.decode(buff, 'obj_info'));
 
+    buff = null;
 }
 
 

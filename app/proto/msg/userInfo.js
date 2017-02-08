@@ -26,7 +26,9 @@ userInfo.prototype.encode = function(){
 	Msg.encode(buff, 'array', this.task, 'int32');
 	Msg.encode(buff, 'int32', this.sceneId);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 userInfo.prototype.decode = function(ba){
@@ -38,6 +40,7 @@ userInfo.prototype.decode = function(ba){
 	this.task = Msg.decode(buff, 'array', 'int32');
 	this.sceneId = Msg.decode(buff, 'int32');
 
+    buff = null;
 }
 
 

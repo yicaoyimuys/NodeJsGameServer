@@ -410,4 +410,4 @@ var ByteBuffer = function (org_buf, offset) {
     };
 }
 
-module.exports = exports = ByteBuffer;
+module.exports = ByteBuffer;

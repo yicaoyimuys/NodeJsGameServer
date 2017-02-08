@@ -9,13 +9,15 @@ var Program = require('../../../libs/program/program.js');
 var Scene = require('../../module/scene.js')
 
 var gameServerConfig = Server.getByServer('game')[Program.gameId.toString()];
-var gateServerConfig = Server.getByServer('gate');
+var connectorServerConfig = Server.getByServer('connector');
 var worldServerConfig = Server.getByServer('world');
 var logServerConfig = Server.getByServer('log');
 
 Startup.init(gameServerConfig.id);
 Startup.initRedis();
-Startup.connectBack(gateServerConfig);
+for(var key in connectorServerConfig){
+    Startup.connectBack(connectorServerConfig[key]);
+}
 Startup.connectBack(worldServerConfig);
 Startup.connectBack(logServerConfig);
 

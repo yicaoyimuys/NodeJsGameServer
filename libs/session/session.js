@@ -16,6 +16,7 @@ function Session(sock){
     this.isClose = false;
     this.exBuffer = null;
     this.gameServer = null;
+    this.connectServerName = null;
     this.closeByActive = false;
     this.remoteAddress = this.sock.remoteAddress + ':' + this.sock.remotePort;
     //Log.debug('SessionCreate:' + this.remoteAddress);
@@ -40,11 +41,18 @@ Session.prototype.$initSock = function() {
 
     //WebSocket接收到数据
     this.sock.on('message', function(data) {
-        if(!data['copy']){
+        var buff = null;
+        if(data instanceof Buffer){
+            buff = data;
+        }
+        else if(data instanceof ArrayBuffer){
+            buff = Utils.arrayBufferToBuffer(data);
+        }
+        if(!buff){
             Log.warn('Session收到未知数据:' + data);
             return;
         }
-        self.exBuffer.put(data);
+        self.exBuffer.put(buff);
     });
 
     //Socket/WebSocket关闭
@@ -52,7 +60,7 @@ Session.prototype.$initSock = function() {
         self.$destroy();
     });
 
-    //Socket错误处理
+    //Socket/WebSocket错误处理
     this.sock.on('error', function(err) {
         Log.debug('socket error：' + err);
 
@@ -65,33 +73,14 @@ Session.prototype.send = function(data){
     if(this.isClose){
         return;
     }
-    var len = data.length;
-
-    //写入2个字节表示本次包长
-    var headBuf = new Buffer(2);
-    headBuf.writeUInt16BE(len, 0);
-    this.writeBufferToSocket(headBuf);
-
-    //写入包体
-    this.writeBufferToSocket(data);
-}
-
-Session.prototype.sendByWebSocket = function (data) {
-    if(this.isClose){
-        return;
-    }
-    var len = data.length;
-
-    //写入2个字节表示本次包长
-    var headBuf = new Buffer(2);
-    headBuf.writeUInt16BE(len, 0);
-
-    //写入包体
-    var sendBuf = Buffer.concat([headBuf, data], 2 + len);
+    var sendBuf = Utils.packageBuffer(data);
     this.writeBufferToSocket(sendBuf);
 }
 
 Session.prototype.writeBufferToSocket = function(buf){
+    if(this.isClose){
+        return;
+    }
     if(this.sock['write']){
         //Socket使用
         this.sock.write(buf);
@@ -155,6 +144,10 @@ Session.prototype.$destroy = function() {
 
 Session.prototype.bindGameServer = function(gameServerName) {
     this.gameServer = gameServerName;
+}
+
+Session.prototype.setConnectServerName = function(serverName) {
+    this.connectServerName = serverName;
 }
 
 module.exports = Session;

@@ -4,7 +4,8 @@
 function WorldUser(){
     this.id = 0;
     this.sessionId = 0;
-    this.gameServer = '';
+    this.connectorServer = null;
+    this.gameServer = null;
 }
 
 module.exports = WorldUser;

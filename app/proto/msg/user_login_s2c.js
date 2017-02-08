@@ -19,7 +19,9 @@ user_login_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'userInfo', this.user);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 user_login_s2c.prototype.decode = function(ba){
@@ -27,6 +29,7 @@ user_login_s2c.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.user.decode(Msg.decode(buff, 'userInfo'));
 
+    buff = null;
 }
 
 

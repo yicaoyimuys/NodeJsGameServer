@@ -16,6 +16,7 @@ var UserCache = require('../cache/userCache.js');
 World.userOnline = function(data, session){
     var userId = data.userId;
     var userSessionId = data.userSessionId;
+    var userConnectorServer = data.userConnectorServer;
 
     //在Redis中获取用户详细数据
     UserCache.getUserById(userId, function(cacheDbUser){
@@ -32,6 +33,7 @@ World.userOnline = function(data, session){
         user.id = userId;
         user.sessionId = userSessionId;
         user.gameServer = userGameServer;
+        user.connectorServer = userConnectorServer;
 
         var userSession = new UserSession(userSessionId, session);
 
@@ -43,12 +45,14 @@ World.userOnline = function(data, session){
         var sendMsg = new SystemProto.system_userJoinGame();
         sendMsg.userId = userId;
         sendMsg.userSessionId = userSessionId;
+        sendMsg.userConnectorServer = userConnectorServer;
         BackMessage.sendToGame(userGameServer, sendMsg);
 
         //通知对应的ChatServer
         var sendMsg = new SystemProto.system_userJoinChat();
         sendMsg.userId = userId;
         sendMsg.userSessionId = userSessionId;
+        sendMsg.userConnectorServer = userConnectorServer;
         sendMsg.userName = cacheDbUser.name;
         sendMsg.unionId = cacheDbUser.unionId || '测试帮会';
         BackMessage.sendToChat(sendMsg);

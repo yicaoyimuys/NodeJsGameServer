@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_userExitChat(){
-	this.msgId = 1012;
+	this.msgId = 112;
 	this.userSessionId = 0;
 
 }
@@ -18,7 +18,9 @@ system_userExitChat.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'int64', this.userSessionId);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_userExitChat.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ system_userExitChat.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.userSessionId = Msg.decode(buff, 'int64');
 
+    buff = null;
 }
 
 

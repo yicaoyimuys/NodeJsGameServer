@@ -7,29 +7,29 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function user_login_c2s(){
-	this.msgId = 1001;
-	this.account = '';
+function get_connector_c2s(){
+	this.msgId = 501;
+	this.userId = '';
 
 }
 
-user_login_c2s.prototype.encode = function(){
+get_connector_c2s.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'string', this.account);
+	Msg.encode(buff, 'string', this.userId);
 
     var result = buff.pack();
     buff = null;
     return result;
 }
 
-user_login_c2s.prototype.decode = function(ba){
+get_connector_c2s.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.account = Msg.decode(buff, 'string');
+	this.userId = Msg.decode(buff, 'string');
 
     buff = null;
 }
 
 
-module.exports = user_login_c2s;
+module.exports = get_connector_c2s;

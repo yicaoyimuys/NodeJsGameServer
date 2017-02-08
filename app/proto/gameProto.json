@@ -1,4 +1,13 @@
 {
+    "get_connector_c2s":{
+        "msgId":"501",//消息ID
+        "userId":"string"
+    },
+    "get_connector_s2c":{
+        "msgId":"502",//消息ID
+        "ip":"string",
+        "port":"string"
+    },
     "user_login_c2s":{
         "msgId":"1001",//消息ID
         "account":"string" //账号

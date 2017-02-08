@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToGateByList(){
-	this.msgId = 1004;
+	this.msgId = 104;
 	this.userSessionList = [];
 	this.msgBody = null;
 
@@ -20,7 +20,9 @@ system_sendToGateByList.prototype.encode = function(){
 	Msg.encode(buff, 'array', this.userSessionList, 'int64');
 	Msg.encode(buff, 'buffer', this.msgBody);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_sendToGateByList.prototype.decode = function(ba){
@@ -29,6 +31,7 @@ system_sendToGateByList.prototype.decode = function(ba){
 	this.userSessionList = Msg.decode(buff, 'array', 'int64');
 	this.msgBody = Msg.decode(buff, 'buffer');
 
+    buff = null;
 }
 
 

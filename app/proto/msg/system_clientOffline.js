@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_clientOffline(){
-	this.msgId = 1006;
+	this.msgId = 106;
 	this.userSessionID = 0;
 
 }
@@ -18,7 +18,9 @@ system_clientOffline.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'int64', this.userSessionID);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_clientOffline.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ system_clientOffline.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.userSessionID = Msg.decode(buff, 'int64');
 
+    buff = null;
 }
 
 

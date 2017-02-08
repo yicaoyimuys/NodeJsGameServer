@@ -19,7 +19,9 @@ player_walk_c2s.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'obj_walk_info', this.data);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 player_walk_c2s.prototype.decode = function(ba){
@@ -27,6 +29,7 @@ player_walk_c2s.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.data.decode(Msg.decode(buff, 'obj_walk_info'));
 
+    buff = null;
 }
 
 

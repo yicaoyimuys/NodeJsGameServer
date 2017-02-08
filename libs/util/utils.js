@@ -80,5 +80,33 @@ utils.myPrint = function () {
         console.log('\n' + aimStr);
     }
 };
-// print the file name and the line number ~ end
+
+/**
+ * ArrayBuffer转换为Buffer
+ * @param data
+ * @returns {Buffer}
+ */
+utils.arrayBufferToBuffer = function(data) {
+    // data is either an ArrayBuffer or ArrayBufferView.
+    var array = new Uint8Array(data.buffer || data)
+        , l = data.byteLength || data.length
+        , o = data.byteOffset || 0
+        , buffer = new Buffer(l);
+    for (var i = 0; i < l; ++i) {
+        buffer[i] = array[o+i];
+    }
+    return buffer;
+}
+
+utils.packageBuffer = function(data) {
+    var len = data.length;
+
+    //写入2个字节表示本次包长
+    var headBuf = new Buffer(2);
+    headBuf.writeUInt16BE(len, 0);
+
+    //写入包体
+    var buffer = Buffer.concat([headBuf, data], 2 + len);
+    return buffer;
+}
 

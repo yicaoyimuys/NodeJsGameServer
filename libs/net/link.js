@@ -11,7 +11,10 @@ var Request = require('request');
 
 Link.serveByWebSocket = function(port, acceptFunc) {
     var WebSocketServer = require('ws').Server;
-    var wss = new WebSocketServer({ port: port });
+    var wss = new WebSocketServer({
+        //perMessageDeflate: false,
+        port: port
+    });
 
     wss.on('connection', function(sock) {
         var session = new Session(sock);

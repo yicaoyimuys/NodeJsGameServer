@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToWorld(){
-	this.msgId = 1008;
+	this.msgId = 108;
 	this.msgBody = null;
 
 }
@@ -18,7 +18,9 @@ system_sendToWorld.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'buffer', this.msgBody);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_sendToWorld.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ system_sendToWorld.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.msgBody = Msg.decode(buff, 'buffer');
 
+    buff = null;
 }
 
 

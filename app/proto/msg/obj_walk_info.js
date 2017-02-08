@@ -24,7 +24,9 @@ obj_walk_info.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.speed);
 	Msg.encode(buff, 'float', this.radian);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 obj_walk_info.prototype.decode = function(ba){
@@ -35,6 +37,7 @@ obj_walk_info.prototype.decode = function(ba){
 	this.speed = Msg.decode(buff, 'ushort');
 	this.radian = Msg.decode(buff, 'float');
 
+    buff = null;
 }
 
 

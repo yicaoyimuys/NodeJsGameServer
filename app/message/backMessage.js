@@ -43,30 +43,38 @@ function send(server, msg) {
     session.send(msg.encode());
 }
 
-BackMessage.sendToGate = function(userSession, sendMsg) {
+BackMessage.sendToConnector = function(userSession, sendMsg) {
     var msg = new SystemProto.system_sendToGate();
     msg.userSessionID = userSession.id;
     msg.msgBody = sendMsg.encode();
     send(userSession.session, msg);
 }
 
-BackMessage.sendToGateByAll = function(sendMsg) {
+BackMessage.sendToConnectorByAll = function(sendMsg) {
     var msg = new SystemProto.system_sendToGateByAll();
     msg.msgBody = sendMsg.encode();
-    send('gate', msg);
+
+    var connectorServerConfig = Server.getByServer('connector');
+    for(var key in connectorServerConfig){
+        send(Global[connectorServerConfig[key].id], msg);
+    }
 }
 
-BackMessage.sendToGateByList = function(sessionList, sendMsg) {
+BackMessage.sendToConnectorByList = function(sessionList, sendMsg) {
     var msg = new SystemProto.system_sendToGateByList();
     msg.userSessionList = sessionList;
     msg.msgBody = sendMsg.encode();
-    send('gate', msg);
+
+    var connectorServerConfig = Server.getByServer('connector');
+    for(var key in connectorServerConfig){
+        send(Global[connectorServerConfig[key].id], msg);
+    }
 }
 
 BackMessage.sendErrorCode = function(userSession, errorCode) {
     var errorMsg = new GameProto.error_notice_s2c();
     errorMsg.errorCode = errorCode;
-    BackMessage.sendToGate(userSession, errorMsg);
+    BackMessage.sendToConnector(userSession, errorMsg);
 }
 
 BackMessage.sendToGame = function(gameServerName, sendMsg) {

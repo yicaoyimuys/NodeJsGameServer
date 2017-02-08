@@ -2,6 +2,12 @@
   "development": {
     "serverID" : 1,
     "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
+    "connector" : {
+      "1": {"id":"connectorServer-1", "host": "127.0.0.1", "port": 3201, "clientPort": 8891, "clientIsWs": true},
+      "2": {"id":"connectorServer-2", "host": "127.0.0.1", "port": 3202, "clientPort": 8892, "clientIsWs": true},
+      "3": {"id":"connectorServer-3", "host": "127.0.0.1", "port": 3203, "clientPort": 8893, "clientIsWs": true},
+      "4": {"id":"connectorServer-4", "host": "127.0.0.1", "port": 3204, "clientPort": 8894, "clientIsWs": true}
+    },
     "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
     "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
     "world": {"id":"worldServer-1", "host":"127.0.0.1", "port":3103},
@@ -16,6 +22,12 @@
   "production": {
     "serverID" : 1,
     "gate": {"id":"gateServer-1", "host": "127.0.0.1", "port": 3100, "clientPort": 8880, "clientIsWs": true},
+    "connector" : {
+      "1": {"id":"connectorServer-1", "host": "127.0.0.1", "port": 3201, "clientPort": 8891, "clientIsWs": true},
+      "2": {"id":"connectorServer-2", "host": "127.0.0.1", "port": 3202, "clientPort": 8892, "clientIsWs": true},
+      "3": {"id":"connectorServer-3", "host": "127.0.0.1", "port": 3203, "clientPort": 8893, "clientIsWs": true},
+      "4": {"id":"connectorServer-4", "host": "127.0.0.1", "port": 3204, "clientPort": 8894, "clientIsWs": true}
+    },
     "chat": {"id":"chatServer-1", "host":"127.0.0.1", "port":3101},
     "log": {"id":"logServer-1", "host":"127.0.0.1", "port":3102},
     "world": {"id":"worldServer-1", "host":"127.0.0.1", "port":3103},

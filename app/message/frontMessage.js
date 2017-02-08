@@ -42,13 +42,12 @@ FrontMessage.receive = function(session, receiveBuff) {
                 return;
             }
             session.bindGameServer(gameServer);
-            Global.gameServerAddUser(gameServer, session);
         }
         //游戏服务器消息
         BackMessage.sendToGame(session.gameServer, sendMsg);
     }
     else {
-        Log.error('FrontMessage收到未处理的消息ID: ' + data.msgId);
+        Log.error('FrontMessage收到未处理的消息ID: ' + msgId);
     }
 }
 

@@ -1,6 +1,10 @@
 /**
  * Created by egret on 16/2/16.
  */
+exports.isGateMsg = function(msgId){
+    return msgId >= 500 && msgId <= 999;
+}
+
 exports.isLoginMsg = function(msgId){
     return msgId >= 1000 && msgId <= 1499;
 }

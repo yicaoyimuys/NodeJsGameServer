@@ -18,7 +18,9 @@ user_joinScene_c2s.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'int32', this.sceneId);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 user_joinScene_c2s.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ user_joinScene_c2s.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.sceneId = Msg.decode(buff, 'int32');
 
+    buff = null;
 }
 
 

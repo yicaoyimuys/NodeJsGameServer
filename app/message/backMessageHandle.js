@@ -3,11 +3,11 @@
  */
 var Global = require('../../libs/global/global.js');
 var SessionService = require('../../libs/session/sessionService.js');
-var UserSessionService = require('../../libs/session/userSessionService.js');
 var Chat = require('../module/chat.js');
 var User = require('../module/user.js');
 var Auth = require('../module/auth.js');
 var Log = require('../../libs/log/log.js');
+var Utils = require('../../libs/util/utils.js');
 var Proto = require('../proto/systemProto.js');
 var BackMessage = require('./backMessage.js');
 var FrontMessage = require('./frontMessage.js');
@@ -35,7 +35,7 @@ BackMessageHandle.handles[Proto.ID_system_clientOffline] = function(session, dat
 
 /***Chat收到消息处理 Start***/
 BackMessageHandle.handles[Proto.ID_system_userJoinChat] = function(session, data) {
-    Chat.addUser(data.userSessionId, data.userId, data.userName, data.unionId);
+    Chat.addUser(data.userSessionId, data.userConnectorServer, data.userId, data.userName, data.unionId);
 }
 BackMessageHandle.handles[Proto.ID_system_userExitChat] = function(session, data) {
     Chat.removeUser(data.userSessionId);
@@ -45,7 +45,7 @@ BackMessageHandle.handles[Proto.ID_system_userExitChat] = function(session, data
 
 /***Game收到消息处理 Start***/
 BackMessageHandle.handles[Proto.ID_system_userJoinGame] = function(session, data) {
-    User.addUser(data.userSessionId, data.userId)
+    User.addUser(data.userSessionId, data.userId, data.userConnectorServer)
 }
 BackMessageHandle.handles[Proto.ID_system_userExitGame] = function(session, data) {
     User.removeUser(data.userSessionId);
@@ -66,17 +66,21 @@ BackMessageHandle.handles[Proto.ID_system_sendToGate] = function(session, data) 
     userSession && FrontMessage.send(userSession, data.msgBody);
 }
 BackMessageHandle.handles[Proto.ID_system_sendToGateByList] = function(session, data) {
+    var sendBuf = Utils.packageBuffer(data.msgBody);
     var list = data.userSessionList;
     for (var i=0, len=list.length; i<len; i++) {
         var userSession = SessionService.getSession(list[i]);
-        userSession && FrontMessage.send(userSession, data.msgBody);
+        userSession && userSession.writeBufferToSocket(sendBuf);
     }
+    sendBuf = null;
 }
 BackMessageHandle.handles[Proto.ID_system_sendToGateByAll] = function(session, data) {
+    var sendBuf = Utils.packageBuffer(data.msgBody);
     var sessions = SessionService.getAllSession();
     for (var sessionId in sessions){
         var userSession = sessions[sessionId];
-        FrontMessage.send(userSession, data.msgBody);
+        userSession && userSession.writeBufferToSocket(sendBuf);
     }
+    sendBuf = null;
 }
 /***Gate收到的消息处理 End**/

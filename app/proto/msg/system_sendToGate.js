@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_sendToGate(){
-	this.msgId = 1003;
+	this.msgId = 103;
 	this.userSessionID = 0;
 	this.msgBody = null;
 
@@ -20,7 +20,9 @@ system_sendToGate.prototype.encode = function(){
 	Msg.encode(buff, 'int64', this.userSessionID);
 	Msg.encode(buff, 'buffer', this.msgBody);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_sendToGate.prototype.decode = function(ba){
@@ -29,6 +31,7 @@ system_sendToGate.prototype.decode = function(ba){
 	this.userSessionID = Msg.decode(buff, 'int64');
 	this.msgBody = Msg.decode(buff, 'buffer');
 
+    buff = null;
 }
 
 

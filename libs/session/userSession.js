@@ -10,8 +10,9 @@ function UserSession($id, $session){
     this.closeHandles = [];
     this.isClose = false;
 
+    var self = this;
     this.session.addCloseCallBack(function(){
-        this.close();
+        self.close();
     });
 }
 

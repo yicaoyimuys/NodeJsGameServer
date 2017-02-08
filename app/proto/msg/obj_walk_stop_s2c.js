@@ -24,7 +24,9 @@ obj_walk_stop_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.x);
 	Msg.encode(buff, 'ushort', this.y);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 obj_walk_stop_s2c.prototype.decode = function(ba){
@@ -35,6 +37,7 @@ obj_walk_stop_s2c.prototype.decode = function(ba){
 	this.x = Msg.decode(buff, 'ushort');
 	this.y = Msg.decode(buff, 'ushort');
 
+    buff = null;
 }
 
 

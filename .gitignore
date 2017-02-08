@@ -4,3 +4,11 @@
 .idea/
 
 *.rdb
+
+gate/
+
+run_test.sh
+
+updateServer.sh
+
+stop_test.sh

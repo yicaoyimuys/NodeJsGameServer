@@ -8,9 +8,10 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_userJoinGame(){
-	this.msgId = 1009;
+	this.msgId = 109;
 	this.userId = 0;
 	this.userSessionId = 0;
+	this.userConnectorServer = '';
 
 }
 
@@ -19,8 +20,11 @@ system_userJoinGame.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'int64', this.userId);
 	Msg.encode(buff, 'int64', this.userSessionId);
+	Msg.encode(buff, 'string', this.userConnectorServer);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_userJoinGame.prototype.decode = function(ba){
@@ -28,7 +32,9 @@ system_userJoinGame.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.userId = Msg.decode(buff, 'int64');
 	this.userSessionId = Msg.decode(buff, 'int64');
+	this.userConnectorServer = Msg.decode(buff, 'string');
 
+    buff = null;
 }
 
 

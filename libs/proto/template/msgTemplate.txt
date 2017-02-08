@@ -14,12 +14,15 @@ $2
 $1.prototype.encode = function(){
     var buff = new ByteBuffer();
 $3
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 $1.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 $4
+    buff = null;
 }
 
 

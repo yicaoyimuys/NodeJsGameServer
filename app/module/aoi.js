@@ -76,7 +76,7 @@ Aoi.prototype._notice = function(obj, sendMsg, aoiCell){
     });
 
     //发送消息
-    BackMessage.sendToGateByList(sessionList, sendMsg);
+    BackMessage.sendToConnectorByList(sessionList, sendMsg);
 }
 
 Aoi.prototype.addObj = function(obj){
@@ -207,7 +207,7 @@ Aoi.prototype._noticeChangeObj = function(obj, oldCell, newCell){
     var sendMsg = new GameProto.obj_leave_s2c();
     sendMsg.type = obj.type;
     sendMsg.id = obj.id;
-    BackMessage.sendToGateByList(sessionList, sendMsg);
+    BackMessage.sendToConnectorByList(sessionList, sendMsg);
 
 
 
@@ -230,7 +230,7 @@ Aoi.prototype._noticeChangeObj = function(obj, oldCell, newCell){
     sendMsg.obj.name = obj.name;
     sendMsg.obj.x = obj.x;
     sendMsg.obj.y = obj.y;
-    BackMessage.sendToGateByList(sessionList, sendMsg);
+    BackMessage.sendToConnectorByList(sessionList, sendMsg);
 }
 
 Aoi.prototype.getNearbyCellObjs = function(objType, minX, maxX, minY, maxY){

@@ -8,7 +8,7 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 function system_helloServer(){
-	this.msgId = 1001;
+	this.msgId = 101;
 	this.serverName = '';
 
 }
@@ -18,7 +18,9 @@ system_helloServer.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'string', this.serverName);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 system_helloServer.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ system_helloServer.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.serverName = Msg.decode(buff, 'string');
 
+    buff = null;
 }
 
 

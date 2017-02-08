@@ -19,33 +19,33 @@ Proto.system_userExitGame = require('./msg/system_userExitGame.js');
 Proto.system_userExitChat = require('./msg/system_userExitChat.js');
 
 
-Proto.ID_system_helloServer = 1001;
-Proto.ID_system_gateDispatch = 1002;
-Proto.ID_system_sendToGate = 1003;
-Proto.ID_system_sendToGateByList = 1004;
-Proto.ID_system_sendToGateByAll = 1005;
-Proto.ID_system_clientOffline = 1006;
-Proto.ID_system_clientOnline = 1007;
-Proto.ID_system_sendToWorld = 1008;
-Proto.ID_system_userJoinGame = 1009;
-Proto.ID_system_userJoinChat = 1010;
-Proto.ID_system_userExitGame = 1011;
-Proto.ID_system_userExitChat = 1012;
+Proto.ID_system_helloServer = 101;
+Proto.ID_system_gateDispatch = 102;
+Proto.ID_system_sendToGate = 103;
+Proto.ID_system_sendToGateByList = 104;
+Proto.ID_system_sendToGateByAll = 105;
+Proto.ID_system_clientOffline = 106;
+Proto.ID_system_clientOnline = 107;
+Proto.ID_system_sendToWorld = 108;
+Proto.ID_system_userJoinGame = 109;
+Proto.ID_system_userJoinChat = 110;
+Proto.ID_system_userExitGame = 111;
+Proto.ID_system_userExitChat = 112;
 
 
 var dic = {
-	"1001":"system_helloServer",
-	"1002":"system_gateDispatch",
-	"1003":"system_sendToGate",
-	"1004":"system_sendToGateByList",
-	"1005":"system_sendToGateByAll",
-	"1006":"system_clientOffline",
-	"1007":"system_clientOnline",
-	"1008":"system_sendToWorld",
-	"1009":"system_userJoinGame",
-	"1010":"system_userJoinChat",
-	"1011":"system_userExitGame",
-	"1012":"system_userExitChat"
+	"101":"system_helloServer",
+	"102":"system_gateDispatch",
+	"103":"system_sendToGate",
+	"104":"system_sendToGateByList",
+	"105":"system_sendToGateByAll",
+	"106":"system_clientOffline",
+	"107":"system_clientOnline",
+	"108":"system_sendToWorld",
+	"109":"system_userJoinGame",
+	"110":"system_userJoinChat",
+	"111":"system_userExitGame",
+	"112":"system_userExitChat"
 }
 
 Proto.decode = function(buff){

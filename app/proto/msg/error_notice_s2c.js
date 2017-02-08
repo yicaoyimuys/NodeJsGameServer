@@ -18,7 +18,9 @@ error_notice_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'ushort', this.msgId);
 	Msg.encode(buff, 'int32', this.errorCode);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 error_notice_s2c.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ error_notice_s2c.prototype.decode = function(ba){
 	this.msgId = Msg.decode(buff, 'ushort');
 	this.errorCode = Msg.decode(buff, 'int32');
 
+    buff = null;
 }
 
 

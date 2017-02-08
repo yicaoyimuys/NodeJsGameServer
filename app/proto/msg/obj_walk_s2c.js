@@ -23,7 +23,9 @@ obj_walk_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'int64', this.id);
 	Msg.encode(buff, 'obj_walk_info', this.data);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 obj_walk_s2c.prototype.decode = function(ba){
@@ -33,6 +35,7 @@ obj_walk_s2c.prototype.decode = function(ba){
 	this.id = Msg.decode(buff, 'int64');
 	this.data.decode(Msg.decode(buff, 'obj_walk_info'));
 
+    buff = null;
 }
 
 

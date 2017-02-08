@@ -14,11 +14,35 @@ var Global = require('../../libs/global/global.js');
 var Server = require('../../libs/config/server.js');
 var MyDate = require('../../libs/date/date.js');
 var Log = require('../../libs/log/log.js');
+var Timer = require('../../libs/timer/timer.js');
 
-Chat.addUser = function(userSessionId, userId, userName, unionId) {
+var chatMessages = [];
+var dealMessageSpace = 100;
+
+function init(){
+    Timer.setInterval(dealMessageSpace, dealMessage);
+}
+
+function dealMessage(){
+    var msgNum = chatMessages.length;
+    if(msgNum == 0){
+        return;
+    }
+
+    var dealNum = Math.ceil(msgNum/(1000/dealMessageSpace));
+    for(var i=0; i<dealNum; i++){
+        var sendMsg = chatMessages.shift();
+        BackMessage.sendToConnectorByAll(sendMsg);
+    }
+    Log.debug('处理消息' + dealNum + ' 剩余聊天信息: '+(msgNum-dealNum));
+}
+
+init();
+
+Chat.addUser = function(userSessionId, userConnectorServer, userId, userName, unionId) {
     ChatService.addUser(userSessionId, userId, userName, unionId);
 
-    var userSession = new UserSession(userSessionId, Global[Server.getByServer('gate').id]);
+    var userSession = new UserSession(userSessionId, Global[userConnectorServer]);
     userSession.addCloseCallBack(function(){
         ChatService.removeUser(userSessionId);
     });
@@ -66,5 +90,5 @@ Chat.talk = function (userSession, chatMsg, channel) {
     sendMsg.fUserId = user.id;
     sendMsg.fUserName = user.name;
     sendMsg.channel = channel;
-    BackMessage.sendToGateByAll(sendMsg);
+    chatMessages.push(sendMsg);
 }

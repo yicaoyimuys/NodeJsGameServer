@@ -17,11 +17,11 @@ Global.serverClients = {};
 Global.userDb = null;
 //当前服务器所连接的redis
 Global.redis = null;
-//当前服务器所连接的game后台服务器
-Global.gameServerClients = null;
 
 //绑定当前所连接的服务器
 Global.bindServer = function(session, serverName) {
+    session.setConnectServerName(serverName);
+
     var existsSession = Global[serverName];
     if(existsSession){
         existsSession.close(true);
@@ -56,33 +56,6 @@ Global.addServerClient = function(session, data){
     Log.info(serverName + ' connect ' + Global.serverName + ' success');
 }
 
-function GameServerInfo($id){
-    this.id = $id;
-    this.users = [];
-}
-
-//在网关中记录游戏服务器中用户列表
-Global.gameServerAddUser = function(serverName, session){
-    if(!Global.gameServerClients){
-        Global.gameServerClients = {};
-        var gameServers = Server.getGameServers();
-        for(var key in gameServers){
-            var name = gameServers[key].id;
-            Global.gameServerClients[name] = new GameServerInfo(name);
-        }
-    }
-
-    var server = Global.gameServerClients[serverName];
-    if(!server){
-        return;
-    }
-
-    server.users.push(session.id);
-    session.addCloseCallBack(function(){
-        server.users.splice(server.users.indexOf(session.id), 1);
-    });
-}
-
-Global.isLoginServer = function(){
-    return Global.serverName.indexOf('loginServer') != -1;
+Global.isConnectorServer = function() {
+    return Global.serverName.indexOf('connectorServer') != -1;
 }

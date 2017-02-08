@@ -22,7 +22,9 @@ user_joinScene_s2c.prototype.encode = function(){
 	Msg.encode(buff, 'obj_info', this.player);
 	Msg.encode(buff, 'att_info', this.att);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 user_joinScene_s2c.prototype.decode = function(ba){
@@ -31,6 +33,7 @@ user_joinScene_s2c.prototype.decode = function(ba){
 	this.player.decode(Msg.decode(buff, 'obj_info'));
 	this.att.decode(Msg.decode(buff, 'att_info'));
 
+    buff = null;
 }
 
 

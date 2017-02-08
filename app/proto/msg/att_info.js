@@ -18,7 +18,9 @@ att_info.prototype.encode = function(){
 	Msg.encode(buff, 'int32', this.attack);
 	Msg.encode(buff, 'int32', this.defence);
 
-    return buff.pack();
+    var result = buff.pack();
+    buff = null;
+    return result;
 }
 
 att_info.prototype.decode = function(ba){
@@ -26,6 +28,7 @@ att_info.prototype.decode = function(ba){
 	this.attack = Msg.decode(buff, 'int32');
 	this.defence = Msg.decode(buff, 'int32');
 
+    buff = null;
 }
 
 

@@ -27,6 +27,7 @@ Auth.login = function(userSession, account) {
             UserDao.getUserByName(account, function(err, dbUser){
                 if (err){
                     Log.error(err);
+                    Auth.loginFail(userSession);
                 } else {
                     if (dbUser) {
                         Auth.loginSuccess(userSession, dbUser);
@@ -47,10 +48,15 @@ Auth.create = function(userSession, account) {
     UserDao.createUser(dbUser, function(err, dbUser){
         if (err){
             Log.error(err);
+            Auth.loginFail(userSession);
         } else {
             Auth.loginSuccess(userSession, dbUser);
         }
     })
+}
+
+Auth.loginFail = function(userSession){
+    userSession.close();
 }
 
 Auth.loginSuccess = function(userSession, dbUser){
@@ -75,8 +81,9 @@ Auth.loginSuccess = function(userSession, dbUser){
 
     //通知WorldServer用户登录成功
     var onlineMsg = new SystemProto.system_clientOnline();
-    onlineMsg.userId = dbUser.id;
-    onlineMsg.userSessionId = userSession.id;
+    onlineMsg.userId = user.id;
+    onlineMsg.userSessionId = user.sessionId;
+    onlineMsg.userConnectorServer = userSession.session.connectServerName;
     BackMessage.sendToWorld(onlineMsg);
 }
 

@@ -12,14 +12,14 @@ Global.serverName = 'testServer';
 Log.init('testServer', 0);
 
 var Event = new EventEmitter();
-var SUM_CLIENT = 1;
+var SUM_CLIENT = 300;
 
 //连接
 var clients = [];
 var successNum = 0;
 var failNum = 0;
 var now = Date.now();
-var players = [];
+var players = {};
 
 var arr = [];
 for(var i=0; i<SUM_CLIENT; i++){
@@ -31,13 +31,51 @@ for(var i=0; i<SUM_CLIENT; i++){
         }
     }
 }
-for(var i=0; i<SUM_CLIENT; i++){
-    connect(i);
+
+
+//var gateIp = '127.0.0.1';
+//var gatePort = 8880;
+var gateIp = '127.0.0.1';
+var gatePort = 18880;
+
+var index = 0;
+var intervalId = setInterval(function(){
+    connectGate(index);
+    index++;
+    if(index == SUM_CLIENT){
+        clearInterval(intervalId);
+    }
+}, 500);
+
+function connectGate(index){
+    Link.connectByWebSocket(gateIp, gatePort, function(client){
+        Log.debug('连接Gate成功');
+        client.addCloseCallBack(function(){
+            Log.debug('连接Gate关闭');
+        });
+
+        var account = 'yangsong' + arr[index];
+        var sendMsg = new Proto.get_connector_c2s();
+        sendMsg.userId = account;
+        client.send(sendMsg.encode());
+
+        client.on(Session.DATA, function(data) {
+            client.close(true);
+            var msg = Proto.decode(data);
+            Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+
+            if (msg.msgId == Proto.ID_get_connector_s2c) {
+                connect(index, msg.port);
+            }
+        })
+    }, function(){
+        Log.error('连接Gate失败');
+    });
+
 }
 
-function connect(index){
-    Link.connectByWebSocket('127.0.0.1', 8880, function(client){
-    //Link.connect('127.0.0.1', 8880, function(client){
+function connect(index, port){
+    Link.connectByWebSocket(gateIp, port, function(client){
         Log.debug('连接成功');
         client.addCloseCallBack(function(){
             Log.debug('连接关闭');
@@ -49,54 +87,62 @@ function connect(index){
         var sendMsg = new Proto.user_login_c2s();
         sendMsg.account = account;
         client.send(sendMsg.encode());
-        //console.log(sendMsg.encode());
 
         client.on(Session.DATA, function(data){
-            //console.log(data);
-
             var msg = Proto.decode(data);
             if(msg.msgId == Proto.ID_user_login_s2c){
-                //console.log(account, '收到用户消息:', msg);
+                Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+
                 //进入游戏
                 sendMsg = new Proto.user_joinScene_c2s();
                 sendMsg.sceneId = msg.user.sceneId;
                 client.send(sendMsg.encode());
             }
             else if(msg.msgId == Proto.ID_user_joinScene_s2c){
-                console.log(account, '收到用户消息:', msg);
+                Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+
                 var player = {};
                 player.id = msg.player.id;
                 player.x = msg.player.x;
                 player.y = msg.player.y;
                 players[player.id] = player;
 
-                //开始走路
-                startWalk(client, player);
-
                 //开始聊天
                 startChat(client, account);
 
+                //开始走路
+                //startWalk(client, player);
+
             } else if(msg.msgId == Proto.ID_obj_walk_s2c){
-                console.log(account, '收到用户消息:', msg);
+                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+
                 var player = players[msg.id];
-                player.x = msg.data.x;
-                player.y = msg.data.y;
+                if(player){
+                    player.x = msg.data.x;
+                    player.y = msg.data.y;
+                }
             } else if(msg.msgId == Proto.ID_obj_walk_stop_s2c){
+                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+
                 var player = players[msg.id];
-                player.x = msg.x;
-                player.y = msg.y;
+                if(player){
+                    player.x = msg.x;
+                    player.y = msg.y;
+                }
             } else if(msg.msgId == Proto.ID_user_chat_s2c){
-                console.log(account, '收到用户消息:', msg);
+                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+
                 //successNum++
                 //if(successNum + failNum == SUM_CLIENT){
                 //    Event.emit('success');
                 //}
             } else {
-                console.log(account, '收到用户消息:', msg);
+                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
             }
         })
 
     }, function(){
+        Log.error('连接失败');
         failNum++
         if(successNum + failNum == SUM_CLIENT){
             Event.emit('success');
@@ -105,20 +151,20 @@ function connect(index){
 }
 
 function startChat(client, account){
-    setInterval(sendChat, 5000, client, account);
+    setTimeout(sendChat, Math.ceil(Math.random()*15000) + 5000, client, account);
 }
 
 function sendChat(client, account){
-    return;
-
     var sendMsg = new Proto.user_chat_c2s();
     sendMsg.chatMsg = 'Hello ' + account;
     sendMsg.channel = 1;
     client.send(sendMsg.encode());
+
+    startChat(client, account);
 }
 
 function startWalk(client, player){
-    setTimeout(sendWalk, Math.ceil(Math.random()*20000), client, player);
+    setTimeout(sendWalk, Math.ceil(Math.random()*15000) + 5000, client, player);
 }
 
 var radianArr = [
@@ -146,9 +192,9 @@ function sendWalk(client, player){
 
 //关闭
 Event.on('success', function(){
-    console.log('成功数：' + successNum)
-    console.log('失败数：' + failNum)
-    console.log('耗时：'+ (Date.now()-now));
+    Log.debug('成功数：' + successNum)
+    Log.debug('失败数：' + failNum)
+    Log.debug('耗时：'+ (Date.now()-now));
     setTimeout(function(){
         for(var i=0;i<clients.length; i++){
             clients[i].close()
