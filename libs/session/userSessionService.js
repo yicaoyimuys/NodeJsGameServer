@@ -33,6 +33,6 @@ UserSessionService.getSessionCount = function() {
     return session_count;
 }
 
-UserSessionService.getAllSession = function () {
+UserSessionService.getAllSession = function() {
     return sessions;
 }

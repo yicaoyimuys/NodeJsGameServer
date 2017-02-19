@@ -4,6 +4,7 @@
 var ExBuffer = require('ExBuffer');
 var Log = require('../log/log.js');
 var Utils = require('../util/utils.js');
+var MyDate = require('../date/date.js');
 var Util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
@@ -19,6 +20,7 @@ function Session(sock){
     this.connectServerName = null;
     this.closeByActive = false;
     this.remoteAddress = this.sock.remoteAddress + ':' + this.sock.remotePort;
+    this.pingTime = MyDate.unix();
     //Log.debug('SessionCreate:' + this.remoteAddress);
 
     this.$initSock();
@@ -148,6 +150,10 @@ Session.prototype.bindGameServer = function(gameServerName) {
 
 Session.prototype.setConnectServerName = function(serverName) {
     this.connectServerName = serverName;
+}
+
+Session.prototype.setPingTime = function(pingTime) {
+    this.pingTime = pingTime;
 }
 
 module.exports = Session;

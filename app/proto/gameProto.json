@@ -8,6 +8,9 @@
         "ip":"string",
         "port":"string"
     },
+    "client_ping_c2s":{
+        "msgId":"1000"//消息ID
+    },
     "user_login_c2s":{
         "msgId":"1001",//消息ID
         "account":"string" //账号

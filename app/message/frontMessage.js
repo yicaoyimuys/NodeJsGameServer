@@ -3,6 +3,7 @@
  */
 
 var Log = require('../../libs/log/log.js');
+var MyDate = require('../../libs/date/date.js');
 var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
 var RpcProto = require('../proto/rpcProto.js');
@@ -16,6 +17,12 @@ FrontMessage.receive = function(session, receiveBuff) {
     //根据msgId发送消息到不同的服务器
     var msgId = receiveBuff.readUInt16BE(0);
     Log.debug('FrontMessage收到消息ID：' + msgId);
+
+    //Ping消息特殊处理
+    if(msgId == GameProto.ID_client_ping_c2s){
+        session.setPingTime(MyDate.unix());
+        return;
+    }
 
     //封装发送到后台服务器的消息
     var sendMsg = new RpcProto.rpc_gateDispatch_c2s();

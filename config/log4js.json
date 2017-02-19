@@ -78,7 +78,7 @@
     ],
     "replaceConsole": true,
     "levels": {
-      "console": "INFO",
+      "console": "DEBUG",
       "gateServer-1": "INFO",
       "chatServer-1": "INFO",
       "logServer-1": "INFO",

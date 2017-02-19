@@ -12,7 +12,7 @@ Global.serverName = 'testServer';
 Log.init('testServer', 0);
 
 var Event = new EventEmitter();
-var SUM_CLIENT = 300;
+var SUM_CLIENT = 2;
 
 //连接
 var clients = [];
@@ -82,6 +82,9 @@ function connect(index, port){
         });
         clients.push(client);
 
+        //开启ping
+        startPing(client);
+
         //登录认证
         var account = 'yangsong' + arr[index];
         var sendMsg = new Proto.user_login_c2s();
@@ -114,7 +117,7 @@ function connect(index, port){
                 //startWalk(client, player);
 
             } else if(msg.msgId == Proto.ID_obj_walk_s2c){
-                Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
 
                 var player = players[msg.id];
                 if(player){
@@ -122,7 +125,7 @@ function connect(index, port){
                     player.y = msg.data.y;
                 }
             } else if(msg.msgId == Proto.ID_obj_walk_stop_s2c){
-                Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
 
                 var player = players[msg.id];
                 if(player){
@@ -148,6 +151,17 @@ function connect(index, port){
             Event.emit('success');
         }
     })
+}
+
+function startPing(client){
+    setTimeout(sendPing, 5000, client);
+}
+
+function sendPing(client){
+    var sendMsg = new Proto.client_ping_c2s();
+    client.send(sendMsg.encode());
+
+    startPing(client);
 }
 
 function startChat(client, account){
