@@ -52,13 +52,33 @@
       },
       {
         "type": "file",
+        "filename": "logs/connectorServer-1.log",
+        "category": "connectorServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/connectorServer-2.log",
+        "category": "connectorServer-2"
+      },
+      {
+        "type": "file",
+        "filename": "logs/connectorServer-3.log",
+        "category": "connectorServer-3"
+      },
+      {
+        "type": "file",
+        "filename": "logs/connectorServer-4.log",
+        "category": "connectorServer-4"
+      },
+      {
+        "type": "file",
         "filename": "logs/test.log",
         "category": "testServer"
       }
     ],
     "replaceConsole": true,
     "levels": {
-      "console": "DEBUG",
+      "console": "INFO",
       "gateServer-1": "INFO",
       "chatServer-1": "INFO",
       "logServer-1": "INFO",
@@ -68,6 +88,10 @@
       "gameServer-1": "INFO",
       "gameServer-2": "INFO",
       "gameServer-3": "INFO",
+      "connectorServer-1": "INFO",
+      "connectorServer-2": "INFO",
+      "connectorServer-3": "INFO",
+      "connectorServer-4": "INFO",
       "testServer": "INFO"
     }
   },
@@ -124,6 +148,26 @@
       },
       {
         "type": "file",
+        "filename": "logs/connectorServer-1.log",
+        "category": "connectorServer-1"
+      },
+      {
+        "type": "file",
+        "filename": "logs/connectorServer-2.log",
+        "category": "connectorServer-2"
+      },
+      {
+        "type": "file",
+        "filename": "logs/connectorServer-3.log",
+        "category": "connectorServer-3"
+      },
+      {
+        "type": "file",
+        "filename": "logs/connectorServer-4.log",
+        "category": "connectorServer-4"
+      },
+      {
+        "type": "file",
         "filename": "logs/test.log",
         "category": "testServer"
       }
@@ -140,6 +184,10 @@
       "gameServer-1": "INFO",
       "gameServer-2": "INFO",
       "gameServer-3": "INFO",
+      "connectorServer-1": "INFO",
+      "connectorServer-2": "INFO",
+      "connectorServer-3": "INFO",
+      "connectorServer-4": "INFO",
       "testServer": "INFO"
     }
   }

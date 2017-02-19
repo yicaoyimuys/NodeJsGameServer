@@ -7,12 +7,13 @@ var Global = require('../libs/global/global.js');
 var Log = require('../libs/log/log.js');
 var Link = require('../libs/net/link.js');
 var Timer = require('../libs/timer/timer.js');
+var Guid = require('../libs/guid/guid.js');
 var Session = require('../libs/session/session.js');
 var SessionService = require('../libs/session/sessionService.js');
-var BackMessage = require('./message/backMessage.js');
+var Rpc = require('./message/rpc.js');
 var FrontMessage = require('./message/frontMessage.js');
 var GateMessage = require('./message/gateMessage.js');
-var Proto = require('./proto/systemProto.js');
+var RpcProto = require('./proto/rpcProto.js');
 var Db = require('../libs/config/db.js');
 var Redis = require('../libs/config/redis.js');
 var SqlClient = require('./dao/mysql/client.js');
@@ -38,6 +39,10 @@ Startup.initRedis = function() {
     Global.redis = new RedisClient(Redis.get());
 }
 
+Startup.initGuid = function(serverId) {
+    Global.guid = new Guid(serverId);
+}
+
 
 var frontSocketAcceptFunc = function(session) {
     Log.debug('front client connected');
@@ -46,9 +51,9 @@ var frontSocketAcceptFunc = function(session) {
     session.addCloseCallBack(function(){
         if(Global.isConnectorServer()){
             //通知后端服务器用户下线
-            var sendMsg = new Proto.system_clientOffline();
-            sendMsg.userSessionID = session.id;
-            BackMessage.sendToLogin(sendMsg);
+            var sendMsg = new RpcProto.rpc_clientOffline_c2s();
+            sendMsg.userSessionId = session.id;
+            Rpc.notify('login', sendMsg);
         }
         Log.debug('front client disconnect');
     });
@@ -76,7 +81,7 @@ Startup.listenerBack = function(port) {
     var acceptFunc = function(session) {
         //Log.debug('back client connected：' + session.sock.remoteAddress + ':' + session.sock.remotePort);
         session.on(Session.DATA, function(data){
-            BackMessage.receive(session, data);
+            Rpc.receive(session, data);
         });
     };
 
@@ -109,13 +114,13 @@ Startup.connectBack = function(serverConfig) {
         });
 
         //发送HelloServer
-        var sendMsg = new Proto.system_helloServer();
+        var sendMsg = new RpcProto.rpc_helloServer_c2s();
         sendMsg.serverName = Global.serverName;
-        BackMessage.send(session, sendMsg);
+        Rpc.notify(session, sendMsg);
 
         //监听收到的消息
         session.on(Session.DATA, function(data){
-            BackMessage.receive(session, data);
+            Rpc.receive(session, data);
         });
     }, function(){
         againConnect();

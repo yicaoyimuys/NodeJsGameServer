@@ -7,29 +7,29 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_sendToGateByAll(){
-	this.msgId = 105;
-	this.msgBody = null;
+function rpc_userExitWorld_s2c(){
+	this.msgId = 220;
+	this.result = 0;
 
 }
 
-system_sendToGateByAll.prototype.encode = function(){
+rpc_userExitWorld_s2c.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'buffer', this.msgBody);
+	Msg.encode(buff, 'byte', this.result);
 
     var result = buff.pack();
     buff = null;
     return result;
 }
 
-system_sendToGateByAll.prototype.decode = function(ba){
+rpc_userExitWorld_s2c.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.msgBody = Msg.decode(buff, 'buffer');
+	this.result = Msg.decode(buff, 'byte');
 
     buff = null;
 }
 
 
-module.exports = system_sendToGateByAll;
+module.exports = rpc_userExitWorld_s2c;

@@ -7,17 +7,17 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_sendToGateByList(){
-	this.msgId = 104;
-	this.userSessionList = [];
+function system_rpcCall_c2s(){
+	this.msgId = 101;
+	this.rpcId = 0;
 	this.msgBody = null;
 
 }
 
-system_sendToGateByList.prototype.encode = function(){
+system_rpcCall_c2s.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'array', this.userSessionList, 'int64');
+	Msg.encode(buff, 'uint32', this.rpcId);
 	Msg.encode(buff, 'buffer', this.msgBody);
 
     var result = buff.pack();
@@ -25,14 +25,14 @@ system_sendToGateByList.prototype.encode = function(){
     return result;
 }
 
-system_sendToGateByList.prototype.decode = function(ba){
+system_rpcCall_c2s.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.userSessionList = Msg.decode(buff, 'array', 'int64');
+	this.rpcId = Msg.decode(buff, 'uint32');
 	this.msgBody = Msg.decode(buff, 'buffer');
 
     buff = null;
 }
 
 
-module.exports = system_sendToGateByList;
+module.exports = system_rpcCall_c2s;

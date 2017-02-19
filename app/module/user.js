@@ -15,13 +15,14 @@ var GameDataService = require('../data/gameDataService.js');
 var SceneDataService = require('../data/sceneDataService.js');
 var UserDao = require('../dao/userDao.js');
 var GameProto = require('../proto/gameProto.js');
+var RpcProto = require('../proto/rpcProto.js');
 var Log = require('../../libs/log/log.js');
 var MyDate = require('../../libs/date/date.js');
 var UserCache = require('../cache/userCache.js');
-var BackMessage = require('../message/backMessage.js');
+var Rpc = require('../message/rpc.js');
 var Scene = require('./scene.js');
 
-User.addUser = function(userSessionId, userId, userConnectorServer){
+User.addUser = function(userSessionId, userId, userConnectorServer, callBack){
     UserCache.getUserById(userId, function(dbUser){
         if(!dbUser) {
             Log.error('不存在用户缓存数据');
@@ -39,15 +40,7 @@ User.addUser = function(userSessionId, userId, userConnectorServer){
         GameDataService.addUser(user, userSession);
         UserSessionService.addSession(userSession);
 
-        //返回通知客户端登录成功
-        var sendMsg = new GameProto.user_login_s2c();
-        sendMsg.user.userId = dbUser.id;
-        sendMsg.user.userName = dbUser.name;
-        sendMsg.user.money = dbUser.money;
-        sendMsg.user.create_time = dbUser.create_time;
-        sendMsg.user.task = dbUser.task || [9, 8, 3, 2];
-        sendMsg.user.sceneId = dbUser.last_scene_id;
-        BackMessage.sendToConnector(userSession, sendMsg);
+        callBack(new RpcProto.rpc_userJoinGame_s2c());
     });
 }
 
@@ -94,7 +87,7 @@ User.joinScene = function(userSession, sceneId){
     sendMsg.player.y = player.y;
     sendMsg.att.attack = player.attack;
     sendMsg.att.defence = player.defence;
-    BackMessage.sendToConnector(userSession, sendMsg);
+    Rpc.notifyClient(userSession, sendMsg);
 
     //UserCache.getUserById(userId, function(cacheDbUser){
     //    if(cacheDbUser){

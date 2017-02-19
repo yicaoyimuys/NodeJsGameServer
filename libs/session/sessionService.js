@@ -3,15 +3,14 @@
  */
 var SessionService = module.exports;
 var Log = require('../log/log.js');
-
-var MAX_SESSION_ID = 0;
+var Global = require('../global/global.js');
 
 var session_count = 0;
 var sessions = {};
 
 //创建一个Session
 SessionService.addSession = function (session) {
-    session.id = ++MAX_SESSION_ID;
+    session.id = Global.guid.newId();
     sessions[session.id] = session;
     session_count++;
     Log.debug("新增Session：" + session.id + "，Session总数量：" + session_count);

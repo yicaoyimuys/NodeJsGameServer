@@ -25,8 +25,8 @@ UserSessionService.removeSession = function(userSession) {
     session_count--;
 }
 
-UserSessionService.getSession = function(userSessionID) {
-    return sessions[userSessionID];
+UserSessionService.getSession = function(userSessionId) {
+    return sessions[userSessionId];
 }
 
 UserSessionService.getSessionCount = function() {

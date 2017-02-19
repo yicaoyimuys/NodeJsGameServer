@@ -6,6 +6,8 @@ function WorldUser(){
     this.sessionId = 0;
     this.connectorServer = null;
     this.gameServer = null;
+    this.chatServer = null;
+    this.loginServer = null;
 }
 
 module.exports = WorldUser;

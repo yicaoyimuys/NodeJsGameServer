@@ -10,15 +10,20 @@ var DbUserModel = require('../model/dbUser.js');
 var GameUser = require('../model/gameUser.js');
 var GameDataService = require('../data/gameDataService.js');
 var UserDao = require('../dao/userDao.js');
+var RpcProto = require('../proto/rpcProto.js');
 var GameProto = require('../proto/gameProto.js');
-var SystemProto = require('../proto/systemProto.js');
 var Log = require('../../libs/log/log.js');
 var MyDate = require('../../libs/date/date.js');
 var UserCache = require('../cache/userCache.js');
-var BackMessage = require('../message/backMessage.js');
+var Rpc = require('../message/rpc.js');
 
 
 Auth.login = function(userSession, account) {
+    var existsUser = GameDataService.getUserByName(account);
+    if(existsUser){
+        Log.debug('重复登陆~');
+        return;
+    }
     UserCache.getUserByName(account, function(cacheDbUser){
         if(cacheDbUser){
             Auth.loginSuccess(userSession, cacheDbUser);
@@ -60,6 +65,12 @@ Auth.loginFail = function(userSession){
 }
 
 Auth.loginSuccess = function(userSession, dbUser){
+    var existsUser = GameDataService.getUser(dbUser.id);
+    if(existsUser){
+        Log.debug('重复登陆~');
+        return;
+    }
+
     //在Redis中缓存用户数据
     dbUser.last_login_time = MyDate.unix();
     UserCache.setUser(dbUser);
@@ -71,27 +82,43 @@ Auth.loginSuccess = function(userSession, dbUser){
         UserCache.setOffline(dbUser.id);
     });
 
-    //在内存中缓存用户数据
-    var user = new GameUser();
-    user.id = dbUser.id;
-    user.name = dbUser.name;
-    user.sessionId = userSession.id;
-    GameDataService.addUser(user, userSession);
-    UserSessionService.addSession(userSession);
-
     //通知WorldServer用户登录成功
-    var onlineMsg = new SystemProto.system_clientOnline();
-    onlineMsg.userId = user.id;
-    onlineMsg.userSessionId = user.sessionId;
+    var onlineMsg = new RpcProto.rpc_userJoinWorld_c2s();
+    onlineMsg.userId = dbUser.id;
+    onlineMsg.userSessionId = userSession.id;
     onlineMsg.userConnectorServer = userSession.session.connectServerName;
-    BackMessage.sendToWorld(onlineMsg);
+    Rpc.call('world', onlineMsg, function(data){
+
+        //在内存中缓存用户数据
+        var gameUser = new GameUser();
+        gameUser.id = dbUser.id;
+        gameUser.name = dbUser.name;
+        gameUser.sessionId = userSession.id;
+        GameDataService.addUser(gameUser, userSession);
+        UserSessionService.addSession(userSession);
+
+        //返回通知客户端登录成功
+        var sendMsg = new GameProto.user_login_s2c();
+        sendMsg.user.userId = dbUser.id;
+        sendMsg.user.userName = dbUser.name;
+        sendMsg.user.money = dbUser.money;
+        sendMsg.user.create_time = dbUser.create_time;
+        sendMsg.user.task = dbUser.task || [9, 8, 3, 2];
+        sendMsg.user.sceneId = dbUser.last_scene_id;
+        Rpc.notifyClient(userSession, sendMsg);
+    });
 }
 
 
 Auth.offline = function(data){
-    var userSession = UserSessionService.getSession(data.userSessionID);
+    var userSessionId = data.userSessionId;
+
+    //在LoginServer下线
+    var userSession = UserSessionService.getSession(userSessionId);
     userSession && userSession.close();
 
     //通知WorldServer用户下线
-    BackMessage.sendToWorld(data);
+    var exitMsg = new RpcProto.rpc_userExitWorld_c2s();
+    exitMsg.userSessionId = userSessionId;
+    Rpc.notify('world', exitMsg);
 }

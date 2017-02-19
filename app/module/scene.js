@@ -13,8 +13,6 @@ var SceneConst = require('../comm/sceneConst.js');
 var Aoi = require('./aoi.js');
 var ActionMove = require('./action/move.js');
 var ActionManager = require('./action/actionManager.js');
-var GameProto = require('../proto/gameProto.js');
-var BackMessage = require('../message/backMessage.js');
 
 //初始化
 Scene.init = function() {

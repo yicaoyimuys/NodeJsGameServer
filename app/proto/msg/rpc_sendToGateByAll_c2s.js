@@ -7,17 +7,15 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_sendToGate(){
-	this.msgId = 103;
-	this.userSessionID = 0;
+function rpc_sendToGateByAll_c2s(){
+	this.msgId = 209;
 	this.msgBody = null;
 
 }
 
-system_sendToGate.prototype.encode = function(){
+rpc_sendToGateByAll_c2s.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'int64', this.userSessionID);
 	Msg.encode(buff, 'buffer', this.msgBody);
 
     var result = buff.pack();
@@ -25,14 +23,13 @@ system_sendToGate.prototype.encode = function(){
     return result;
 }
 
-system_sendToGate.prototype.decode = function(ba){
+rpc_sendToGateByAll_c2s.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.userSessionID = Msg.decode(buff, 'int64');
 	this.msgBody = Msg.decode(buff, 'buffer');
 
     buff = null;
 }
 
 
-module.exports = system_sendToGate;
+module.exports = rpc_sendToGateByAll_c2s;

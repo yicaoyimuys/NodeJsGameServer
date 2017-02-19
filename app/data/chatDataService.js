@@ -1,7 +1,7 @@
 /**
  * Created by egret on 16/3/10.
  */
-var ChatService = module.exports;
+var ChatDataService = module.exports;
 
 var Log = require('../../libs/log/log.js');
 var ChatUser = require('../model/chatUser.js');
@@ -12,7 +12,7 @@ var UserSessions = {};
 
 var Chan_World = [];
 
-ChatService.addUser = function(userSessionId, userId, userName, unionId){
+ChatDataService.addUser = function(userSessionId, userId, userName, unionId){
     var user = new ChatUser();
     user.id = userId;
     user.name = userName;
@@ -27,7 +27,7 @@ ChatService.addUser = function(userSessionId, userId, userName, unionId){
     Log.debug('Chat AddUser：' + Chan_World.length);
 }
 
-ChatService.removeUser = function(userSessionId){
+ChatDataService.removeUser = function(userSessionId){
     var userId = UserSessions[userSessionId];
     if(!userId){
         return;
@@ -43,11 +43,11 @@ ChatService.removeUser = function(userSessionId){
     Log.debug('下线了。。。。。 ' + userId);
 }
 
-ChatService.getUserById = function(userId) {
+ChatDataService.getUserById = function(userId) {
     return Users[userId];
 }
 
-ChatService.getUserBySession = function(userSessionId) {
+ChatDataService.getUserBySession = function(userSessionId) {
     var userId = UserSessions[userSessionId];
     if(!userId){
         return null;

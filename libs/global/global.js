@@ -17,6 +17,8 @@ Global.serverClients = {};
 Global.userDb = null;
 //当前服务器所连接的redis
 Global.redis = null;
+//当前服务器使用的Guid
+Global.guid = null;
 
 //绑定当前所连接的服务器
 Global.bindServer = function(session, serverName) {
@@ -58,4 +60,12 @@ Global.addServerClient = function(session, data){
 
 Global.isConnectorServer = function() {
     return Global.serverName.indexOf('connectorServer') != -1;
+}
+
+Global.isLoginServer = function() {
+    return Global.serverName.indexOf('loginServer') != -1;
+}
+
+Global.isWorldServer = function() {
+    return Global.serverName.indexOf('worldServer') != -1;
 }

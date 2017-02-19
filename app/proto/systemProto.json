@@ -1,61 +1,16 @@
 {
-    "system_helloServer":{
+    "system_rpcCall_c2s":{
         "msgId":"101", //消息ID
-        "serverName":"string" //服务器名称
+        "rpcId":"uint32", //rpc消息id
+        "msgBody":"buffer" //消息内容
     },
-    "system_gateDispatch":{
-        "msgId":"102",
-        "userSessionID":"int64",
-        "msgBody":"buffer"
+    "system_rpcCall_s2c":{
+        "msgId":"102", //消息ID
+        "rpcId":"uint32", //rpc消息id
+        "msgBody":"buffer" //消息内容
     },
-    "system_sendToGate":{
-        "msgId":"103",
-        "userSessionID":"int64",
-        "msgBody":"buffer"
-    },
-    "system_sendToGateByList":{
-        "msgId":"104",
-        "userSessionList":"array/int64",
-        "msgBody":"buffer"
-    },
-    "system_sendToGateByAll":{
-        "msgId":"105",
-        "msgBody":"buffer"
-    },
-    "system_clientOffline":{
-        "msgId":"106",
-        "userSessionID":"int64"
-    },
-    "system_clientOnline":{
-        "msgId":"107",
-        "userId":"int64",
-        "userSessionId":"int64",
-        "userConnectorServer":"string"
-    },
-    "system_sendToWorld":{
-        "msgId":"108",
-        "msgBody":"buffer"
-    },
-    "system_userJoinGame":{
-        "msgId":"109",
-        "userId":"int64",
-        "userSessionId":"int64",
-        "userConnectorServer":"string"
-    },
-    "system_userJoinChat":{
-        "msgId":"110",
-        "userId":"int64",
-        "userSessionId":"int64",
-        "userConnectorServer":"string",
-        "userName":"string",
-        "unionId":"int32"
-    },
-    "system_userExitGame":{
-        "msgId":"111",
-        "userSessionId":"int64"
-    },
-    "system_userExitChat":{
-        "msgId":"112",
-        "userSessionId":"int64"
+    "system_rpcNotify_c2s":{
+        "msgId":"103", //消息ID
+        "msgBody":"buffer" //消息内容
     }
 }

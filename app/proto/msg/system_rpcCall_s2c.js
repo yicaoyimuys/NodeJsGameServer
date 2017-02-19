@@ -7,29 +7,32 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_clientOffline(){
-	this.msgId = 106;
-	this.userSessionID = 0;
+function system_rpcCall_s2c(){
+	this.msgId = 102;
+	this.rpcId = 0;
+	this.msgBody = null;
 
 }
 
-system_clientOffline.prototype.encode = function(){
+system_rpcCall_s2c.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'int64', this.userSessionID);
+	Msg.encode(buff, 'uint32', this.rpcId);
+	Msg.encode(buff, 'buffer', this.msgBody);
 
     var result = buff.pack();
     buff = null;
     return result;
 }
 
-system_clientOffline.prototype.decode = function(ba){
+system_rpcCall_s2c.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.userSessionID = Msg.decode(buff, 'int64');
+	this.rpcId = Msg.decode(buff, 'uint32');
+	this.msgBody = Msg.decode(buff, 'buffer');
 
     buff = null;
 }
 
 
-module.exports = system_clientOffline;
+module.exports = system_rpcCall_s2c;

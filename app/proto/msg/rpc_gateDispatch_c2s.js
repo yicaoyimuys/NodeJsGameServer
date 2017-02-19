@@ -7,29 +7,32 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_helloServer(){
-	this.msgId = 101;
-	this.serverName = '';
+function rpc_gateDispatch_c2s(){
+	this.msgId = 203;
+	this.userSessionId = 0;
+	this.msgBody = null;
 
 }
 
-system_helloServer.prototype.encode = function(){
+rpc_gateDispatch_c2s.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'string', this.serverName);
+	Msg.encode(buff, 'int64', this.userSessionId);
+	Msg.encode(buff, 'buffer', this.msgBody);
 
     var result = buff.pack();
     buff = null;
     return result;
 }
 
-system_helloServer.prototype.decode = function(ba){
+rpc_gateDispatch_c2s.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.serverName = Msg.decode(buff, 'string');
+	this.userSessionId = Msg.decode(buff, 'int64');
+	this.msgBody = Msg.decode(buff, 'buffer');
 
     buff = null;
 }
 
 
-module.exports = system_helloServer;
+module.exports = rpc_gateDispatch_c2s;

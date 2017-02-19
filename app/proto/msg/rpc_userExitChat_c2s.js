@@ -7,35 +7,29 @@ var Msg = require('../../../libs/proto/Msg.js');
 
 
 
-function system_clientOnline(){
-	this.msgId = 107;
-	this.userId = 0;
+function rpc_userExitChat_c2s(){
+	this.msgId = 223;
 	this.userSessionId = 0;
-	this.userConnectorServer = '';
 
 }
 
-system_clientOnline.prototype.encode = function(){
+rpc_userExitChat_c2s.prototype.encode = function(){
     var buff = new ByteBuffer();
 	Msg.encode(buff, 'ushort', this.msgId);
-	Msg.encode(buff, 'int64', this.userId);
 	Msg.encode(buff, 'int64', this.userSessionId);
-	Msg.encode(buff, 'string', this.userConnectorServer);
 
     var result = buff.pack();
     buff = null;
     return result;
 }
 
-system_clientOnline.prototype.decode = function(ba){
+rpc_userExitChat_c2s.prototype.decode = function(ba){
     var buff = new ByteBuffer(ba);
 	this.msgId = Msg.decode(buff, 'ushort');
-	this.userId = Msg.decode(buff, 'int64');
 	this.userSessionId = Msg.decode(buff, 'int64');
-	this.userConnectorServer = Msg.decode(buff, 'string');
 
     buff = null;
 }
 
 
-module.exports = system_clientOnline;
+module.exports = rpc_userExitChat_c2s;

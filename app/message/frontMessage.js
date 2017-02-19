@@ -5,10 +5,10 @@
 var Log = require('../../libs/log/log.js');
 var Server = require('../../libs/config/server.js');
 var Global = require('../../libs/global/global.js');
-var SystemProto = require('../proto/systemProto.js');
+var RpcProto = require('../proto/rpcProto.js');
 var GameProto = require('../proto/gameProto.js');
 var Message = require('./message.js');
-var BackMessage = require('./backMessage.js');
+var Rpc = require('./rpc.js');
 
 var FrontMessage = module.exports;
 
@@ -18,18 +18,18 @@ FrontMessage.receive = function(session, receiveBuff) {
     Log.debug('FrontMessage收到消息ID：' + msgId);
 
     //封装发送到后台服务器的消息
-    var sendMsg = new SystemProto.system_gateDispatch();
-    sendMsg.userSessionID = session.id;
+    var sendMsg = new RpcProto.rpc_gateDispatch_c2s();
+    sendMsg.userSessionId = session.id;
     sendMsg.msgBody = receiveBuff;
 
     //消息分发
     if(Message.isLoginMsg(msgId)){
         //登陆服务器消息
-        BackMessage.sendToLogin(sendMsg);
+        Rpc.notify('login', sendMsg);
     }
     else if(Message.isChatMsg(msgId)){
         //聊天服务器消息
-        BackMessage.sendToChat(sendMsg);
+        Rpc.notify('chat', sendMsg);
     }
     else if(Message.isGameMsg(msgId)){
         //游戏服务器消息
@@ -44,7 +44,7 @@ FrontMessage.receive = function(session, receiveBuff) {
             session.bindGameServer(gameServer);
         }
         //游戏服务器消息
-        BackMessage.sendToGame(session.gameServer, sendMsg);
+        Rpc.notify(session.gameServer, sendMsg);
     }
     else {
         Log.error('FrontMessage收到未处理的消息ID: ' + msgId);

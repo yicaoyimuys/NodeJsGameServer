@@ -11,6 +11,8 @@ var Program = require('../../../libs/program/program.js');
 var connectorServerConfig = Server.getByServer('connector')[Program.connectorId.toString()];
 
 Startup.init(connectorServerConfig.id);
+Startup.initGuid(Program.connectorId);
+
 //是否使用WebSocket
 if(connectorServerConfig.clientIsWs){
     Startup.listenerFrontWs(connectorServerConfig.clientPort);

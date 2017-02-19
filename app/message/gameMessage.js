@@ -14,16 +14,16 @@ var GameMessage = module.exports;
 
 GameMessage.receive = function(session, data) {
     var receiveBuff = data.msgBody;
-    var userSessionID = data.userSessionID;
+    var userSessionId = data.userSessionId;
     var receiveMsg = Proto.decode(receiveBuff);
     var handle = Handle.handles[receiveMsg.msgId];
     Log.debug('GameMessage收到消息ID：' + receiveMsg.msgId);
 
     var userSession = null;
     if(receiveMsg.msgId == Proto.ID_user_login_c2s){
-        userSession = new UserSession(userSessionID, session);
+        userSession = new UserSession(userSessionId, session);
     } else {
-        userSession = UserSessionService.getSession(userSessionID);
+        userSession = UserSessionService.getSession(userSessionId);
     }
 
     if(!userSession){

@@ -9,23 +9,39 @@ var GameDataService = module.exports;
 var UserSessionService = require('../../libs/session/userSessionService.js');
 
 var Users = {};
+var UserNames = {};
 var UserSessions = {};
 
 GameDataService.addUser = function(user, userSession){
     var userId = user.id;
+    var userName = user.name;
     var userSessionId = user.sessionId;
     Users[userId] = user;
+    UserNames[userName] = userId;
     UserSessions[userSessionId] = userId;
 
     userSession.addCloseCallBack(function(){
         Users[userId] = null;
+        UserNames[userName] = null;
         UserSessions[userSessionId] = null;
+
+        delete Users[userId];
+        delete UserNames[userName];
+        delete UserSessions[userSessionId];
         Log.debug('下线了。。。。。 ' + userId);
     });
 }
 
 GameDataService.getUser = function(userId){
     return Users[userId];
+}
+
+GameDataService.getUserByName = function(userName){
+    var userId = UserNames[userName];
+    if(userId){
+        return Users[userId];
+    }
+    return null;
 }
 
 GameDataService.getUserSessionId = function(userId){

@@ -33,10 +33,10 @@ for(var i=0; i<SUM_CLIENT; i++){
 }
 
 
-//var gateIp = '127.0.0.1';
-//var gatePort = 8880;
 var gateIp = '127.0.0.1';
-var gatePort = 18880;
+var gatePort = 8880;
+//var gateIp = '127.0.0.1';
+//var gatePort = 18880;
 
 var index = 0;
 var intervalId = setInterval(function(){
@@ -114,7 +114,7 @@ function connect(index, port){
                 //startWalk(client, player);
 
             } else if(msg.msgId == Proto.ID_obj_walk_s2c){
-                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+                Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
 
                 var player = players[msg.id];
                 if(player){
@@ -122,7 +122,7 @@ function connect(index, port){
                     player.y = msg.data.y;
                 }
             } else if(msg.msgId == Proto.ID_obj_walk_stop_s2c){
-                //Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
+                Log.debug(account + ' 收到用户消息: ' + JSON.stringify(msg));
 
                 var player = players[msg.id];
                 if(player){
