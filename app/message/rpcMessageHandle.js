@@ -3,7 +3,7 @@
  */
 var RpcMessageHandle = module.exports;
 
-var RpcProto = require('../proto/RpcProto.js');
+var RpcProto = require('../proto/rpcProto.js');
 var Utils = require('../../libs/util/utils.js');
 var Global = require('../../libs/global/global.js');
 var GameMessage = require('./gameMessage.js');
